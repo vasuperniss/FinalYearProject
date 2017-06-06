@@ -1,0 +1,170 @@
+﻿@using DigitalIsraelFund_System.Models
+<!DOCTYPE html>
+@{
+    UserData user = (UserData)this.Session["user"];
+}
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - ישראל דיגיטלית</title>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    @if (user == null)
+    {
+        <link href="~/Content/login.css" rel="stylesheet" type="text/css" />
+    }
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    <style>
+        .center2 {
+            margin: auto;
+            max-width: 75%;
+            padding: 10px;
+            text-align: right;
+            direction: rtl;
+        }
+
+        .scaleable {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body style="direction:rtl;height:100%;">
+    <div class="navbar navbar-default navbar-fixed-top navbar-right">
+        <div class="container">
+            <div class="navbar-header navbar-right">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="navbar-brand">ישראל דיגיטלית</div>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="navbar-right">@Html.ActionLink("ראשי", "Page", "Home")</li>
+                    <li class="navbar-right">@Html.ActionLink("אודות", "Page", "Home", new { page = "About" }, null)</li>
+                    <li class="navbar-right">@Html.ActionLink("אירועי חשיפה", "Events", "Home")</li>
+                    <li class="navbar-right">@Html.ActionLink("הגשת בקשות", "ApplyForRequests", "Home")</li>
+                    <li class="navbar-right">@Html.ActionLink("צור קשר", "Contact", "Home")</li>
+                    <li class="navbar-right">@Html.ActionLink("שאלות נפוצות", "CommonQuestions", "Home")</li>
+                </ul>
+                @if (user == null)
+                {
+                    <ul class="nav navbar-nav navbar-left">
+                        <li class="navbar-left"><a href="#" data-toggle="modal" data-target="#login-modal">כניסה</a></li>
+                    </ul>
+                }
+            </div>
+        </div>
+    </div>
+    @if (user != null)
+    {
+        <div class="navbar navbar-default navbar-fixed-top navbar-right" style="margin-top:51px;">
+            <div class="container">
+                <div class="navbar-header navbar-right">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <div class="navbar-brand">@user.Name</div>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        @if (user.Type == "Admin")
+                        {
+                            <li class="navbar-right">@Html.ActionLink("ניהול בקשות", "RequestsManage", "AdminOps")</li>
+                            <li class="navbar-right">@Html.ActionLink("ניהול מומחים ממשלתיים", "MomhimManage", "AdminOps")</li>
+                            <li class="navbar-right">@Html.ActionLink("ניהול בודקי מדען", "MadanMomhimManage", "AdminOps")</li>
+                        }
+                        @if (user.Type == "Admin2")
+                        {
+                            <li class="navbar-right">@Html.ActionLink("ניהול בקשות", "RequestControl", "Admin")</li>
+                            <li class="navbar-right">@Html.ActionLink("ניהול מומחים", "GovExpControl", "Admin")</li>
+                            <li class="navbar-right">@Html.ActionLink("נתונים סטטיסטיים", "Statistics", "Admin")</li>
+                        }
+                        else if (user.Type == "GovExp")
+                        {
+                            <li class="navbar-right">@Html.ActionLink("בקשות", "RequestControl", "GovExp")</li>
+                        }
+                    </ul>
+                    <ul class="nav navbar-nav navbar-left">
+                        <li class="navbar-left"><a style="color:darkred;" href="~/Account/LogOut">יציאה</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="center2" style="padding-top:51px;"></div>
+    }
+    <div class="center2" dir="rtl">
+        <h3><b>קרן חדשנות דיגיטלית לאתגרי המרחב הציבורי – קול קורא להגשת בקשות</b></h3>
+        <h5><b>מבית מטה ישראל דיגיטלית שבמשרד לשוויון חברתי והרשות הלאומית לחדשנות טכנולוגית</b></h5>
+        <img class="scaleable" src="~/Content/Images/bannerfund_logo.png" />
+        @if (user == null)
+        {
+            <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                <div class="modal-dialog">
+                    <div class="loginmodal-container" style="align-items:center;text-align:center;">
+                        <h1 style="font-weight:600;">כניסה לחשבון שלך</h1><br>
+                        <input id="email" type="text" name="email" placeholder="אימייל" />
+                        <input id="pass" type="password" name="password" placeholder="סיסמה" />
+                        <input id="subm" type="submit" name="login" class="login loginmodal-submit" value="כניסה" />
+                        <img id="loginLoadIcon" src="http://i.stack.imgur.com/FhHRx.gif" style="width:auto;margin:auto;align-self:center;display:none;" />
+                        <h5 id="logInFailMsg" style="color:red;">* שם המשתמש או הסיסמה שגואים.</h5>
+                    </div>
+                </div>
+            </div>
+        }
+        <hr />
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - ישראל דיגיטלית המשרד לשוויון חברתי</p>
+        </footer>
+    </div>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    @if (user == null)
+    {
+        <script>
+        $(document).ready(function () {
+            $('#logInFailMsg').hide();
+            $('#subm').click(function () {
+                var data = {
+                    "email": $("#email").val(),
+                    "password": $("#pass").val()
+                };
+                document.getElementById("subm").setAttribute('disabled', true);
+                document.getElementById("subm").style.color = 'dimgrey';
+                $('#logInFailMsg').hide(200);
+                $('#loginLoadIcon').show(200);
+                $.ajax({
+                    url: "/Account/Login",
+                    type: "POST",
+                    data: JSON.stringify(data),
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function (response) {
+                        if (response.Success) {
+                            location.reload(true);
+                        }
+                        else {
+                            $('#logInFailMsg').show(400);
+                            document.getElementById("subm").style.color = 'white';
+                            document.getElementById("subm").removeAttribute('disabled');
+                            $('#loginLoadIcon').hide(200);
+                        }
+
+                    },
+                    error: function () {
+                        alert('Login Fail!!!');
+                    }
+                });
+            });
+        });
+        </script>
+    }
+</body>
+</html>
