@@ -15,20 +15,6 @@
     }
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
-    <style>
-        .center2 {
-            margin: auto;
-            max-width: 75%;
-            padding: 10px;
-            text-align: right;
-            direction: rtl;
-        }
-
-        .scaleable {
-            max-width: 100%;
-            height: auto;
-        }
-    </style>
 </head>
 <body style="direction:rtl;height:100%;">
     <div class="navbar navbar-default navbar-fixed-top navbar-right">
@@ -53,7 +39,7 @@
                 @if (user == null)
                 {
                     <ul class="nav navbar-nav navbar-left">
-                        <li class="navbar-left"><a href="#" data-toggle="modal" data-target="#login-modal">כניסה</a></li>
+                        <li class="navbar-left"><a href="#" data-toggle="modal" data-target="#login-modal" onclick="attemptToLogIn()">כניסה</a></li>
                     </ul>
                 }
             </div>
@@ -96,9 +82,9 @@
                 </div>
             </div>
         </div>
-        <div class="center2" style="padding-top:51px;"></div>
+        <div class="center" style="padding-top:51px;"></div>
     }
-    <div class="center2" dir="rtl">
+    <div class="center" dir="rtl">
         <h3><b>קרן חדשנות דיגיטלית לאתגרי המרחב הציבורי – קול קורא להגשת בקשות</b></h3>
         <h5><b>מבית מטה ישראל דיגיטלית שבמשרד לשוויון חברתי והרשות הלאומית לחדשנות טכנולוגית</b></h5>
         <img class="scaleable" src="~/Content/Images/bannerfund_logo.png" />
@@ -110,8 +96,8 @@
                         <h1 style="font-weight:600;">כניסה לחשבון שלך</h1><br>
                         <input id="email" type="text" name="email" placeholder="אימייל" />
                         <input id="pass" type="password" name="password" placeholder="סיסמה" />
-                        <input id="subm" type="submit" name="login" class="login loginmodal-submit" value="כניסה" />
-                        <img id="loginLoadIcon" src="http://i.stack.imgur.com/FhHRx.gif" style="width:auto;margin:auto;align-self:center;display:none;" />
+                        <button id="subm" class="login loginmodal-submit" style="width:95%">כניסה</button>
+                        <img id="loginLoadIcon" src="~/Content/Images/loadingIcon.gif" style="width:auto;margin:auto;align-self:center;display:none;" />
                         <h5 id="logInFailMsg" style="color:red;">* שם המשתמש או הסיסמה שגואים.</h5>
                     </div>
                 </div>
@@ -129,7 +115,7 @@
     @if (user == null)
     {
         <script>
-        $(document).ready(function () {
+        function attemptToLogIn() {
             $('#logInFailMsg').hide();
             $('#subm').click(function () {
                 var data = {
@@ -163,7 +149,7 @@
                     }
                 });
             });
-        });
+        }
         </script>
     }
 </body>

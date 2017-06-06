@@ -16,3 +16,15 @@ textarea {
     max-width: 280px;
 }
 
+.center {
+    margin: auto;
+    max-width: 75%;
+    padding: 10px;
+    text-align: right;
+    direction: rtl;
+}
+
+.scaleable {
+    max-width: 100%;
+    height: auto;
+}
