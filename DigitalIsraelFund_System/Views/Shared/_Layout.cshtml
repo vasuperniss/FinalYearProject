@@ -45,10 +45,10 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li class="navbar-right">@Html.ActionLink("ראשי", "Page", "Home")</li>
                     <li class="navbar-right">@Html.ActionLink("אודות", "Page", "Home", new { page = "About" }, null)</li>
-                    <li class="navbar-right">@Html.ActionLink("אירועי חשיפה", "Events", "Home")</li>
-                    <li class="navbar-right">@Html.ActionLink("הגשת בקשות", "ApplyForRequests", "Home")</li>
-                    <li class="navbar-right">@Html.ActionLink("צור קשר", "Contact", "Home")</li>
-                    <li class="navbar-right">@Html.ActionLink("שאלות נפוצות", "CommonQuestions", "Home")</li>
+                    <li class="navbar-right">@Html.ActionLink("אירועי חשיפה", "Page", "Home", new { page = "Events" }, null)</li>
+                    <li class="navbar-right">@Html.ActionLink("הגשת בקשות", "Page", "Home", new { page = "ApplyForRequest" }, null)</li>
+                    <li class="navbar-right">@Html.ActionLink("צור קשר", "Page", "Home", new { page = "Contact" }, null)</li>
+                    <li class="navbar-right">@Html.ActionLink("שאלות נפוצות", "Page", "Home", new { page = "CommonQuestions" }, null)</li>
                 </ul>
                 @if (user == null)
                 {
