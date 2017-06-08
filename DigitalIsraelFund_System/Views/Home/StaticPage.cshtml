@@ -78,7 +78,7 @@
         <button onmousedown="event.preventDefault();" onclick="commmandWithInput('createLink', 'הזן את הכתובת שברצונך לקשר', 'http://');" class="button dark-button"><u>link</u></button>
         <button onmousedown="event.preventDefault();" onclick="commmandWithInput('insertImage', 'הזן את הכתובת התמונה לצרף', 'http://');" class="button dark-button">.img</button>
         <button id="saveBtn" onmousedown="event.preventDefault();" onclick="saveChanges()" class="button green-button">שמור שינויים</button>
-        <img id="loadIcon" src="http://i.stack.imgur.com/FhHRx.gif" style="display:none;" />
+        <img id="loadIcon" src="~/Content/Images/bannerfund_logo.png" style="display:none;" />
         <br>
         <button onmousedown="event.preventDefault();" onclick="setColor(this)" class="color-button black-button"></button>
         <button onmousedown="event.preventDefault();" onclick="setColor(this)" class="color-button dark-button"></button>
@@ -176,7 +176,7 @@
         var title = document.getElementById("titleDiv").value;
         var html = document.getElementById("cntntDiv").innerHTML;
         var data = {
-            "page": '@ViewBag.Page',
+            "page": '@ViewData["page"]',
             "title": title,
             "html": html
         };
@@ -191,17 +191,17 @@
             contentType: "application/json",
             success: function (response) {
                 if (response.Success) {
-                    //alert('הדף נשמר בהצלחה');
+                    alert('הדף נשמר בהצלחה');
                 }
                 else {
-                    alert('error');
+                    alert('בעיה בשמירת הדך');
                 }
                 document.getElementById("saveBtn").style.backgroundColor = '#4CAF50';
                 document.getElementById("saveBtn").removeAttribute('disabled');
                 $('#loadIcon').fadeOut(100);
             },
             error: function () {
-                alert('Send Failed!!!');
+                alert('בעיה בשרת');
             }
         });
     }
