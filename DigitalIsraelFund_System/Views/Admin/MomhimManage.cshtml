@@ -1,0 +1,88 @@
+﻿@model DigitalIsraelFund_System.Models.TableResult
+@using DigitalIsraelFund_System.Models
+@{
+    ViewBag.Title = "ניהול מומחים";
+}
+
+<div onload='loadTable(1, 10, "join_date")' id="cntntDiv" contenteditable="false" style="height:100%;resize:none;overflow-y:auto;min-width:inherit;min-height:200px;border-width:thin;border-style: none;font-family:sans-serif;border-color:#555555;font-size:small;font-weight:400;" dir="rtl">
+    <table style="padding:5px 5px;border: 1px solid #ccc;margin:auto;width:85%;">
+        <tr style="background-color:#E3E4FA;">
+            <td style="padding:3px;font-weight:600;text-align:center;"></td>
+            <td style="padding:3px;font-weight:600;text-align:center;">
+                @Html.ActionLink("שם פרטי", "MomhimManage", "Admin", new { orderBy = "fname",
+               isDesc = Model.OrderBy == "fname" ? !Model.isDesc : false, page = Model.Page,
+               resultsPerPage = Model.ResultsPerPage }, null) @{ if (Model.OrderBy == "fname")
+                   { if (!Model.isDesc)
+                       { <font>🠟</font> }
+                       else
+                       { <font>🠝</font> }
+                   } }
+            </td>
+            <td style="padding:3px;font-weight:600;text-align:center;">
+                @Html.ActionLink("שם משפחה", "MomhimManage", "Admin", new {
+                orderBy = "lname", isDesc = Model.OrderBy == "lname" ? !Model.isDesc : Model.isDesc, page = Model.Page,
+                resultsPerPage = Model.ResultsPerPage }, null) @{ if (Model.OrderBy == "lname")
+                    {
+                        if (!Model.isDesc)
+                        { <font>🠟</font> }
+                        else
+                        { <font>🠝</font> }
+                    } }
+            </td>
+            <td style="padding:3px;font-weight:600;text-align:center;">
+                @Html.ActionLink("אימייל", "MomhimManage", "Admin", new
+                           {
+                               orderBy = "email",
+                               isDesc = Model.OrderBy == "email" ? !Model.isDesc : Model.isDesc,
+                               page = Model.Page,
+                               resultsPerPage = Model.ResultsPerPage
+                           }, null) @{ if (Model.OrderBy == "email")
+                               {
+                                   if (!Model.isDesc)
+                                   { <font>🠟</font> }
+                                   else
+                                   { <font>🠝</font> }
+                               } }
+            </td>
+            <td style="padding:3px;font-weight:600;text-align:center;">
+                @Html.ActionLink("מס' בקשות מצורפות", "MomhimManage", "Admin", new
+                           {
+                               orderBy = "num_requests",
+                               isDesc = Model.OrderBy == "num_requests" ? !Model.isDesc : Model.isDesc,
+                               page = Model.Page,
+                               resultsPerPage = Model.ResultsPerPage
+                           }, null) @{ if (Model.OrderBy == "num_requests")
+                               {
+                                   if (!Model.isDesc)
+                                   { <font>🠟</font> }
+                                   else
+                                   { <font>🠝</font> }
+                               } }
+            </td>
+            <td style="padding:3px;font-weight:600;text-align:center;"></td>
+            <td style="padding:3px;font-weight:600;text-align:center;"></td>
+        </tr>
+        <tr style="border: 1px solid #ccc;background-color:darkseagreen;">
+            <td colspan="7" style="align-items:flex-start;">
+                @Html.ActionLink("הוסף מומחה חדש", "AddNewMomhee", "Admin", null, new { @class = "btn btn-primary btn-xs" })
+            </td>
+        </tr>
+        @{ var count = 1; }
+        @foreach (Dictionary<string, string> line in Model.Table)
+        {
+            <tr style="border: 1px solid #ccc;">
+                <td style="padding:3px;border: 0px solid #888;text-align:center;">@(count++)</td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["fname"]</td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["lname"]</td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["email"]</td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;">בקרוב</td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;">
+                    @Html.ActionLink("בקשות מקושרות", "ViewRequestsForMomhee", "Admin", new { govExpId = line["id"] }, new { @class = "btn btn-info btn-xs" })
+                </td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;">
+                    @Html.ActionLink("עדכון", "EditMomhee", "Admin", new { govExpId = line["id"] }, new { @class = "btn btn-warning btn-xs" })
+                </td>
+            </tr>
+        }
+    </table>
+</div>

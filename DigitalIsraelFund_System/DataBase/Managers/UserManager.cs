@@ -27,7 +27,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             fields.Add("password");
             fields.Add("type");
             List<Dictionary<string, string>> userResult =
-                MySqlCommands.Select("users", fields, "email =\'" + email + "\'");
+                MySqlCommands.Select("users", fields, "email =\'" + email + "\'", null);
             if (userResult == null || userResult.Count != 1)
                 return null;
             if (userResult[0]["password"] != password)
@@ -38,7 +38,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             return user;
         }
 
-        public static List<Dictionary<string, string>> GetAllWhere(string where)
+        public static List<Dictionary<string, string>> GetAllWhere(string where, string orderBy)
         {
             List<string> fields = new List<string>();
             fields.Add("id");
@@ -46,7 +46,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             fields.Add("fname");
             fields.Add("lname");
             List<Dictionary<string, string>> requestsResult =
-                MySqlCommands.Select("users", fields, where);
+                MySqlCommands.Select("users", fields, where, orderBy);
             return requestsResult;
         }
     }

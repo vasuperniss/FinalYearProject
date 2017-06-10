@@ -1,8 +1,5 @@
-﻿using DigitalIsraelFund_System.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using DigitalIsraelFund_System.DataBase.Managers;
+using DigitalIsraelFund_System.Models;
 using System.Web.Mvc;
 
 namespace DigitalIsraelFund_System.Controllers
@@ -25,6 +22,33 @@ namespace DigitalIsraelFund_System.Controllers
             System.IO.File.WriteAllText(@dataFile, json);
         }
 
+        [HttpGet]
+        public ActionResult MomhimManage(string page, string resultsPerPage, string orderBy, string isDesc)
+        {
+            int pageNum, resultsPerPageNum;
+            bool isDescBool;
+            if (!bool.TryParse(isDesc, out isDescBool)) isDescBool = false;
+            if (!int.TryParse(page, out pageNum)) pageNum = 1;
+            if (!int.TryParse(resultsPerPage, out resultsPerPageNum)) resultsPerPageNum = 2;
+            string isDescString = "";
+            if (isDescBool) isDescString = " DESC";
 
+            return View(new TableResult { Table = UserManager.GetAllWhere("type='momhee'", orderBy + isDescString),
+                            isDesc = isDescBool, Page = pageNum,
+                            ResultsPerPage = resultsPerPageNum, OrderBy = orderBy});
+        }
+
+        [HttpGet]
+        public ActionResult AddNewMomhee()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AddNewMomhee(string fname, string lname, string email, string password)
+        {
+            UserManager.Add(email, password, fname, lname, "momhee");
+            return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

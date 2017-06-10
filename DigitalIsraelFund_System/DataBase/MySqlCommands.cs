@@ -26,7 +26,8 @@ namespace DigitalIsraelFund_System.DataBase
             return MySqlConnector.Connector.RunNonQueryCommand(query);
         }
 
-        public static List<Dictionary<string, string>> Select(string tableName, List<string> fields, string where)
+        public static List<Dictionary<string, string>> Select(string tableName, List<string> fields,
+            string where, string orderBy)
         {
             string query = "SELECT ";
             if (fields == null)
@@ -38,6 +39,8 @@ namespace DigitalIsraelFund_System.DataBase
             query += " FROM " + tableName;
             if (where != null && where != "")
                 query += " WHERE " + where;
+            if (orderBy != null && orderBy != "")
+                query += " ORDER BY " + orderBy;
             return MySqlConnector.Connector.RunQueryCommand(query);
         }
     }

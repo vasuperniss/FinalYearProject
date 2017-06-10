@@ -19,7 +19,7 @@ namespace DigitalIsraelFund_System.Controllers
         public ActionResult LogOut()
         {
             this.Session["user"] = null;
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Page", "Home");
         }
     }
 }
