@@ -7,7 +7,7 @@
 @{
     UserData user = (UserData)this.Session["user"];
 }
-@if (user != null && user.Type == "Admin")
+@if (user != null && user.Type.ToLower() == "Admin".ToLower())
 {
     <style>
         .button {
@@ -93,7 +93,7 @@
     @Html.Raw(System.Web.HttpUtility.HtmlDecode(Model.HtmlContent))
 </div>
 
-@if (user != null && user.Type == "Admin")
+@if (user != null && user.Type.ToLower() == "Admin".ToLower())
 {
     <div id="txtHtmlDiv" style="min-width:100%;text-align:left;" dir="ltr" hidden>
         <button id="toTxt" onclick="toText()" disabled class="button gray-button" style="color:dimgrey;">Text</button>
@@ -194,7 +194,7 @@
                     alert('הדף נשמר בהצלחה');
                 }
                 else {
-                    alert('בעיה בשמירת הדך');
+                    alert('בעיה בשמירת הדף');
                 }
                 document.getElementById("saveBtn").style.backgroundColor = '#4CAF50';
                 document.getElementById("saveBtn").removeAttribute('disabled');

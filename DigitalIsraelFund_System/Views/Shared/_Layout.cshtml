@@ -59,7 +59,7 @@
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        @if (user.Type == "Admin")
+                        @if (user.Type.ToLower() == "Admin".ToLower())
                         {
                             <li class="navbar-right">@Html.ActionLink("ניהול בקשות", "RequestsManage", "AdminOps")</li>
                             <li class="navbar-right">@Html.ActionLink("ניהול מומחים ממשלתיים", "MomhimManage", "AdminOps")</li>
