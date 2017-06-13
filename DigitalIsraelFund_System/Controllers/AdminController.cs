@@ -29,11 +29,13 @@ namespace DigitalIsraelFund_System.Controllers
             bool isDescBool;
             if (!bool.TryParse(isDesc, out isDescBool)) isDescBool = false;
             if (!int.TryParse(page, out pageNum)) pageNum = 1;
-            if (!int.TryParse(resultsPerPage, out resultsPerPageNum)) resultsPerPageNum = 2;
+            if (!int.TryParse(resultsPerPage, out resultsPerPageNum)) resultsPerPageNum = 10;
             string isDescString = "";
             if (isDescBool) isDescString = " DESC";
 
-            return View(new TableResult { Table = UserManager.GetAllWhere("type='momhee'", orderBy + isDescString),
+            var table = UserManager.GetAllWhere("type='momhee'", orderBy + isDescString, pageNum, resultsPerPageNum);
+            var count = UserManager.Count("type='momhee'");
+            return View(new TableResult { Table = table, NumPages = (int)System.Math.Ceiling((double)count / resultsPerPageNum),
                             isDesc = isDescBool, Page = pageNum,
                             ResultsPerPage = resultsPerPageNum, OrderBy = orderBy});
         }

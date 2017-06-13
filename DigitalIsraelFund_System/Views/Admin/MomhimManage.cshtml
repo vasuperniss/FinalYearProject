@@ -67,7 +67,7 @@
                 @Html.ActionLink("הוסף מומחה חדש", "AddNewMomhee", "Admin", null, new { @class = "btn btn-primary btn-xs" })
             </td>
         </tr>
-        @{ var count = 1; }
+        @{ var count = (Model.Page - 1) * Model.ResultsPerPage + 1; }
         @foreach (Dictionary<string, string> line in Model.Table)
         {
             <tr style="border: 1px solid #ccc;">
@@ -84,5 +84,51 @@
                 </td>
             </tr>
         }
+        <tr>
+            <td colspan="4" style="direction:rtl;background:linear-gradient(to left, #E3E4FA , white);">
+                &nbsp;&nbsp;
+                <font>תוצאות לעמוד : </font>&nbsp;
+                <select id="selectPP" onchange="changeResultsPerPage()">
+                    @for (int i = 1; i <= 5; ++i)
+                    {
+                        if (i * 10 == Model.ResultsPerPage)
+                        {
+                            <option selected value="@(i*10)">@(i*10)</option>
+                        }
+                        else
+                        {
+                            <option value="@(i*10)">@(i * 10)</option>
+                        }
+                    }
+                </select>
+                &nbsp;&nbsp;
+                @if (Model.NumPages <= 7)
+                {
+                    for (int i = 1; i <= Model.NumPages; ++i)
+                    {
+                        if (Model.Page != i)
+                        {
+                        @Html.ActionLink(i + "", "MomhimManage", "Admin", new {
+                                           orderBy = Model.OrderBy,
+                                           isDesc = Model.isDesc,
+                                           page = i,
+                                           resultsPerPage = Model.ResultsPerPage }, null)
+                        <font>&nbsp;</font>
+                        }
+                        else
+                        {
+                            <font style="font-size:small;color:darkgrey;">@i</font><font>&nbsp;</font>
+                        }
+                    }
+                }
+            </td>
+        </tr>
     </table>
 </div>
+
+<script>
+    function changeResultsPerPage() {
+        var pp = document.getElementById('selectPP').value;
+        window.location.href = "/Admin/MomhimManage?isDesc=@Model.isDesc&page=1&resultsPerPage=" + pp;
+    }
+</script>

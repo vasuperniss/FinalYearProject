@@ -1,0 +1,148 @@
+﻿@model DigitalIsraelFund_System.Models.UserData
+@{
+    ViewBag.Title = "EditSelf";
+}
+
+<div id="cntntDiv" contenteditable="false" style="height:100%;resize:none;overflow-y:auto;min-width:inherit;min-height:200px;border-width:thin;border-style: none;font-family:sans-serif;border-color:#555555;font-size:small;font-weight:400;" dir="rtl">
+    <table>
+        <tr>
+            <td style="padding-left:50px;">
+                <table style="padding:10px 5px;border: 0px solid #ccc;margin:auto;">
+                    <tr style="background-color:white;border-radius:5px;">
+                        <td style="padding:3px;font-weight:600;text-align:right;color:black;border: 0px solid #ccc;border-radius:5px;" colspan="2">
+                            <div style="height:10px;border-top-left-radius:5px;border-top-right-radius:10px;background:linear-gradient(to left, #E3E4FA , white);"></div>
+                            <div style="padding-right:20px;height:20px;border-top-left-radius:0px;border-top-right-radius:0px;background:linear-gradient(to left, #E3E4FA , white);">
+                                עדכון פרטים אישיים
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:3px;font-weight:600;text-align:right;">
+                            שם פרטי
+                        </td>
+                        <td style="padding:3px;font-weight:600;text-align:center;">
+                            <input id="firstname" class="form-control" type="text" value="@Model.FirstName"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:3px;font-weight:600;text-align:right;">
+                            שם משפחה
+                        </td>
+                        <td style="padding:3px;font-weight:600;text-align:center;">
+                            <input id="lastname" class="form-control" type="text" value="@Model.LastName"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:3px;font-weight:600;text-align:right;">
+                            אימייל
+                        </td>
+                        <td style="padding:3px;font-weight:600;text-align:center;">
+                            <input id="email" class="form-control" type="text" value="@Model.Email"/>
+                        </td>
+                    </tr>
+                    <tr style="background-color:white;">
+                        <td style="padding:3px;font-weight:600;text-align:left;color:whitesmoke;" colspan="2">
+                            <button id="choose" onclick="editPersonal();" class="btn btn-primary btn-xs">עדכן פרטים אישיים</button>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td style="padding-right:50px;border: 0px solid #ccc;border-right-width:1px;">
+                <table style="padding:10px 5px;border: 0px solid #ccc;margin:auto;">
+                    <tr style="background-color:white;border-radius:5px;">
+                        <td style="padding:3px;font-weight:600;text-align:right;color:black;border: 0px solid #ccc;border-radius:5px;" colspan="2">
+                            <div style="height:10px;border-top-left-radius:5px;border-top-right-radius:10px;background:linear-gradient(to left, #F5B041 , white);"></div>
+                            <div style="padding-right:20px;height:20px;border-top-left-radius:0px;border-top-right-radius:0px;background:linear-gradient(to left, #F5B041 , white);">
+                                שינוי סיסמה
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:3px;font-weight:600;text-align:right;">
+                            סיסמה ישנה
+                        </td>
+                        <td style="padding:3px;font-weight:600;text-align:center;">
+                            <input id="pass_old" class="form-control" type="text" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:3px;font-weight:600;text-align:right;">
+                            סיסמה חדשה
+                        </td>
+                        <td style="padding:3px;font-weight:600;text-align:center;">
+                            <input id="pass_new" class="form-control" type="text" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:3px;font-weight:600;text-align:right;">
+                            סיסמה חדשה
+                        </td>
+                        <td style="padding:3px;font-weight:600;text-align:center;">
+                            <input id="pass_new_verify" class="form-control" type="text" />
+                        </td>
+                    </tr>
+                    <tr style="background-color:white;">
+                        <td style="padding:3px;font-weight:600;text-align:left;color:whitesmoke;" colspan="2">
+                            <button id="choose" onclick="editPassword();" class="btn btn-warning btn-xs">שנה סיסמה</button>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    function editPersonal() {
+        var data = {
+            "fname": $('#firstname').val(),
+            "lname": $('#lastname').val(),
+            "email": $('#email').val(),
+        };
+        $.ajax({
+            url: "/GovExp/EditPersonalInfo",
+            type: "POST",
+            data: JSON.stringify(data),
+            dataType: "json",
+            contentType: "application/json",
+            success: function (response) {
+                if (response.Success) {
+                    alert("פרטים אישיים שונו בהצלחה.");
+                    location.reload();
+                }
+                else {
+                    alert("נכשל");
+                }
+            },
+            error: function () {
+                alert('Fail!!!');
+            }
+        });
+    }
+
+    function editPassword() {
+        var data = {
+            "oldPass": $('#firstname').val(),
+            "newPass": $('#lastname').val(),
+        };
+        $.ajax({
+            url: "/GovExp/EditPassword",
+            type: "POST",
+            data: JSON.stringify(data),
+            dataType: "json",
+            contentType: "application/json",
+            success: function (response) {
+                if (response.Success) {
+                    alert("סיסמה שונתה בהצלחה.");
+                    location.reload();
+                }
+                else {
+                    alert("נכשל");
+                }
+            },
+            error: function () {
+                alert('Fail!!!');
+            }
+        });
+    }
+</script>

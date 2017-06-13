@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml;
 
-namespace DigitalIsraelFund_Web.Models.Widgets
+namespace DigitalIsraelFund_System.Models
 {
     public class FormUnit
     {

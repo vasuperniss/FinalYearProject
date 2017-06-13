@@ -1,17 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using DigitalIsraelFund_System.Models;
 using System.Web.Mvc;
 
 namespace DigitalIsraelFund_System.Controllers
 {
     public class GovExpController : Controller
     {
-        // GET: GovExp
-        public ActionResult Index()
+
+        [HttpGet]
+        public ActionResult EditSelf()
         {
-            return View();
+            return View((UserData)this.Session["user"]);
+        }
+
+        [HttpPost]
+        public JsonResult EditPassword(string oldPass, string newPass)
+        {
+
+            return null;
+        }
+
+        [HttpPost]
+        public JsonResult EditPersonalInfo(string fname, string lname, string email)
+        {
+
+            return null;
         }
     }
 }

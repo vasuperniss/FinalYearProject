@@ -27,7 +27,7 @@ namespace DigitalIsraelFund_System.DataBase
         }
 
         public static List<Dictionary<string, string>> Select(string tableName, List<string> fields,
-            string where, string orderBy)
+            string where, string orderBy, string limit)
         {
             string query = "SELECT ";
             if (fields == null)
@@ -41,7 +41,15 @@ namespace DigitalIsraelFund_System.DataBase
                 query += " WHERE " + where;
             if (orderBy != null && orderBy != "")
                 query += " ORDER BY " + orderBy;
+            if (limit != null && limit != "")
+                query += " LIMIT " + limit;
             return MySqlConnector.Connector.RunQueryCommand(query);
+        }
+
+        public static int Count(string tableName, string where)
+        {
+            string query = "SELECT COUNT(*) AS total FROM " + tableName +" WHERE " + where;
+            return int.Parse(MySqlConnector.Connector.RunQueryCommand(query)[0]["total"]);
         }
     }
 }

@@ -71,9 +71,10 @@
                             <li class="navbar-right">@Html.ActionLink("ניהול מומחים", "GovExpControl", "Admin")</li>
                             <li class="navbar-right">@Html.ActionLink("נתונים סטטיסטיים", "Statistics", "Admin")</li>
                         }
-                        else if (user.Type == "GovExp")
+                        else if (user.Type.ToLower() == "momhee".ToLower())
                         {
-                            <li class="navbar-right">@Html.ActionLink("בקשות", "RequestControl", "GovExp")</li>
+                            <li class="navbar-right">@Html.ActionLink("בקשות", "RequestsManage", "GovExp")</li>
+                            <li class="navbar-right">@Html.ActionLink("עדכון פרטים אישיים\\סיסמה", "EditSelf", "GovExp")</li>
                         }
                     </ul>
                     <ul class="nav navbar-nav navbar-left">
@@ -97,7 +98,7 @@
                         <input id="email" type="text" name="email" placeholder="אימייל" />
                         <input id="pass" type="password" name="password" placeholder="סיסמה" />
                         <button id="subm" class="login loginmodal-submit" style="width:95%">כניסה</button>
-                        <img id="loginLoadIcon" src="~/Content/Images/loadingIcon.gif" style="width:auto;margin:auto;align-self:center;display:none;" />
+                        <img id="loginLoadIcon" src="~/Content/Images/loadingIcon.gif" style="width:auto;margin:auto;align-self:center;display:none;padding-top:5px;" />
                         <h5 id="logInFailMsg" style="color:red;">* שם המשתמש או הסיסמה שגואים.</h5>
                     </div>
                 </div>

@@ -6,6 +6,7 @@ namespace DigitalIsraelFund_System.Models
     {
         public int Page { get; set; }
         public int ResultsPerPage { get; set; }
+        public int NumPages { get; set; }
         public string OrderBy { get; set; }
         public bool isDesc { get; set; }
         public List<Dictionary<string, string>> Table { get; set; }
