@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DigitalIsraelFund_System.DataBase;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,10 +9,9 @@ namespace DigitalIsraelFund_System.Controllers
 {
     public class RequestController : Controller
     {
-        // GET: Request
-        public ActionResult Index()
+        public JsonResult ValidateField(string value, string type)
         {
-            return View();
+            return Json(new { Success = TypeValidator.Validator.Validate(value, type) }, JsonRequestBehavior.AllowGet);
         }
     }
 }

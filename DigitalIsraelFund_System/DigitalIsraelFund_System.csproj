@@ -129,6 +129,7 @@
     <Compile Include="DataBase\Managers\UserManager.cs" />
     <Compile Include="DataBase\MySqlCommands.cs" />
     <Compile Include="DataBase\MySqlConnector.cs" />
+    <Compile Include="DataBase\TypeValidator.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
