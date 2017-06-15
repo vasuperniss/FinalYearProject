@@ -139,6 +139,7 @@
                         }
                         else {
                             $('#logInFailMsg').show(400);
+                            $('#logInFailMsg').text(response.ErrMsg);
                             document.getElementById("subm").style.color = 'white';
                             document.getElementById("subm").removeAttribute('disabled');
                             $('#loginLoadIcon').hide(200);

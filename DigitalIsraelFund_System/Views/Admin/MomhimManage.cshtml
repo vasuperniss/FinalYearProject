@@ -4,14 +4,38 @@
     ViewBag.Title = "ניהול מומחים";
 }
 
+<style>
+    .myInp {
+    width: 180px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 12px;
+    background-color: white;
+    background-image: url('~/Content/Images/search_icon.png');
+    background-position: 10px 10px; 
+    background-repeat: no-repeat;
+    padding: 4px 4px 4px 4px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+
+.myInp:focus {
+    width: 240px;
+}
+</style>
+
 <div onload='loadTable(1, 10, "join_date")' id="cntntDiv" contenteditable="false" style="height:100%;resize:none;overflow-y:auto;min-width:inherit;min-height:200px;border-width:thin;border-style: none;font-family:sans-serif;border-color:#555555;font-size:small;font-weight:400;" dir="rtl">
     <table style="padding:5px 5px;border: 1px solid #ccc;margin:auto;width:85%;">
         <tr style="background-color:#E3E4FA;">
             <td style="padding:3px;font-weight:600;text-align:center;"></td>
             <td style="padding:3px;font-weight:600;text-align:center;">
+                <input style="width:12px;height:12px;" type="image" src="~/Content/Images/search_icon.png"
+                       onclick="showSearch('fname', 'שם פרטי')" />
                 @Html.ActionLink("שם פרטי", "MomhimManage", "Admin", new { orderBy = "fname",
                isDesc = Model.OrderBy == "fname" ? !Model.isDesc : false, page = Model.Page,
-               resultsPerPage = Model.ResultsPerPage }, null) @{ if (Model.OrderBy == "fname")
+               resultsPerPage = Model.ResultsPerPage, search = Model.Search,
+               searchBy = Model.SearchField }, null) @{ if (Model.OrderBy == "fname")
                    { if (!Model.isDesc)
                        { <font>🠟</font> }
                        else
@@ -19,9 +43,12 @@
                    } }
             </td>
             <td style="padding:3px;font-weight:600;text-align:center;">
+                <input style="width:12px;height:12px;" type="image" src="~/Content/Images/search_icon.png"
+                       onclick="showSearch('lname', 'שם משפחה')" />
                 @Html.ActionLink("שם משפחה", "MomhimManage", "Admin", new {
                 orderBy = "lname", isDesc = Model.OrderBy == "lname" ? !Model.isDesc : Model.isDesc, page = Model.Page,
-                resultsPerPage = Model.ResultsPerPage }, null) @{ if (Model.OrderBy == "lname")
+                resultsPerPage = Model.ResultsPerPage, search = Model.Search,
+               searchBy = Model.SearchField }, null) @{ if (Model.OrderBy == "lname")
                     {
                         if (!Model.isDesc)
                         { <font>🠟</font> }
@@ -30,12 +57,15 @@
                     } }
             </td>
             <td style="padding:3px;font-weight:600;text-align:center;">
+                <input style="width:12px;height:12px;" type="image" src="~/Content/Images/search_icon.png"
+                       onclick="showSearch('email', 'אימייל')" />
                 @Html.ActionLink("אימייל", "MomhimManage", "Admin", new
                            {
-                               orderBy = "email",
-                               isDesc = Model.OrderBy == "email" ? !Model.isDesc : Model.isDesc,
-                               page = Model.Page,
-                               resultsPerPage = Model.ResultsPerPage
+                                orderBy = "email",
+                                isDesc = Model.OrderBy == "email" ? !Model.isDesc : Model.isDesc,
+                                page = Model.Page,
+                                resultsPerPage = Model.ResultsPerPage, search = Model.Search,
+                                searchBy = Model.SearchField
                            }, null) @{ if (Model.OrderBy == "email")
                                {
                                    if (!Model.isDesc)
@@ -47,10 +77,11 @@
             <td style="padding:3px;font-weight:600;text-align:center;">
                 @Html.ActionLink("מס' בקשות מצורפות", "MomhimManage", "Admin", new
                            {
-                               orderBy = "num_requests",
-                               isDesc = Model.OrderBy == "num_requests" ? !Model.isDesc : Model.isDesc,
-                               page = Model.Page,
-                               resultsPerPage = Model.ResultsPerPage
+                                orderBy = "num_requests",
+                                isDesc = Model.OrderBy == "num_requests" ? !Model.isDesc : Model.isDesc,
+                                page = Model.Page,
+                                resultsPerPage = Model.ResultsPerPage, search = Model.Search,
+                                searchBy = Model.SearchField
                            }, null) @{ if (Model.OrderBy == "num_requests")
                                {
                                    if (!Model.isDesc)
@@ -63,8 +94,28 @@
             <td style="padding:3px;font-weight:600;text-align:center;"></td>
         </tr>
         <tr style="border: 1px solid #ccc;background-color:darkseagreen;">
-            <td colspan="7" style="align-items:flex-start;">
+            <td colspan="2" style="align-items:flex-start">
                 @Html.ActionLink("הוסף מומחה חדש", "AddNewMomhee", "Admin", null, new { @class = "btn btn-primary btn-xs" })
+            </td>
+            <td colspan="5" style="align-items:flex-start;align-items:center;vertical-align:central;">
+                @{
+                    var hidden = "";
+                    var dict = new Dictionary<string, string>();
+                    dict["fname"] = "שם פרטי";
+                    dict["lname"] = "שם משפחה";
+                    dict["email"] = "אימייל";
+                    if (Model.SearchField == null)
+                    {
+                        hidden = "hidden";
+                    }
+                }
+                <div id="searchDiv" @hidden style="float:right;">
+                    <font>חיפוש לפי</font>&nbsp;<font style="font-weight:600;" id="searchByTxt">@(Model.SearchField!=null?dict[Model.SearchField]:"")</font>
+                    &nbsp;<input id="searchVal" type="search" value="@Model.Search" list="listOptions" placeholder="חיפוש" class="myInp" oninput="updateSearchOptions()" onkeypress="searchAttempt(event)" />
+                    <input style="width:16px;height:16px;vertical-align:central;margin:6px;float:right" type="image" src="~/Content/Images/delete_icon.png" onclick="hideSearch()" />
+                    <input type="hidden" id="searchBy" value="@Model.SearchField" />
+                </div>
+                <datalist id="listOptions"></datalist>
             </td>
         </tr>
         @{ var count = (Model.Page - 1) * Model.ResultsPerPage + 1; }
@@ -129,6 +180,55 @@
 <script>
     function changeResultsPerPage() {
         var pp = document.getElementById('selectPP').value;
-        window.location.href = "/Admin/MomhimManage?isDesc=@Model.isDesc&page=1&resultsPerPage=" + pp;
+        window.location.href = "/Admin/MomhimManage?isDesc=@Model.isDesc&page=1&resultsPerPage=" + pp
+                        + "&search=@Model.Search&searchBy=@Model.SearchField";
     }
+
+    function updateSearchOptions() {
+        var data = {
+            "searchVal": document.getElementById('searchVal').value,
+            "searchBy": document.getElementById('searchBy').value
+        };
+        $.ajax({
+            url: "/Admin/SearchUserBy",
+            type: "POST",
+            data: JSON.stringify(data),
+            dataType: "json",
+            contentType: "application/json",
+            success: function (response) {
+                var options = '';
+                $.each(response.List, function (index, item) {
+                    options += '<option value="' + item + '" />';
+                });
+                document.getElementById('listOptions').innerHTML = options;
+            },
+            error: function () {
+
+            }
+        });
+    }
+
+    function showSearch(searchBy, title) {
+        $('#searchDiv').fadeIn(400);
+        document.getElementById('searchByTxt').innerText = title;
+        document.getElementById('searchBy').value = searchBy;
+        document.getElementById('searchVal').value = "";
+    }
+
+    function hideSearch() {
+        $('#searchDiv').fadeOut(400);
+        @if (Model.SearchField != null)
+        {
+            <text>window.location.href = "/Admin/MomhimManage?isDesc=@Model.isDesc&page=1&resultsPerPage=@Model.ResultsPerPage";</text>
+        }
+    }
+
+    function searchAttempt(event) {
+        if (event.keyCode == 13) {
+            window.location.href = "/Admin/MomhimManage?isDesc=@Model.isDesc&page=1&resultsPerPage=@Model.ResultsPerPage"
+                        + "&search=" + document.getElementById('searchVal').value
+                        + "&searchBy=" + document.getElementById('searchBy').value;
+        }
+    }
+
 </script>

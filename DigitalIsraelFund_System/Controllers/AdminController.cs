@@ -1,5 +1,6 @@
 ﻿using DigitalIsraelFund_System.DataBase.Managers;
 using DigitalIsraelFund_System.Models;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace DigitalIsraelFund_System.Controllers
@@ -23,7 +24,7 @@ namespace DigitalIsraelFund_System.Controllers
         }
 
         [HttpGet]
-        public ActionResult MomhimManage(string page, string resultsPerPage, string orderBy, string isDesc)
+        public ActionResult MomhimManage(string page, string resultsPerPage, string orderBy, string isDesc, string search, string searchBy)
         {
             int pageNum, resultsPerPageNum;
             bool isDescBool;
@@ -32,12 +33,35 @@ namespace DigitalIsraelFund_System.Controllers
             if (!int.TryParse(resultsPerPage, out resultsPerPageNum)) resultsPerPageNum = 10;
             string isDescString = "";
             if (isDescBool) isDescString = " DESC";
+            string where = "type='momhee'";
+            if (searchBy != null && searchBy != "" && search != null && search != "")
+            {
+                if (searchBy == "fname" || searchBy == "lname" || searchBy == "email")
+                    where += " and " + searchBy + " LIKE '%" + search + "%'";
+            }
 
-            var table = UserManager.Manager.GetAllWhere("type='momhee'", orderBy + isDescString, pageNum, resultsPerPageNum);
+            var table = UserManager.Manager.GetAllWhere(where, orderBy + isDescString, pageNum, resultsPerPageNum);
             var count = UserManager.Manager.Count("type='momhee'");
             return View(new TableResult { Table = table, NumPages = (int)System.Math.Ceiling((double)count / resultsPerPageNum),
                             isDesc = isDescBool, Page = pageNum,
-                            ResultsPerPage = resultsPerPageNum, OrderBy = orderBy});
+                            ResultsPerPage = resultsPerPageNum, OrderBy = orderBy,
+                            Search = search, SearchField = searchBy});
+        }
+
+        [HttpPost]
+        public JsonResult SearchUserBy(string searchVal, string searchBy)
+        {
+            var table = UserManager.Manager.GetAllWhere("type='momhee' and "
+                + searchBy + " LIKE '%" + searchVal + "%'", searchBy, 1, 5);
+            List<string> results = new List<string>();
+            if (table != null)
+            {
+                foreach (Dictionary<string, string> row in table)
+                {
+                    results.Add(row[searchBy]);
+                }
+            }
+            return Json(new { List = results }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
