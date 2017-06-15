@@ -10,9 +10,32 @@ namespace DigitalIsraelFund_System.Controllers
         [HttpPost]
         public JsonResult Login(string email, string password)
         {
-            UserData user = UserManager.GetIfCorrect(email, password);
+            UserData user = UserManager.Manager.GetIfCorrect(email, password);
+            if (!UserManager.Manager.isUserAllowed(email))
+            {
+                return Json(new { Success = false, ErrMsg = "החשבון הנ\"ל חסום מפעולות למשך 5 דקות." }, JsonRequestBehavior.AllowGet);
+            }
             Session["user"] = user;
-            return Json(new { Success = user != null }, JsonRequestBehavior.AllowGet);
+            if (user == null)
+            {
+                int badAttempts = UserManager.Manager.addIncorrectAttempt(email);
+                bool isBlocked = !UserManager.Manager.isUserAllowed(email);
+                if (!isBlocked)
+                    return Json(new
+                    {
+                        Success = false,
+                        ErrMsg = "הסיסמה שהזנת אינה נכונה. נותרו "
+                    + (3 - badAttempts) + " מס' הזנות לא נכונות של הסיסמה עד לחסימה"
+                    }, JsonRequestBehavior.AllowGet);
+                else
+                    this.Session["user"] = null;
+                return Json(new
+                {
+                    Success = false,
+                    ErrMsg = "החשבון נחסם למשך 5 דקות"
+                }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]

@@ -6,7 +6,50 @@ namespace DigitalIsraelFund_System.DataBase.Managers
 {
     public class UserManager
     {
-        public static void Add(string email, string password, string fname, string lname, string type)
+        private static UserManager instance = new UserManager();
+
+        public static UserManager Manager { get { return instance; } }
+
+        private Dictionary<string, int> currectAttempts;
+        private Dictionary<string, DateTime> blockedUsers;
+
+        private UserManager()
+        {
+            this.currectAttempts = new Dictionary<string, int>();
+            this.blockedUsers = new Dictionary<string, DateTime>();
+        }
+
+        public bool isUserAllowed(string username)
+        {
+            if (this.blockedUsers.ContainsKey(username))
+            {
+                DateTime now = DateTime.UtcNow;
+                DateTime then = this.blockedUsers[username];
+                if (now.Subtract(then).Minutes > 5)
+                {
+                    this.blockedUsers.Remove(username);
+                }
+            }
+            return !this.blockedUsers.ContainsKey(username);
+        }
+
+        public int addIncorrectAttempt(string username)
+        {
+            int currIncorrectAttempt = 1;
+            if (currectAttempts.ContainsKey(username))
+            {
+                currIncorrectAttempt = currectAttempts[username] + 1;
+            }
+            currectAttempts[username] = currIncorrectAttempt;
+            if (currIncorrectAttempt >= 3)
+            {
+                this.currectAttempts.Remove(username);
+                this.blockedUsers[username] = DateTime.UtcNow;
+            }
+            return currIncorrectAttempt;
+        }
+
+        public void Add(string email, string password, string fname, string lname, string type)
         {
             var values = new Dictionary<string, string>();
             values["email"] = email;
@@ -17,7 +60,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             MySqlCommands.Insert("users", values);
         }
 
-        public static UserData GetIfCorrect(string email, string password)
+        public UserData GetIfCorrect(string email, string password)
         {
             UserData user = new UserData();
             var fields = new List<string>();
@@ -42,17 +85,17 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             return user;
         }
 
-        public static bool Change(UserData user, Dictionary<string, string> newValues)
+        public bool Change(UserData user, Dictionary<string, string> newValues)
         {
             return MySqlCommands.Update("users", newValues, "id='" + user.Id + "'");
         }
 
-        public static int Count(string where)
+        public int Count(string where)
         {
             return MySqlCommands.Count("users", where);
         }
 
-        public static List<Dictionary<string, string>> GetAllWhere(string where, string orderBy, int page, int resultsPerPage)
+        public List<Dictionary<string, string>> GetAllWhere(string where, string orderBy, int page, int resultsPerPage)
         {
             List<string> fields = new List<string>();
             fields.Add("id");

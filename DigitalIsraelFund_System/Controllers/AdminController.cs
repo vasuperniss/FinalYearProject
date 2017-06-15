@@ -33,8 +33,8 @@ namespace DigitalIsraelFund_System.Controllers
             string isDescString = "";
             if (isDescBool) isDescString = " DESC";
 
-            var table = UserManager.GetAllWhere("type='momhee'", orderBy + isDescString, pageNum, resultsPerPageNum);
-            var count = UserManager.Count("type='momhee'");
+            var table = UserManager.Manager.GetAllWhere("type='momhee'", orderBy + isDescString, pageNum, resultsPerPageNum);
+            var count = UserManager.Manager.Count("type='momhee'");
             return View(new TableResult { Table = table, NumPages = (int)System.Math.Ceiling((double)count / resultsPerPageNum),
                             isDesc = isDescBool, Page = pageNum,
                             ResultsPerPage = resultsPerPageNum, OrderBy = orderBy});
@@ -49,7 +49,7 @@ namespace DigitalIsraelFund_System.Controllers
         [HttpPost]
         public ActionResult AddNewMomhee(string fname, string lname, string email, string password)
         {
-            UserManager.Add(email, password, fname, lname, "momhee");
+            UserManager.Manager.Add(email, password, fname, lname, "momhee");
             return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
         }
     }

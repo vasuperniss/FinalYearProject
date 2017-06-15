@@ -20,19 +20,38 @@ namespace DigitalIsraelFund_System.Controllers
         {
             TypeValidator v = TypeValidator.Validator;
             UserData user = (UserData)this.Session["user"];
+            if (!UserManager.Manager.isUserAllowed(user.Email))
+            {
+                return Json(new { Success = false, ErrMsg = "החשבון הנ\"ל חסום מפעולות למשך 5 דקות." }, JsonRequestBehavior.AllowGet);
+            }
             if (v.Validate(oldPass, "Password") && v.Validate(newPass, "Password"))
             {
-                UserData passTest = UserManager.GetIfCorrect(user.Email, oldPass);
+                UserData passTest = UserManager.Manager.GetIfCorrect(user.Email, oldPass);
                 if (passTest != null && passTest.Id == user.Id)
                 {
                     Dictionary<string, string> newValues = new Dictionary<string, string>();
                     newValues["password"] = newPass;
-                    bool isSuccess = UserManager.Change(user, newValues);
+                    bool isSuccess = UserManager.Manager.Change(user, newValues);
                     return Json(new { Success = isSuccess, ErrMsg = "שגיאה בשרת." }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
-                    return Json(new { Success = false, ErrMsg = "הסיסמה הישנה שהזנת אינה נכונה." }, JsonRequestBehavior.AllowGet);
+                    int badAttempts = UserManager.Manager.addIncorrectAttempt(user.Email);
+                    bool isBlocked = !UserManager.Manager.isUserAllowed(user.Email);
+                    if (!isBlocked)
+                        return Json(new
+                        {
+                            Success = false,
+                            ErrMsg = "הסיסמה הישנה שהזנת אינה נכונה. נותרו "
+                        + (3 - badAttempts) + " מס' הזנות לא נכונות של הסיסמה עד לחסימה"
+                        }, JsonRequestBehavior.AllowGet);
+                    else
+                        this.Session["user"] = null;
+                        return Json(new
+                        {
+                            Success = false,
+                            ErrMsg = "החשבון נחסם למשך 5 דקות"
+                        }, JsonRequestBehavior.AllowGet);
                 }
             }
             return Json(new { Success = false, ErrMsg = "אחת הסיסמאות שהזנן אינה בםורמט הנכון." }, JsonRequestBehavior.AllowGet);
@@ -43,22 +62,41 @@ namespace DigitalIsraelFund_System.Controllers
         {
             TypeValidator v = TypeValidator.Validator;
             UserData user = (UserData)this.Session["user"];
+            if (!UserManager.Manager.isUserAllowed(user.Email))
+            {
+                return Json(new { Success = false, ErrMsg = "החשבון הנ\"ל חסום מפעולות למשך 5 דקות." }, JsonRequestBehavior.AllowGet);
+            }
             if (v.Validate(password, "Password") && v.Validate(fname, "Letters")
                 && v.Validate(lname, "Letters") && v.Validate(email, "Email"))
             {
-                UserData passTest = UserManager.GetIfCorrect(user.Email, password);
+                UserData passTest = UserManager.Manager.GetIfCorrect(user.Email, password);
                 if (passTest != null && passTest.Id == user.Id)
                 {
                     Dictionary<string, string> newValues = new Dictionary<string, string>();
                     newValues["fname"] = fname;
                     newValues["lname"] = lname;
                     newValues["email"] = email;
-                    bool isSuccess = UserManager.Change(user, newValues);
+                    bool isSuccess = UserManager.Manager.Change(user, newValues);
                     return Json(new { Success = isSuccess, ErrMsg = "שגיאה בשרת." }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
-                    return Json(new { Success = false, ErrMsg = "הסיסמה שהזנת אינה נכונה." }, JsonRequestBehavior.AllowGet);
+                    int badAttempts = UserManager.Manager.addIncorrectAttempt(user.Email);
+                    bool isBlocked = !UserManager.Manager.isUserAllowed(user.Email);
+                    this.Session["user"] = null;
+                    if (!isBlocked)
+                        return Json(new
+                        {
+                            Success = false,
+                            ErrMsg = "הסיסמה הישנה שהזנת אינה נכונה. נותרו "
+                        + (3 - badAttempts) + " מס' הזנות לא נכונות של הסיסמה עד לחסימה"
+                        }, JsonRequestBehavior.AllowGet);
+                    else
+                        return Json(new
+                        {
+                            Success = false,
+                            ErrMsg = "החשבון נחסם למשך 5 דקות"
+                        }, JsonRequestBehavior.AllowGet);
                 }
             }
             return Json(new { Success = false, ErrMsg = "אחד מהשדות שהזנן אינו בפורנט הנכון." }, JsonRequestBehavior.AllowGet);
