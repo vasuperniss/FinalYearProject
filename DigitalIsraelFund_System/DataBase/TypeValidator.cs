@@ -19,6 +19,7 @@ namespace DigitalIsraelFund_System.DataBase
             this.regexes["Real"] = new Regex("^([0-9]+[.][0-9])|([0-9][.][0-9]+)|([0-9]+)$");
             this.regexes["Letters"] = new Regex("^([- .,A-Za-z0-9א-ת_\n\"]+)$");
             this.regexes["Date"] = new Regex(@"^([0-9]{4,4}-[0-9]{2,2}-[0-9]{2,2})$");
+            this.regexes["Password"] = new Regex(@"^([- .@!#$%&*A-Za-z0-9_]+)$");
         }
 
         public bool Validate(string input, string type)

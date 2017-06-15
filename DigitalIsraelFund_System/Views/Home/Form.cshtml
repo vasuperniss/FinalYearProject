@@ -1,10 +1,10 @@
-﻿@model DigitalIsraelFund_System.Models.FormUnit
+﻿@model DigitalIsraelFund_System.Models.FormComponent
 @using DigitalIsraelFund_System.Models
 @{
     ViewBag.Title = "הגשת בקשה";
 
-    FormUnit root = Model;
-    List<FormUnit> pages = root.FormUnits;
+    FormComponent root = Model;
+    List<FormComponent> pages = root.FormUnits;
 }
 
 @functions {
@@ -83,7 +83,7 @@
     }
 </style>
 
-@helper DrawWidget(FormUnit w)
+@helper DrawWidget(FormComponent w)
 {
 switch (w.Type)
 {
@@ -117,7 +117,7 @@ switch (w.Type)
     }
 }
 
-@helper DrawText(FormUnit w)
+@helper DrawText(FormComponent w)
 {
 var weight = w.Properties.ContainsKey("weight") ? w.Properties["weight"] : "600";
 var size = w.Properties.ContainsKey("size") ? w.Properties["size"] : "small";
@@ -126,50 +126,50 @@ var margin = w.Properties.ContainsKey("margin") ? w.Properties["margin"] + "px" 
     <div style="font-size:@size; font-weight:@weight; color:@color; margin:@margin;">@w.Text</div>
 }
 
-@helper DrawTable(FormUnit w)
+@helper DrawTable(FormComponent w)
 {
 var id = w.Properties.ContainsKey("id") ? w.Properties["id"] : "";
 var borderColor = w.Properties.ContainsKey("color") ? w.Properties["color"] : "#ccc";
 id += this.repeatableIds;
     <table id="@id" style="padding:5px 5px;border: 1px solid @borderColor;margin-bottom:10px;width:100%;">
-        @foreach (FormUnit subW in w.FormUnits)
+        @foreach (FormComponent subW in w.FormUnits)
         {
             @DrawWidget(subW);
         }
     </table>
 }
 
-@helper DrawRow(FormUnit w)
+@helper DrawRow(FormComponent w)
 {
 var color = w.Properties.ContainsKey("color") ? w.Properties["color"] : "#ffffff";
     <tr style="background-color:@color;">
-        @foreach (FormUnit subW in w.FormUnits)
+        @foreach (FormComponent subW in w.FormUnits)
         {
             @DrawWidget(subW);
         }
     </tr>
 }
 
-@helper DrawCol(FormUnit w)
+@helper DrawCol(FormComponent w)
 {
 var span = w.Properties.ContainsKey("span") ? w.Properties["span"] : "1";
 var color = w.Properties.ContainsKey("color") ? w.Properties["color"] : "null";
     <td align="center" style="font-size:small;padding:3px;border: 0px solid #ff0000;vertical-align:top;background-color:@color;" colspan="@span ">
-        @foreach (FormUnit subW in w.FormUnits)
+        @foreach (FormComponent subW in w.FormUnits)
         {
             @DrawWidget(subW);
         }
     </td>
 }
 
-@helper DrawRepeatAble(FormUnit w)
+@helper DrawRepeatAble(FormComponent w)
 {
 var id = w.Properties.ContainsKey("id") ? w.Properties["id"] : "";
 var pasteTo = w.Properties.ContainsKey("pasteTo") ? w.Properties["pasteTo"] : "";
 var addition = "_{" + id + "}";
 this.repeatableIds += addition;
 var repeated = "";
-foreach (FormUnit subW in w.FormUnits)
+foreach (FormComponent subW in w.FormUnits)
 {
     repeated += @DrawWidget(subW);
 }
@@ -179,20 +179,20 @@ repeatables.Add(id, repeated);
     @Html.Raw(repeated.Replace(addition, "_1").Replace(indexStr, "1"));
 }
 
-@helper DrawDeleter(FormUnit w)
+@helper DrawDeleter(FormComponent w)
 {
 var id = w.Properties.ContainsKey("id") ? w.Properties["id"] : "";
 var delFrom = w.Properties.ContainsKey("delFrom") ? w.Properties["delFrom"] : "";
     <button type="button" onclick="delete_fn('@id', '@repeatableIds.Replace("_{"+id+"}","")','@delFrom','@this.repeatableIds.Replace("{","{Index")');" style="background-color:tomato;color:white;border:none;border-radius:16px;font-size:small;margin-top:2px;">x</button>
 }
 
-@helper DrawIndexer(FormUnit w)
+@helper DrawIndexer(FormComponent w)
 {
 var id = w.Properties.ContainsKey("id") ? w.Properties["id"] : "";
     <div style="font-weight:700;font-size:small;margin-top:4px;">@this.repeatableIds.Replace("{", "{Index")</div>
 }
 
-@helper DrawRepeater(FormUnit w)
+@helper DrawRepeater(FormComponent w)
 {
 var repeaterId = w.Properties.ContainsKey("repeaterId") ? w.Properties["repeaterId"] : "";
 var pasteTo = w.Properties.ContainsKey("pasteTo") ? w.Properties["pasteTo"] : "";
@@ -261,7 +261,7 @@ var father = repeatableIds.Length > 0 ? repeatableIds.Substring(2, repeatableIds
     }
 </script>
 
-@helper DrawInput(FormUnit w)
+@helper DrawInput(FormComponent w)
 {
 var required = w.Properties.ContainsKey("required") ? w.Properties["required"] : "false";
 var range = w.Properties.ContainsKey("range") ? w.Properties["range"] : "Letters";
@@ -278,7 +278,7 @@ else
 {
     if (w.Properties["type"] == "radio")
     {
-        foreach (FormUnit subW in w.FormUnits)
+        foreach (FormComponent subW in w.FormUnits)
         {
                 <input form="textForm" class="myInput" id="@id" name="Values[@id]" type="radio" value="@subW.Text" onchange="validate('@id',@required,'@range', false);" />
                 <label for="@subW.Text">@subW.Text</label>
@@ -293,8 +293,8 @@ else
     {
             <select form="textForm" class="myInput" id="@id" name="Values[@id]"
                     onchange="validate('@id',@required,'@range', false);">
-                @foreach (FormUnit option in w.FormUnits)
-            {
+                @foreach (FormComponent option in w.FormUnits)
+                {
                     <option value="@option.Text">@option.Text</option>
                 }
             </select>
@@ -340,9 +340,9 @@ else
         </div>
         for (int p = 0; p < pages.Count; ++p)
         {
-            FormUnit page = pages[p];
+            FormComponent page = pages[p];
             <div id="t-@p" class="tabcontent">
-                @foreach (FormUnit w in page.FormUnits)
+                @foreach (FormComponent w in page.FormUnits)
                 {
                     @DrawWidget(w);
                 }

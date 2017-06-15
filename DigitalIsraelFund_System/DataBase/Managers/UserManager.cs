@@ -1,5 +1,6 @@
 ﻿using DigitalIsraelFund_System.Models;
 using System.Collections.Generic;
+using System;
 
 namespace DigitalIsraelFund_System.DataBase.Managers
 {
@@ -39,6 +40,11 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             user.Email = userResult[0]["email"];
             user.Type = userResult[0]["type"];
             return user;
+        }
+
+        public static bool Change(UserData user, Dictionary<string, string> newValues)
+        {
+            return MySqlCommands.Update("users", newValues, "id='" + user.Id + "'");
         }
 
         public static int Count(string where)
