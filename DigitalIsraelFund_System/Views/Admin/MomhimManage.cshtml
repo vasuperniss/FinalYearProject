@@ -6,26 +6,45 @@
 
 <style>
     .myInp {
-    width: 180px;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 12px;
-    background-color: white;
-    background-image: url('~/Content/Images/search_icon.png');
-    background-position: 10px 10px; 
-    background-repeat: no-repeat;
-    padding: 4px 4px 4px 4px;
-    -webkit-transition: width 0.4s ease-in-out;
-    transition: width 0.4s ease-in-out;
-}
+        width: 180px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 12px;
+        background-color: white;
+        background-image: url('~/Content/Images/search_icon.png');
+        background-position: 10px 10px;
+        background-repeat: no-repeat;
+        padding: 4px 4px 4px 4px;
+        -webkit-transition: width 0.4s ease-in-out;
+        transition: width 0.4s ease-in-out;
+    }
 
-.myInp:focus {
-    width: 240px;
-}
+        .myInp:focus {
+            width: 240px;
+        }
+
+    .fakeInput {
+        border: solid 0px #00A;
+        border-radius: 4px;
+        border-right-color: #38ACEC;
+        border-right-width: 0px;
+    }
 </style>
 
-<div onload='loadTable(1, 10, "join_date")' id="cntntDiv" contenteditable="false" style="height:100%;resize:none;overflow-y:auto;min-width:inherit;min-height:200px;border-width:thin;border-style: none;font-family:sans-serif;border-color:#555555;font-size:small;font-weight:400;" dir="rtl">
+<select hidden id="officesCopy" class="fakeInput">
+    @{
+        List<Dictionary<string, string>> offices = (List<Dictionary<string, string>>)ViewData["offices"];
+        foreach (Dictionary<string, string> office in offices)
+        {
+            <option class="fakeInput" value="@office["id"]">@office["office_name"]</option>
+        }
+    }
+</select>
+
+
+
+<div id="cntntDiv" contenteditable="false" style="height:100%;resize:none;overflow-y:auto;min-width:inherit;min-height:200px;border-width:thin;border-style: none;font-family:sans-serif;border-color:#555555;font-size:small;font-weight:400;" dir="rtl">
     <table style="padding:5px 5px;border: 1px solid #ccc;margin:auto;width:85%;">
         <tr style="background-color:#E3E4FA;">
             <td style="padding:3px;font-weight:600;text-align:center;"></td>
@@ -75,21 +94,26 @@
                                } }
             </td>
             <td style="padding:3px;font-weight:600;text-align:center;">
-                @Html.ActionLink("מס' בקשות מצורפות", "MomhimManage", "Admin", new
-                           {
-                                orderBy = "num_requests",
-                                isDesc = Model.OrderBy == "num_requests" ? !Model.isDesc : Model.isDesc,
-                                page = Model.Page,
-                                resultsPerPage = Model.ResultsPerPage, search = Model.Search,
-                                searchBy = Model.SearchField
-                           }, null) @{ if (Model.OrderBy == "num_requests")
-                               {
-                                   if (!Model.isDesc)
-                                   { <font>🠟</font> }
-                                   else
-                                   { <font>🠝</font> }
-                               } }
+                <input style="width:12px;height:12px;" type="image" src="~/Content/Images/search_icon.png"
+                       onclick="showSearch('office_name', 'משרד')" />
+                @Html.ActionLink("משרד", "MomhimManage", "Admin", new
+               {
+                   orderBy = "office_name",
+                   isDesc = Model.OrderBy == "office_name" ? !Model.isDesc : Model.isDesc,
+                   page = Model.Page,
+                   resultsPerPage = Model.ResultsPerPage,
+                   search = Model.Search,
+                   searchBy = Model.SearchField
+               }, null) @{ if (Model.OrderBy == "office_name")
+                   {
+                       if (!Model.isDesc)
+                       { <font>🠟</font> }
+                       else
+                       { <font>🠝</font> }
+                   } }
             </td>
+            <td style="padding:3px;font-weight:600;text-align:center;">טלפון</td>
+            <td style="padding:3px;font-weight:600;text-align:center;">פלפון</td>
             <td style="padding:3px;font-weight:600;text-align:center;"></td>
             <td style="padding:3px;font-weight:600;text-align:center;"></td>
         </tr>
@@ -97,13 +121,14 @@
             <td colspan="2" style="align-items:flex-start">
                 @Html.ActionLink("הוסף מומחה חדש", "AddNewMomhee", "Admin", null, new { @class = "btn btn-primary btn-xs" })
             </td>
-            <td colspan="5" style="align-items:flex-start;align-items:center;vertical-align:central;">
+            <td colspan="7" style="align-items:flex-start;align-items:center;vertical-align:central;">
                 @{
                     var hidden = "";
                     var dict = new Dictionary<string, string>();
                     dict["fname"] = "שם פרטי";
                     dict["lname"] = "שם משפחה";
                     dict["email"] = "אימייל";
+                    dict["office_name"] = "משרד";
                     if (Model.SearchField == null)
                     {
                         hidden = "hidden";
@@ -112,7 +137,7 @@
                 <div id="searchDiv" @hidden style="float:right;">
                     <font>חיפוש לפי</font>&nbsp;<font style="font-weight:600;" id="searchByTxt">@(Model.SearchField!=null?dict[Model.SearchField]:"")</font>
                     &nbsp;<input id="searchVal" type="search" value="@Model.Search" list="listOptions" placeholder="חיפוש" class="myInp" oninput="updateSearchOptions()" onkeypress="searchAttempt(event)" />
-                    <input style="width:16px;height:16px;vertical-align:central;margin:6px;float:right" type="image" src="~/Content/Images/delete_icon.png" onclick="hideSearch()" />
+                    <input style="width:16px;height:16px;vertical-align:central;margin:6px;float:right" type="image" src="~/Content/Images/delete_icon.png" onclick="hideSearch();" />
                     <input type="hidden" id="searchBy" value="@Model.SearchField" />
                 </div>
                 <datalist id="listOptions"></datalist>
@@ -123,15 +148,29 @@
         {
             <tr style="border: 1px solid #ccc;">
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">@(count++)</td>
-                <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["fname"]</td>
-                <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["lname"]</td>
-                <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["email"]</td>
-                <td style="padding:3px;border: 0px solid #888;text-align:center;">בקרוב</td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;">
+                    <div id="fname_@line["id"]" contenteditable="false" oninput="validate('fname_@line["id"]','Letters');" class="fakeInput">@line["fname"]</div>
+                </td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;">
+                    <div id="lname_@line["id"]" contenteditable="false" oninput="validate('lname_@line["id"]','Letters');" class="fakeInput">@line["lname"]</div>
+                </td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;">
+                    <div id="email_@line["id"]" contenteditable="false" oninput="validate('email_@line["id"]','Email');" class="fakeInput">@line["email"]</div>
+                </td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;">
+                    <div id="office_name_div_@line["id"]">@line["office_name"]</div>
+                </td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;">
+                    <div id="phone_@line["id"]" contenteditable="false" oninput="validate('phone_@line["id"]','Phone');" class="fakeInput">@line["phone"]</div>
+                </td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;">
+                    <div id="cell_phone_@line["id"]" contenteditable="false" oninput="validate('cell_phone_@line["id"]','Phone');" class="fakeInput">@line["cell_phone"]</div>
+                </td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">
                     @Html.ActionLink("בקשות מקושרות", "ViewRequestsForMomhee", "Admin", new { govExpId = line["id"] }, new { @class = "btn btn-info btn-xs" })
                 </td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">
-                    @Html.ActionLink("עדכון", "EditMomhee", "Admin", new { govExpId = line["id"] }, new { @class = "btn btn-warning btn-xs" })
+                    <button id="edit_@line["id"]" class="btn btn-warning btn-xs" onclick="showEdit('@line["id"]');">עריכה</button>
                 </td>
             </tr>
         }
@@ -178,6 +217,87 @@
 </div>
 
 <script>
+
+    function showEdit(user_id) {
+        var btn = document.getElementById('edit_' + user_id);
+        if (btn.innerText != 'שמור') {
+            var fields = ['fname_', 'lname_', 'email_', 'phone_', 'cell_phone_'];
+            for (i = 0; i < fields.length; ++i) {
+                document.getElementById(fields[i] + user_id).style.borderWidth = '1px';
+                document.getElementById(fields[i] + user_id).style.borderRightWidth = '3px';
+                document.getElementById(fields[i] + user_id).contentEditable = true;
+            }
+
+            selectHTML = document.getElementById('officesCopy').innerHTML;
+            div = document.getElementById('office_name_div_' + user_id);
+            selected = div.innerText;
+            div.innerText = "";
+            select = document.createElement('select');
+            select.id = 'office_' + user_id;
+            select.innerHTML = selectHTML;
+            for (i = 0; i < select.getElementsByTagName('option').length; i++) {
+                child = select.getElementsByTagName('option')[i];
+                if (child.innerText == selected) {
+                    select.value = child.value;
+                    break;
+                }
+            }
+            div.appendChild(select);
+            btn.innerText = 'שמור';
+            btn.className = 'btn btn-success btn-xs';
+        } else {
+            var data = {
+                "id" : user_id,
+                "fname": document.getElementById('fname_' + user_id).innerText,
+                "lname": document.getElementById('lname_' + user_id).innerText,
+                "email": document.getElementById('email_' + user_id).innerText,
+                "office": document.getElementById('office_' + user_id).value
+            };
+            $.ajax({
+                url: "/Admin/EditMomhee",
+                type: "POST",
+                data: JSON.stringify(data),
+                dataType: "json",
+                contentType: "application/json",
+                success: function (response) {
+                    if (response.Success) {
+                        location.reload();
+                    }
+                    else {
+                        alert(response.ErrMsg);
+                    }
+                },
+                error: function () {
+                    alert('בעיה בשרת');
+                }
+            });
+        }
+    }
+
+    function validate(id, type) {
+        var data = {
+            "value": document.getElementById(id).innerText,
+            "type": type
+        };
+        $.ajax({
+            url: "/Request/ValidateField",
+            type: "POST",
+            data: JSON.stringify(data),
+            dataType: "json",
+            contentType: "application/json",
+            success: function (response) {
+                if (response.Success) {
+                    document.getElementById(id).style.borderRightColor = '#38ACEC';
+                }
+                else {
+                    document.getElementById(id).style.borderRightColor = '#ff0000';
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+
     function changeResultsPerPage() {
         var pp = document.getElementById('selectPP').value;
         window.location.href = "/Admin/MomhimManage?isDesc=@Model.isDesc&page=1&resultsPerPage=" + pp

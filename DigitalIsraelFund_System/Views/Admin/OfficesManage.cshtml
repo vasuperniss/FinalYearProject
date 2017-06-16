@@ -1,0 +1,107 @@
+﻿@model DigitalIsraelFund_System.Models.TableResult
+@{
+    ViewBag.Title = "משרדים ממשלתיים";
+}
+
+<div id="cntntDiv" contenteditable="false" style="height:100%;resize:none;overflow-y:auto;min-width:inherit;min-height:200px;border-width:thin;border-style: none;font-family:sans-serif;border-color:#555555;font-size:small;font-weight:400;" dir="rtl">
+    <table style="padding:5px 5px;border: 1px solid #ccc;margin:auto;width:70%;">
+        <tr style="background-color:#E3E4FA;">
+            <td style="padding:3px;font-weight:600;text-align:center;"></td>
+            <td colspan="3" style="padding:3px;font-weight:600;text-align:right;">
+                &nbsp;&nbsp;
+                רשימת משרדים
+            </td>
+        </tr>
+        <tr style="border: 1px solid #ccc;background-color:darkseagreen;">
+            <td colspan="4" style="align-items:flex-start">
+                <div id="addButtonDiv">
+                    <button class="btn btn-primary" onclick="showAddition()">הוסף משרד חדש</button>
+                </div>
+                <div id="addDiv" style="margin:4px;" hidden>
+                    <table>
+                        <tr>
+                            <td style="font-weight:600;">&nbsp;&nbsp;שם משרד :&nbsp;</td>
+                            <td><input id="office_name" oninput="validate('office_name', 'Letters');" class="form-control" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="text" /></td>
+                            <td>&nbsp;<button class="btn btn-primary" onclick="submitAddition()">הוסף</button></td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+        @{ var count = (Model.Page - 1) * Model.ResultsPerPage + 1; }
+        @{ var iter = Model.Table.GetEnumerator(); }
+        @while (iter.MoveNext()) {
+            <tr style="border: 1px solid #ccc;">
+                <td style="padding:3px;border: 0px solid #888;text-align:center;">@(count++)</td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;">
+                    @Html.ActionLink(iter.Current["office_name"], "MomhimManage", "Admin", new { search = iter.Current["office_name"], searchBy = "office_name" }, null)
+                </td>
+                @if (iter.MoveNext())
+                {
+                    <td style="padding:3px;border: 0px solid #888;text-align:center;">@(count++)</td>
+                    <td style="padding:3px;border: 0px solid #888;text-align:center;">
+                        @Html.ActionLink(iter.Current["office_name"], "MomhimManage", "Admin", new { search = iter.Current["office_name"], searchBy = "office_name" }, null)
+                    </td>
+                }
+            </tr>
+        }
+    </table>
+</div>
+
+<script>
+    function showAddition() {
+        $('#addButtonDiv').fadeOut(0);
+        $('#addDiv').fadeIn(400);
+    }
+
+    function validate(id, type) {
+        var data = {
+            "value": document.getElementById(id).value,
+            "type": type
+        };
+        $.ajax({
+            url: "/Request/ValidateField",
+            type: "POST",
+            data: JSON.stringify(data),
+            dataType: "json",
+            contentType: "application/json",
+            success: function (response) {
+                if (response.Success) {
+                    document.getElementById(id).style.borderRightColor = '#38ACEC';
+                }
+                else {
+                    document.getElementById(id).style.borderRightColor = '#ff0000';
+                }
+            },
+            error: function () {
+                alert('Fail!!!');
+            }
+        });
+    }
+
+    function submitAddition() {
+        var data = {
+            "officeName": $('#office_name').val()
+        };
+        $.ajax({
+            url: "/Admin/OfficesManage",
+            type: "POST",
+            data: JSON.stringify(data),
+            dataType: "json",
+            contentType: "application/json",
+            success: function (response) {
+                if (response.Success) {
+                    alert("משרד נוסף בהצלחה.");
+                    location.reload();
+                }
+                else {
+                    alert("נכשל");
+                }
+            },
+            error: function () {
+                alert('בעיה בשרת.');
+            }
+        });
+    }
+</script>
+

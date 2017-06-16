@@ -49,7 +49,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             return currIncorrectAttempt;
         }
 
-        public void Add(string email, string password, string fname, string lname, string type)
+        public void Add(string email, string password, string fname, string lname, string type, string office, string phone, string cellPhone)
         {
             var values = new Dictionary<string, string>();
             values["email"] = email;
@@ -57,6 +57,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             values["lname"] = lname;
             values["password"] = password;
             values["type"] = type;
+            values["office"] = office;
             MySqlCommands.Insert("users", values);
         }
 
@@ -64,14 +65,18 @@ namespace DigitalIsraelFund_System.DataBase.Managers
         {
             UserData user = new UserData();
             var fields = new List<string>();
-            fields.Add("id");
+            fields.Add("users.id as id");
             fields.Add("email");
             fields.Add("fname");
             fields.Add("lname");
             fields.Add("password");
             fields.Add("type");
+            fields.Add("office_name");
+            fields.Add("phone");
+            fields.Add("cell_phone");
             List<Dictionary<string, string>> userResult =
-                MySqlCommands.Select("users", fields, "email =\'" + email + "\'", null, null);
+                MySqlCommands.Select("users LEFT JOIN offices", fields,
+                "users.office=offices.id", "email =\'" + email + "\'", null, null);
             if (userResult == null || userResult.Count != 1)
                 return null;
             if (userResult[0]["password"] != password)
@@ -82,12 +87,15 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             user.LastName = userResult[0]["lname"];
             user.Email = userResult[0]["email"];
             user.Type = userResult[0]["type"];
+            user.Office = userResult[0]["office_name"];
+            user.Phone = userResult[0]["phone"];
+            user.CellPhone = userResult[0]["cell_phone"];
             return user;
         }
 
-        public bool Change(UserData user, Dictionary<string, string> newValues)
+        public bool Change(string user_id, Dictionary<string, string> newValues)
         {
-            return MySqlCommands.Update("users", newValues, "id='" + user.Id + "'");
+            return MySqlCommands.Update("users", newValues, "id='" + user_id + "'");
         }
 
         public int Count(string where)
@@ -98,12 +106,28 @@ namespace DigitalIsraelFund_System.DataBase.Managers
         public List<Dictionary<string, string>> GetAllWhere(string where, string orderBy, int page, int resultsPerPage)
         {
             List<string> fields = new List<string>();
-            fields.Add("id");
+            fields.Add("users.id as id");
             fields.Add("email");
             fields.Add("fname");
             fields.Add("lname");
+            fields.Add("office_name");
+            fields.Add("phone");
+            fields.Add("cell_phone");
             string limit = ((page - 1) * resultsPerPage) + "," + resultsPerPage;
-            List<Dictionary<string, string>> requestsResult = MySqlCommands.Select("users", fields, where, orderBy, limit);
+            string on = "users.office=offices.id";
+            List<Dictionary<string, string>> requestsResult = MySqlCommands.Select("users LEFT JOIN offices",
+                fields, on, where, orderBy, limit);
+            return requestsResult;
+        }
+
+        public List<Dictionary<string, string>> GetFieldWhere(string field, string where, string orderBy, int page, int resultsPerPage)
+        {
+            List<string> fields = new List<string>();
+            fields.Add("DISTINCT " + field);
+            string limit = ((page - 1) * resultsPerPage) + "," + resultsPerPage;
+            string on = "users.office=offices.id";
+            List<Dictionary<string, string>> requestsResult = MySqlCommands.Select("users LEFT JOIN offices",
+                fields, on, where, orderBy, limit);
             return requestsResult;
         }
     }

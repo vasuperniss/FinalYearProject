@@ -20,11 +20,12 @@ namespace DigitalIsraelFund_System.DataBase
             this.regexes["Letters"] = new Regex("^([- .,A-Za-z0-9א-ת_\n\"]+)$");
             this.regexes["Date"] = new Regex(@"^([0-9]{4,4}-[0-9]{2,2}-[0-9]{2,2})$");
             this.regexes["Password"] = new Regex(@"^([- .@!#$%&*A-Za-z0-9_]+)$");
+            this.regexes["Phone"] = new Regex(@"^([0-9-]*)$");
         }
 
         public bool Validate(string input, string type)
         {
-            if (!regexes.ContainsKey(type))
+            if (input == null || !regexes.ContainsKey(type))
                 return false;
             Match m = regexes[type].Match(input);
             return m.Length == input.Length && m.Success;

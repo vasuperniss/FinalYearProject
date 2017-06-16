@@ -12,6 +12,7 @@ namespace DigitalIsraelFund_System.Controllers
         [HttpGet]
         public ActionResult EditSelf()
         {
+            ViewData["offices"] = OfficeManager.Manager.GetAll();
             return View((UserData)this.Session["user"]);
         }
 
@@ -31,7 +32,7 @@ namespace DigitalIsraelFund_System.Controllers
                 {
                     Dictionary<string, string> newValues = new Dictionary<string, string>();
                     newValues["password"] = newPass;
-                    bool isSuccess = UserManager.Manager.Change(user, newValues);
+                    bool isSuccess = UserManager.Manager.Change(user.Id, newValues);
                     return Json(new { Success = isSuccess, ErrMsg = "שגיאה בשרת." }, JsonRequestBehavior.AllowGet);
                 }
                 else
@@ -58,7 +59,7 @@ namespace DigitalIsraelFund_System.Controllers
         }
 
         [HttpPost]
-        public JsonResult EditPersonalInfo(string password, string fname, string lname, string email)
+        public JsonResult EditPersonalInfo(string password, string fname, string lname, string email, string office)
         {
             TypeValidator v = TypeValidator.Validator;
             UserData user = (UserData)this.Session["user"];
@@ -76,7 +77,12 @@ namespace DigitalIsraelFund_System.Controllers
                     newValues["fname"] = fname;
                     newValues["lname"] = lname;
                     newValues["email"] = email;
-                    bool isSuccess = UserManager.Manager.Change(user, newValues);
+                    newValues["office"] = office;
+                    bool isSuccess = UserManager.Manager.Change(user.Id, newValues);
+                    if (isSuccess)
+                    {
+                        this.Session["user"] = UserManager.Manager.GetIfCorrect(email, password);
+                    }
                     return Json(new { Success = isSuccess, ErrMsg = "שגיאה בשרת." }, JsonRequestBehavior.AllowGet);
                 }
                 else

@@ -93,7 +93,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\Forms\MashovForm_v_0.xml" />
+    <Content Include="App_Data\Forms\MashovForm_v_0.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\bannerfund_logo.png" />
@@ -128,6 +130,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RequestController.cs" />
     <Compile Include="DataBase\DataBase.cs" />
+    <Compile Include="DataBase\Managers\OfficeManager.cs" />
     <Compile Include="DataBase\Managers\UserManager.cs" />
     <Compile Include="DataBase\MySqlCommands.cs" />
     <Compile Include="DataBase\MySqlConnector.cs" />
@@ -153,6 +156,7 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Home\Form.cshtml" />
     <Content Include="Views\GovExp\EditSelf.cshtml" />
+    <Content Include="Views\Admin\OfficesManage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,6 +1,6 @@
 ﻿@model DigitalIsraelFund_System.Models.UserData
 @{
-    ViewBag.Title = "EditSelf";
+    ViewBag.Title = "עריכה";
 }
 
 <style>
@@ -59,7 +59,40 @@
                             אימייל
                         </td>
                         <td style="padding:3px;font-weight:600;text-align:center;">
-                            <input oninput="validate('email','Email')" id="email"  class="form-control" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="text" value="@Model.Email"/>
+                            <input oninput="validate('email','Email')" id="email"  class="form-control" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="email" value="@Model.Email"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:3px;font-weight:600;text-align:right;">
+                            טלפון
+                        </td>
+                        <td style="padding:3px;font-weight:600;text-align:center;">
+                            <input oninput="validate('phone', 'Phone')" id="phone" class="form-control" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="tel" value="@Model.Phone" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:3px;font-weight:600;text-align:right;">
+                            פלפון
+                        </td>
+                        <td style="padding:3px;font-weight:600;text-align:center;">
+                            <input oninput="validate('cell_phone', 'Phone')" id="cell_phone" class="form-control" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="tel" value="@Model.CellPhone" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:3px;font-weight:600;text-align:right;">
+                            משרד
+                        </td>
+                        <td style="padding:3px;font-weight:600;text-align:center;">
+                            <select id="office" class="form-control" style="height:100%;">
+                                @{ 
+                                    List<Dictionary<string, string>> offices = (List<Dictionary<string, string>>)ViewData["offices"];
+                                    foreach (Dictionary<string, string> office in offices)
+                                    {
+                                        var selected = office["office_name"] == Model.Office ? "selected" : "";
+                                        <option value="@office["id"]" @selected>@office["office_name"]</option>
+                                    }
+                                }
+                            </select>
                         </td>
                     </tr>
                     <tr style="background-color:white;">
@@ -155,10 +188,13 @@
 
     function editPersonal() {
         var data = {
-            "password": $('password').val(),
+            "password": $('#password').val(),
             "fname": $('#firstname').val(),
             "lname": $('#lastname').val(),
-            "email": $('#email').val()
+            "email": $('#email').val(),
+            "office": $('#office').val(),
+            "phone": $('#phone').val(),
+            "cellPhone": $('#cell_phone').val()
         };
         $.ajax({
             url: "/GovExp/EditPersonalInfo",
@@ -172,11 +208,11 @@
                     location.reload();
                 }
                 else {
-                    alert("נכשל");
+                    alert(response.ErrMsg);
                 }
             },
             error: function () {
-                alert('Fail!!!');
+                alert('בעיה בשרת');
             }
         });
     }

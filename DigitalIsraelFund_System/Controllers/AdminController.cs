@@ -36,12 +36,14 @@ namespace DigitalIsraelFund_System.Controllers
             string where = "type='momhee'";
             if (searchBy != null && searchBy != "" && search != null && search != "")
             {
-                if (searchBy == "fname" || searchBy == "lname" || searchBy == "email")
+                if (searchBy == "fname" || searchBy == "lname" || searchBy == "email"
+                    || searchBy == "office_name")
                     where += " and " + searchBy + " LIKE '%" + search + "%'";
             }
 
             var table = UserManager.Manager.GetAllWhere(where, orderBy + isDescString, pageNum, resultsPerPageNum);
             var count = UserManager.Manager.Count("type='momhee'");
+            ViewData["offices"] = OfficeManager.Manager.GetAll();
             return View(new TableResult { Table = table, NumPages = (int)System.Math.Ceiling((double)count / resultsPerPageNum),
                             isDesc = isDescBool, Page = pageNum,
                             ResultsPerPage = resultsPerPageNum, OrderBy = orderBy,
@@ -49,9 +51,21 @@ namespace DigitalIsraelFund_System.Controllers
         }
 
         [HttpPost]
+        public JsonResult EditMomhee(string id, string fname, string lname, string email, string office)
+        {
+            Dictionary<string, string> newValues = new Dictionary<string, string>();
+            newValues["fname"] = fname;
+            newValues["lname"] = lname;
+            newValues["email"] = email;
+            newValues["office"] = office;
+            return Json(new { Success = UserManager.Manager.Change(id, newValues), ErrMsg = "נכשל." },
+                JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
         public JsonResult SearchUserBy(string searchVal, string searchBy)
         {
-            var table = UserManager.Manager.GetAllWhere("type='momhee' and "
+            var table = UserManager.Manager.GetFieldWhere(searchBy, "type='momhee' and "
                 + searchBy + " LIKE '%" + searchVal + "%'", searchBy, 1, 5);
             List<string> results = new List<string>();
             if (table != null)
@@ -67,14 +81,27 @@ namespace DigitalIsraelFund_System.Controllers
         [HttpGet]
         public ActionResult AddNewMomhee()
         {
+            ViewData["offices"] = OfficeManager.Manager.GetAll();
             return View();
         }
 
         [HttpPost]
-        public ActionResult AddNewMomhee(string fname, string lname, string email, string password)
+        public ActionResult AddNewMomhee(string fname, string lname, string email, string password, string office, string phone, string cellPhone)
         {
-            UserManager.Manager.Add(email, password, fname, lname, "momhee");
+            UserManager.Manager.Add(email, password, fname, lname, "momhee", office, phone, cellPhone);
             return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult OfficesManage()
+        {
+            return View(new TableResult() { Table = OfficeManager.Manager.GetAll() });
+        }
+
+        [HttpPost]
+        public JsonResult OfficesManage(string officeName)
+        {
+            return Json(new { Success = OfficeManager.Manager.Add(officeName) }, JsonRequestBehavior.AllowGet);
         }
     }
 }

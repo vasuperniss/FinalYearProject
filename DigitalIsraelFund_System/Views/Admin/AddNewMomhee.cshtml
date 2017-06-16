@@ -17,7 +17,7 @@
                 שם פרטי
             </td>
             <td style="padding:3px;font-weight:600;text-align:center;">
-                <input id="firstname" class="form-control" type="text" />
+                <input id="firstname" class="form-control" oninput="validate('firstname', 'Letters');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="text" />
             </td>
         </tr>
         <tr>
@@ -25,7 +25,7 @@
                 שם משפחה
             </td>
             <td style="padding:3px;font-weight:600;text-align:center;">
-                <input id="lastname" class="form-control" type="text" />
+                <input id="lastname" class="form-control" oninput="validate('lastname', 'Letters');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="text" />
             </td>
         </tr>
         <tr>
@@ -33,7 +33,39 @@
                 אימייל
             </td>
             <td style="padding:3px;font-weight:600;text-align:center;">
-                <input id="email" class="form-control" type="text" />
+                <input id="_email" class="form-control" oninput="validate('_email', 'Email');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="text" />
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:3px;font-weight:600;text-align:right;">
+                טלפון
+            </td>
+            <td style="padding:3px;font-weight:600;text-align:center;">
+                <input id="phone" class="form-control" oninput="validate('phone', 'Phone');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="tel" />
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:3px;font-weight:600;text-align:right;">
+                פלפון
+            </td>
+            <td style="padding:3px;font-weight:600;text-align:center;">
+                <input id="cell_phone" class="form-control" oninput="validate('cell_phone', 'Phone');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="tel" />
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:3px;font-weight:600;text-align:right;">
+                משרד
+            </td>
+            <td style="padding:3px;font-weight:600;text-align:center;">
+                <select id="office" class="form-control" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;">
+                    @{
+                        List<Dictionary<string, string>> offices = (List<Dictionary<string, string>>)ViewData["offices"];
+                        foreach (Dictionary<string, string> office in offices)
+                        {
+                            <option value="@office["id"]">@office["office_name"]</option>
+                        }
+                    }
+                </select>
             </td>
         </tr>
         <tr>
@@ -41,7 +73,7 @@
                 סיסמה
             </td>
             <td style="padding:3px;font-weight:600;text-align:center;">
-                <input id="password" class="form-control" type="text" />
+                <input id="password" class="form-control" oninput="validate('password', 'Password');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="text" />
             </td>
         </tr>
         <tr style="background-color:white;">
@@ -52,12 +84,41 @@
     </table>
 </div>
 <script>
+
+    function validate(id, type) {
+        var data = {
+            "value": document.getElementById(id).value,
+            "type": type
+        };
+        $.ajax({
+            url: "/Request/ValidateField",
+            type: "POST",
+            data: JSON.stringify(data),
+            dataType: "json",
+            contentType: "application/json",
+            success: function (response) {
+                if (response.Success) {
+                    document.getElementById(id).style.borderRightColor = '#38ACEC';
+                }
+                else {
+                    document.getElementById(id).style.borderRightColor = '#ff0000';
+                }
+            },
+            error: function () {
+                alert('Fail!!!');
+            }
+        });
+    }
+
     function addGovExp() {
         var data = {
             "fname": $('#firstname').val(),
             "lname": $('#lastname').val(),
             "email": $('#email').val(),
-            "password": $('#password').val()
+            "office": $('#office').val(),
+            "password": $('#password').val(),
+            "phone": $('#phone').val(),
+            "cellPhone": $('#cell_phone').val()
         };
         $.ajax({
             url: "/Admin/AddNewMomhee",

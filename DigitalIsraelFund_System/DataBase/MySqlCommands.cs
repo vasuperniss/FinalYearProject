@@ -9,9 +9,10 @@ namespace DigitalIsraelFund_System.DataBase
         {
             string query = "UPDATE " + tableName + " SET ";
             foreach (string key in updates.Keys)
-                query += key + "='" + updates[key] + "' ";
+                query += key + "='" + updates[key] + "',";
+            query = query.Substring(0, query.Length - 1);
             if (where != null && where != "")
-                query += "WHERE " + where;
+                query += " WHERE " + where;
             return MySqlConnector.Connector.RunNonQueryCommand(query);
         }
 
@@ -26,7 +27,7 @@ namespace DigitalIsraelFund_System.DataBase
             return MySqlConnector.Connector.RunNonQueryCommand(query);
         }
 
-        public static List<Dictionary<string, string>> Select(string tableName, List<string> fields,
+        public static List<Dictionary<string, string>> Select(string tableName, List<string> fields, string on,
             string where, string orderBy, string limit)
         {
             string query = "SELECT ";
@@ -37,6 +38,8 @@ namespace DigitalIsraelFund_System.DataBase
                 query += String.Join(",", fields);
             }
             query += " FROM " + tableName;
+            if (on != null && on != "")
+                query += " ON " + on;
             if (where != null && where != "")
                 query += " WHERE " + where;
             if (orderBy != null && orderBy != "")
