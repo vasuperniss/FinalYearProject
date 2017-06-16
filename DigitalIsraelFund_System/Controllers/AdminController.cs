@@ -51,13 +51,15 @@ namespace DigitalIsraelFund_System.Controllers
         }
 
         [HttpPost]
-        public JsonResult EditMomhee(string id, string fname, string lname, string email, string office)
+        public JsonResult EditMomhee(string id, string fname, string lname, string email, string office, string phone, string cellPhone)
         {
             Dictionary<string, string> newValues = new Dictionary<string, string>();
             newValues["fname"] = fname;
             newValues["lname"] = lname;
             newValues["email"] = email;
             newValues["office"] = office;
+            newValues["phone"] = phone;
+            newValues["cell_phone"] = cellPhone;
             return Json(new { Success = UserManager.Manager.Change(id, newValues), ErrMsg = "נכשל." },
                 JsonRequestBehavior.AllowGet);
         }

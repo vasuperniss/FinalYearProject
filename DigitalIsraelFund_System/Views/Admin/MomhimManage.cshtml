@@ -251,7 +251,9 @@
                 "fname": document.getElementById('fname_' + user_id).innerText,
                 "lname": document.getElementById('lname_' + user_id).innerText,
                 "email": document.getElementById('email_' + user_id).innerText,
-                "office": document.getElementById('office_' + user_id).value
+                "office": document.getElementById('office_' + user_id).value,
+                "phone": document.getElementById('phone_' + user_id).innerText,
+                "cellPhone": document.getElementById('cell_phone_' + user_id).innerText
             };
             $.ajax({
                 url: "/Admin/EditMomhee",
