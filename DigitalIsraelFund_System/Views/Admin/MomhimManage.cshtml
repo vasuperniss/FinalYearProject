@@ -32,6 +32,8 @@
     }
 </style>
 
+<script src="~/Scripts/validation.js"></script>
+
 <select hidden id="officesCopy" class="fakeInput">
     @{
         List<Dictionary<string, string>> offices = (List<Dictionary<string, string>>)ViewData["offices"];
@@ -149,22 +151,22 @@
             <tr style="border: 1px solid #ccc;">
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">@(count++)</td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">
-                    <div id="fname_@line["id"]" contenteditable="false" oninput="validate('fname_@line["id"]','Letters');" class="fakeInput">@line["fname"]</div>
+                    <div id="fname_@line["id"]" contenteditable="false" oninput="validateText('fname_@line["id"]','Letters');" class="fakeInput">@line["fname"]</div>
                 </td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">
-                    <div id="lname_@line["id"]" contenteditable="false" oninput="validate('lname_@line["id"]','Letters');" class="fakeInput">@line["lname"]</div>
+                    <div id="lname_@line["id"]" contenteditable="false" oninput="validateText('lname_@line["id"]','Letters');" class="fakeInput">@line["lname"]</div>
                 </td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">
-                    <div id="email_@line["id"]" contenteditable="false" oninput="validate('email_@line["id"]','Email');" class="fakeInput">@line["email"]</div>
+                    <div id="email_@line["id"]" contenteditable="false" oninput="validateText('email_@line["id"]','Email');" class="fakeInput">@line["email"]</div>
                 </td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">
                     <div id="office_name_div_@line["id"]">@line["office_name"]</div>
                 </td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">
-                    <div id="phone_@line["id"]" contenteditable="false" oninput="validate('phone_@line["id"]','Phone');" class="fakeInput">@line["phone"]</div>
+                    <div id="phone_@line["id"]" contenteditable="false" oninput="validateText('phone_@line["id"]','Phone');" class="fakeInput">@line["phone"]</div>
                 </td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">
-                    <div id="cell_phone_@line["id"]" contenteditable="false" oninput="validate('cell_phone_@line["id"]','Phone');" class="fakeInput">@line["cell_phone"]</div>
+                    <div id="cell_phone_@line["id"]" contenteditable="false" oninput="validateText('cell_phone_@line["id"]','Phone');" class="fakeInput">@line["cell_phone"]</div>
                 </td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">
                     @Html.ActionLink("בקשות מקושרות", "ViewRequestsForMomhee", "Admin", new { govExpId = line["id"] }, new { @class = "btn btn-info btn-xs" })
@@ -274,30 +276,6 @@
                 }
             });
         }
-    }
-
-    function validate(id, type) {
-        var data = {
-            "value": document.getElementById(id).innerText,
-            "type": type
-        };
-        $.ajax({
-            url: "/Request/ValidateField",
-            type: "POST",
-            data: JSON.stringify(data),
-            dataType: "json",
-            contentType: "application/json",
-            success: function (response) {
-                if (response.Success) {
-                    document.getElementById(id).style.borderRightColor = '#38ACEC';
-                }
-                else {
-                    document.getElementById(id).style.borderRightColor = '#ff0000';
-                }
-            },
-            error: function () {
-            }
-        });
     }
 
     function changeResultsPerPage() {

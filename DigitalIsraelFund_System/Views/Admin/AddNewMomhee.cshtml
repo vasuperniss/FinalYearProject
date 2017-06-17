@@ -2,6 +2,8 @@
     ViewBag.Title = "הוסף מומחה";
 }
 
+<script src="~/Scripts/validation.js"></script>
+
 <div id="cntntDiv" contenteditable="false" style="height:100%;resize:none;overflow-y:auto;min-width:inherit;min-height:200px;border-width:thin;border-style: none;font-family:sans-serif;border-color:#555555;font-size:small;font-weight:400;" dir="rtl">
     <table style="padding:10px 5px;border: 0px solid #ccc;margin:auto;">
         <tr style="background-color:white;border-radius:5px;">
@@ -17,7 +19,7 @@
                 שם פרטי
             </td>
             <td style="padding:3px;font-weight:600;text-align:center;">
-                <input id="firstname" class="form-control" oninput="validate('firstname', 'Letters');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="text" />
+                <input id="firstname" class="form-control" oninput="validateInput('firstname', 'Letters');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="text" />
             </td>
         </tr>
         <tr>
@@ -25,7 +27,7 @@
                 שם משפחה
             </td>
             <td style="padding:3px;font-weight:600;text-align:center;">
-                <input id="lastname" class="form-control" oninput="validate('lastname', 'Letters');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="text" />
+                <input id="lastname" class="form-control" oninput="validateInput('lastname', 'Letters');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="text" />
             </td>
         </tr>
         <tr>
@@ -33,7 +35,7 @@
                 אימייל
             </td>
             <td style="padding:3px;font-weight:600;text-align:center;">
-                <input id="_email" class="form-control" oninput="validate('_email', 'Email');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="text" />
+                <input id="_email" class="form-control" oninput="validateInput('_email', 'Email');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="text" />
             </td>
         </tr>
         <tr>
@@ -41,7 +43,7 @@
                 טלפון
             </td>
             <td style="padding:3px;font-weight:600;text-align:center;">
-                <input id="phone" class="form-control" oninput="validate('phone', 'Phone');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="tel" />
+                <input id="phone" class="form-control" oninput="validateInput('phone', 'Phone');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="tel" />
             </td>
         </tr>
         <tr>
@@ -49,7 +51,7 @@
                 פלפון
             </td>
             <td style="padding:3px;font-weight:600;text-align:center;">
-                <input id="cell_phone" class="form-control" oninput="validate('cell_phone', 'Phone');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="tel" />
+                <input id="cell_phone" class="form-control" oninput="validateInput('cell_phone', 'Phone');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="tel" />
             </td>
         </tr>
         <tr>
@@ -73,7 +75,7 @@
                 סיסמה
             </td>
             <td style="padding:3px;font-weight:600;text-align:center;">
-                <input id="password" class="form-control" oninput="validate('password', 'Password');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="text" />
+                <input id="password" class="form-control" oninput="validateInput('password', 'Password');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="text" />
             </td>
         </tr>
         <tr style="background-color:white;">
@@ -84,32 +86,6 @@
     </table>
 </div>
 <script>
-
-    function validate(id, type) {
-        var data = {
-            "value": document.getElementById(id).value,
-            "type": type
-        };
-        $.ajax({
-            url: "/Request/ValidateField",
-            type: "POST",
-            data: JSON.stringify(data),
-            dataType: "json",
-            contentType: "application/json",
-            success: function (response) {
-                if (response.Success) {
-                    document.getElementById(id).style.borderRightColor = '#38ACEC';
-                }
-                else {
-                    document.getElementById(id).style.borderRightColor = '#ff0000';
-                }
-            },
-            error: function () {
-                alert('Fail!!!');
-            }
-        });
-    }
-
     function addGovExp() {
         var data = {
             "fname": $('#firstname').val(),

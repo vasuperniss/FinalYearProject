@@ -3,6 +3,8 @@
     ViewBag.Title = "משרדים ממשלתיים";
 }
 
+<script src="~/Scripts/validation.js"></script>
+
 <div id="cntntDiv" contenteditable="false" style="height:100%;resize:none;overflow-y:auto;min-width:inherit;min-height:200px;border-width:thin;border-style: none;font-family:sans-serif;border-color:#555555;font-size:small;font-weight:400;" dir="rtl">
     <table style="padding:5px 5px;border: 1px solid #ccc;margin:auto;width:70%;">
         <tr style="background-color:#E3E4FA;">
@@ -21,7 +23,7 @@
                     <table>
                         <tr>
                             <td style="font-weight:600;">&nbsp;&nbsp;שם משרד :&nbsp;</td>
-                            <td><input id="office_name" oninput="validate('office_name', 'Letters');" class="form-control" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="text" /></td>
+                            <td><input id="office_name" oninput="validateInput('office_name', 'Letters');" class="form-control" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="text" /></td>
                             <td>&nbsp;<button class="btn btn-primary" onclick="submitAddition()">הוסף</button></td>
                         </tr>
                     </table>
@@ -52,31 +54,6 @@
     function showAddition() {
         $('#addButtonDiv').fadeOut(0);
         $('#addDiv').fadeIn(400);
-    }
-
-    function validate(id, type) {
-        var data = {
-            "value": document.getElementById(id).value,
-            "type": type
-        };
-        $.ajax({
-            url: "/Request/ValidateField",
-            type: "POST",
-            data: JSON.stringify(data),
-            dataType: "json",
-            contentType: "application/json",
-            success: function (response) {
-                if (response.Success) {
-                    document.getElementById(id).style.borderRightColor = '#38ACEC';
-                }
-                else {
-                    document.getElementById(id).style.borderRightColor = '#ff0000';
-                }
-            },
-            error: function () {
-                alert('Fail!!!');
-            }
-        });
     }
 
     function submitAddition() {

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace DigitalIsraelFund_System.Models
+﻿namespace DigitalIsraelFund_System.Models
 {
     public class UserData
     {
