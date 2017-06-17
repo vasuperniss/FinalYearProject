@@ -2,7 +2,9 @@
 using DigitalIsraelFund_System.DataBase.Managers;
 using DigitalIsraelFund_System.Models;
 using System.Collections.Generic;
+using System.IO;
 using System.Web.Mvc;
+using System.Xml;
 
 namespace DigitalIsraelFund_System.Controllers
 {
@@ -46,7 +48,19 @@ namespace DigitalIsraelFund_System.Controllers
         {
             string where = "file_number='" + file_number + "'";
             ViewData["request"] = RequestManager.Manager.GetAllWhere(where, null, 1, 1)[0];
-            return View();
+
+            var requestFile = Server.MapPath("~/App_Data/Forms/MashovForm_v_0.xml");
+            string xmlNode = System.IO.File.ReadAllText(@requestFile);
+            XmlReader xmlReader = XmlReader.Create(new StringReader(xmlNode));
+            FormComponent requestForm = new FormComponent(xmlReader);
+            xmlReader.Close();
+
+            ViewData["postToController"] = "../GovExp/AddMashov";
+            ViewData["sendBtnTitle"] = "שלח משוב";
+            ViewData["fileNumberRequest"] = file_number;
+            ViewData["nameGovExp"] = ((UserData)this.Session["user"]).Name;
+            ViewData["officeGovExp"] = ((UserData)this.Session["user"]).Office;
+            return View("../Home/Form", requestForm.FormComponents[0]);
         }
 
         [HttpPost]

@@ -19,7 +19,7 @@
           <text>מספר תיק</text>
         </col>
         <col>
-          <input id="file_number" type="text" required="true" width="50"></input>
+          <input id="file_number" type="text" required="true" width="100" pullFrom="fileNumberRequest" readOnly="true"></input>
         </col>
       </row>
       <row>
@@ -60,36 +60,7 @@
           <text>שם המשרד</text>
         </col>
         <col span="3">
-          <input id="misrad_name" type="dropdown" required="true">
-            <option>משרד ראש הממשלה</option>
-            <option>משרד החוץ</option>
-            <option>משרד הביטחון</option>
-            <option>משרד האוצר</option>
-            <option>משרד החינוך</option>
-            <option>משרד המשפטים</option>
-            <option>משרד הבריאות</option>
-            <option>משרד הפנים</option>
-            <option>משרד הכלכלה והתעשייה</option>
-            <option>משרד התחבורה והבטיחות בדרכים</option>
-            <option>המשרד לביטחון הפנים</option>
-            <option>המשרד לקליטת עלייה</option>
-            <option>המשרד לשיתוף פעולה אזורי</option>
-            <option>משרד התשתיות הלאומיות, האנרגיה והמים</option>
-            <option>המשרד לפיתוח הפריפריה, הנגב והגליל</option>
-            <option>משרד התרבות והספורט</option>
-            <option>משרד המדע, הטכנולוגיה והחלל</option>
-            <option>משרד החקלאות ופיתוח הכפר</option>
-            <option>משרד הבינוי והשיכון</option>
-            <option>משרד הרווחה והשרותים החברתיים</option>
-            <option>משרד התיירות</option>
-            <option>משרד התקשורת</option>
-            <option>המשרד לענייני מודיעין</option>
-            <option>המשרד לנושאים אסטרטגיים והסברה</option>
-            <option>המשרד לשירותי דת</option>
-            <option>המשרד לשוויון חברתי</option>
-            <option>משרד התפוצות</option>
-            <option>המשרד להגנת הסביבה</option>
-          </input>
+          <input id="misrad_name" type="text" required="true" pullFrom="officeGovExp" readOnly="true"></input>
         </col>
       </row>
       <row>
