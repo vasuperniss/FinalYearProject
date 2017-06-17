@@ -66,15 +66,9 @@
                             <li class="navbar-right">@Html.ActionLink("משרדים", "OfficesManage", "Admin")</li>
                             <li class="navbar-right">@Html.ActionLink("ניהול בודקי מדען", "MadanMomhimManage", "Admin")</li>
                         }
-                        @if (user.Type == "Admin2")
-                        {
-                            <li class="navbar-right">@Html.ActionLink("ניהול בקשות", "RequestControl", "Admin")</li>
-                            <li class="navbar-right">@Html.ActionLink("ניהול מומחים", "GovExpControl", "Admin")</li>
-                            <li class="navbar-right">@Html.ActionLink("נתונים סטטיסטיים", "Statistics", "Admin")</li>
-                        }
                         else if (user.Type.ToLower() == "momhee".ToLower())
                         {
-                            <li class="navbar-right">@Html.ActionLink("בקשות", "RequestsManage", "GovExp")</li>
+                            <li class="navbar-right">@Html.ActionLink("ניהול בקשות", "RequestsManage", "GovExp")</li>
                             <li class="navbar-right">@Html.ActionLink("עדכון פרטים אישיים\\סיסמה", "EditSelf", "GovExp")</li>
                         }
                     </ul>

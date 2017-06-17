@@ -16,6 +16,39 @@ namespace DigitalIsraelFund_System.Controllers
             return View((UserData)this.Session["user"]);
         }
 
+        [HttpGet]
+        public ActionResult RequestsManage(string page, string resultsPerPage, string orderBy, string isDesc)
+        {
+            UserData momhee = (UserData)Session["user"];
+            int pageNum, resultsPerPageNum;
+            bool isDescBool;
+            if (!bool.TryParse(isDesc, out isDescBool)) isDescBool = false;
+            if (!int.TryParse(page, out pageNum)) pageNum = 1;
+            if (!int.TryParse(resultsPerPage, out resultsPerPageNum)) resultsPerPageNum = 10;
+            string isDescString = "";
+            if (isDescBool) isDescString = " DESC";
+            string where = "momhee_id='" + momhee.Id + "'";
+            var table = RequestManager.Manager.GetAllWhere(where, orderBy + isDescString, pageNum, resultsPerPageNum);
+            var count = RequestManager.Manager.Count("");
+            return View("../Admin/RequestsManage", new TableResult
+            {
+                Table = table,
+                NumPages = (int)System.Math.Ceiling((double)count / resultsPerPageNum),
+                isDesc = isDescBool,
+                Page = pageNum,
+                ResultsPerPage = resultsPerPageNum,
+                OrderBy = orderBy
+            });
+        }
+
+        [HttpGet]
+        public ActionResult AddMashov(string file_number)
+        {
+            string where = "file_number='" + file_number + "'";
+            ViewData["request"] = RequestManager.Manager.GetAllWhere(where, null, 1, 1)[0];
+            return View();
+        }
+
         [HttpPost]
         public JsonResult EditPassword(string oldPass, string newPass)
         {

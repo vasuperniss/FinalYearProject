@@ -24,30 +24,28 @@ namespace DigitalIsraelFund_System.Controllers
         }
 
         [HttpGet]
-        public ActionResult MomhimManage(string page, string resultsPerPage, string orderBy, string isDesc, string search, string searchBy)
+        public ActionResult MomhimManage(string page, string resultsPerPage, string orderBy, string isDesc,
+            string fname , string lname, string email, string office_name)
         {
             int pageNum, resultsPerPageNum;
-            bool isDescBool;
-            if (!bool.TryParse(isDesc, out isDescBool)) isDescBool = false;
+            bool isDescBool = false;
+            if (orderBy != "" && !bool.TryParse(isDesc, out isDescBool)) isDescBool = false;
             if (!int.TryParse(page, out pageNum)) pageNum = 1;
             if (!int.TryParse(resultsPerPage, out resultsPerPageNum)) resultsPerPageNum = 10;
             string isDescString = "";
             if (isDescBool) isDescString = " DESC";
             string where = "type='momhee'";
-            if (searchBy != null && searchBy != "" && search != null && search != "")
-            {
-                if (searchBy == "fname" || searchBy == "lname" || searchBy == "email"
-                    || searchBy == "office_name")
-                    where += " and " + searchBy + " LIKE '%" + search + "%'";
-            }
+            if (fname != null) where += " and fname LIKE '%" + fname + "%'";
+            if (lname != null) where += " and lname LIKE '%" + lname + "%'";
+            if (email != null) where += " and email LIKE '%" + email + "%'";
+            if (office_name != null) where += " and office_name LIKE '%" + office_name + "%'";
 
             var table = UserManager.Manager.GetAllWhere(where, orderBy + isDescString, pageNum, resultsPerPageNum);
             var count = UserManager.Manager.Count("type='momhee'");
             ViewData["offices"] = OfficeManager.Manager.GetAll();
             return View(new TableResult { Table = table, NumPages = (int)System.Math.Ceiling((double)count / resultsPerPageNum),
                             isDesc = isDescBool, Page = pageNum,
-                            ResultsPerPage = resultsPerPageNum, OrderBy = orderBy,
-                            Search = search, SearchField = searchBy});
+                            ResultsPerPage = resultsPerPageNum, OrderBy = orderBy });
         }
 
         [HttpPost]
@@ -104,6 +102,39 @@ namespace DigitalIsraelFund_System.Controllers
         public JsonResult OfficesManage(string officeName)
         {
             return Json(new { Success = OfficeManager.Manager.Add(officeName) }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult RequestsManage(string page, string resultsPerPage, string orderBy, string isDesc)
+        {
+            int pageNum, resultsPerPageNum;
+            bool isDescBool;
+            if (!bool.TryParse(isDesc, out isDescBool)) isDescBool = false;
+            if (!int.TryParse(page, out pageNum)) pageNum = 1;
+            if (!int.TryParse(resultsPerPage, out resultsPerPageNum)) resultsPerPageNum = 10;
+            string isDescString = "";
+            if (isDescBool) isDescString = " DESC";
+            string where = "";
+            var table = RequestManager.Manager.GetAllWhere(where, orderBy + isDescString, pageNum, resultsPerPageNum);
+            var count = RequestManager.Manager.Count("");
+            return View(new TableResult
+            {
+                Table = table,
+                NumPages = (int)System.Math.Ceiling((double)count / resultsPerPageNum),
+                isDesc = isDescBool,
+                Page = pageNum,
+                ResultsPerPage = resultsPerPageNum,
+                OrderBy = orderBy
+            });
+        }
+
+        [HttpGet]
+        public void JoinMomheeAndRequest(string file_number, string momhee_id)
+        {
+            var newVals = new Dictionary<string, string>();
+            newVals["momhee_id"] = momhee_id;
+            RequestManager.Manager.Change(file_number, newVals);
+            Response.Redirect("/Admin/RequestsManage");
         }
     }
 }
