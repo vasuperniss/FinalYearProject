@@ -18,6 +18,7 @@
 </style>
 
 <script src="~/Scripts/validation.js"></script>
+<script src="~/Scripts/ajaxSubmit.js"></script>
 
 <div id="cntntDiv" contenteditable="false" style="height:100%;resize:none;overflow-y:auto;min-width:inherit;min-height:200px;border-width:thin;border-style: none;font-family:sans-serif;border-color:#555555;font-size:small;font-weight:400;" dir="rtl">
     <table>
@@ -170,25 +171,14 @@
             "phone": $('#phone').val(),
             "cellPhone": $('#cell_phone').val()
         };
-        $.ajax({
-            url: "/GovExp/EditPersonalInfo",
-            type: "POST",
-            data: JSON.stringify(data),
-            dataType: "json",
-            contentType: "application/json",
-            success: function (response) {
-                if (response.Success) {
-                    alert("פרטים אישיים שונו בהצלחה.");
-                    location.reload();
-                }
-                else {
-                    alert(response.ErrMsg);
-                }
+        ajaxSbmt(data, '/GovExp/EditPersonalInfo',
+            function (response) {
+                alert("פרטים אישיים שונו בהצלחה.");
+                location.reload();
             },
-            error: function () {
-                alert('בעיה בשרת');
-            }
-        });
+            function (msg) {
+                alert(msg);
+            });
     }
 
     function editPassword() {
@@ -202,24 +192,13 @@
             "oldPass": $('#pass_old').val(),
             "newPass": $('#pass_new').val()
         };
-        $.ajax({
-            url: "/GovExp/EditPassword",
-            type: "POST",
-            data: JSON.stringify(data),
-            dataType: "json",
-            contentType: "application/json",
-            success: function (response) {
-                if (response.Success) {
-                    alert("סיסמה שונתה בהצלחה.");
-                    location.reload();
-                }
-                else {
-                    alert("נכשל");
-                }
+        ajaxSbmt(data, '/GovExp/EditPassword',
+            function (response) {
+                alert("סיסמה שונתה בהצלחה.");
+                location.reload();
             },
-            error: function () {
-                alert('Fail!!!');
-            }
-        });
+            function (msg) {
+                alert(msg);
+            });
     }
 </script>

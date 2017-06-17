@@ -77,7 +77,7 @@ namespace DigitalIsraelFund_System.Controllers
                     results.Add(row[searchBy]);
                 }
             }
-            return Json(new { List = results }, JsonRequestBehavior.AllowGet);
+            return Json(new { Success = true, List = results }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]

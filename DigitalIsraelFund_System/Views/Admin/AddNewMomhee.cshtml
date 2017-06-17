@@ -3,6 +3,7 @@
 }
 
 <script src="~/Scripts/validation.js"></script>
+<script src="~/Scripts/ajaxSubmit.js"></script>
 
 <div id="cntntDiv" contenteditable="false" style="height:100%;resize:none;overflow-y:auto;min-width:inherit;min-height:200px;border-width:thin;border-style: none;font-family:sans-serif;border-color:#555555;font-size:small;font-weight:400;" dir="rtl">
     <table style="padding:10px 5px;border: 0px solid #ccc;margin:auto;">
@@ -35,7 +36,7 @@
                 אימייל
             </td>
             <td style="padding:3px;font-weight:600;text-align:center;">
-                <input id="_email" class="form-control" oninput="validateInput('_email', 'Email');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="text" />
+                <input id="email" class="form-control" oninput="validateInput('email', 'Email');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="text" />
             </td>
         </tr>
         <tr>
@@ -43,7 +44,7 @@
                 טלפון
             </td>
             <td style="padding:3px;font-weight:600;text-align:center;">
-                <input id="phone" class="form-control" oninput="validateInput('phone', 'Phone');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="tel" />
+                <input id="phone" class="form-control" oninput="validateInput('phone', 'Phone');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="text" />
             </td>
         </tr>
         <tr>
@@ -51,7 +52,7 @@
                 פלפון
             </td>
             <td style="padding:3px;font-weight:600;text-align:center;">
-                <input id="cell_phone" class="form-control" oninput="validateInput('cell_phone', 'Phone');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="tel" />
+                <input id="cell_phone" class="form-control" oninput="validateInput('cell_phone', 'Phone');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="text" />
             </td>
         </tr>
         <tr>
@@ -96,24 +97,13 @@
             "phone": $('#phone').val(),
             "cellPhone": $('#cell_phone').val()
         };
-        $.ajax({
-            url: "/Admin/AddNewMomhee",
-            type: "POST",
-            data: JSON.stringify(data),
-            dataType: "json",
-            contentType: "application/json",
-            success: function (response) {
-                if (response.Success) {
-                    alert("מומחה הוסף בהצלחה.");
-                    location.replace('MomhimManage');
-                }
-                else {
-                    alert("נכשל");
-                }
+        ajaxSbmt(data, '/Admin/AddNewMomhee',
+            function (response) {
+                alert("מומחה הוסף בהצלחה.");
+                location.replace('MomhimManage');
             },
-            error: function () {
-                alert('Fail!!!');
-            }
-        });
+            function (msg) {
+                alert(msg);
+            });
     }
 </script>

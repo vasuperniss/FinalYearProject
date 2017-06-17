@@ -33,6 +33,7 @@
 </style>
 
 <script src="~/Scripts/validation.js"></script>
+<script src="~/Scripts/ajaxSubmit.js"></script>
 
 <select hidden id="officesCopy" class="fakeInput">
     @{
@@ -43,8 +44,6 @@
         }
     }
 </select>
-
-
 
 <div id="cntntDiv" contenteditable="false" style="height:100%;resize:none;overflow-y:auto;min-width:inherit;min-height:200px;border-width:thin;border-style: none;font-family:sans-serif;border-color:#555555;font-size:small;font-weight:400;" dir="rtl">
     <table style="padding:5px 5px;border: 1px solid #ccc;margin:auto;width:85%;">
@@ -257,24 +256,11 @@
                 "phone": document.getElementById('phone_' + user_id).innerText,
                 "cellPhone": document.getElementById('cell_phone_' + user_id).innerText
             };
-            $.ajax({
-                url: "/Admin/EditMomhee",
-                type: "POST",
-                data: JSON.stringify(data),
-                dataType: "json",
-                contentType: "application/json",
-                success: function (response) {
-                    if (response.Success) {
-                        location.reload();
-                    }
-                    else {
-                        alert(response.ErrMsg);
-                    }
+            ajaxSbmt(data, '/Admin/EditMomhee',
+                function (response) {
+                    location.reload();
                 },
-                error: function () {
-                    alert('בעיה בשרת');
-                }
-            });
+                function (msg) { alert(msg); });
         }
     }
 
@@ -289,23 +275,15 @@
             "searchVal": document.getElementById('searchVal').value,
             "searchBy": document.getElementById('searchBy').value
         };
-        $.ajax({
-            url: "/Admin/SearchUserBy",
-            type: "POST",
-            data: JSON.stringify(data),
-            dataType: "json",
-            contentType: "application/json",
-            success: function (response) {
+        ajaxSbmt(data, '/Admin/SearchUserBy',
+            function (response) {
                 var options = '';
                 $.each(response.List, function (index, item) {
                     options += '<option value="' + item + '" />';
                 });
                 document.getElementById('listOptions').innerHTML = options;
             },
-            error: function () {
-
-            }
-        });
+            function (msg) { });
     }
 
     function showSearch(searchBy, title) {

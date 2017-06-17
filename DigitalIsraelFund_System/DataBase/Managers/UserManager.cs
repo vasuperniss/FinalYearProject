@@ -58,6 +58,8 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             values["password"] = password;
             values["type"] = type;
             values["office"] = office;
+            values["phone"] = phone;
+            values["cell_phone"] = cellPhone;
             MySqlCommands.Insert("users", values);
         }
 

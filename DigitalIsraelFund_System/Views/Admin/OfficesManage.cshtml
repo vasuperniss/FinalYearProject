@@ -4,6 +4,7 @@
 }
 
 <script src="~/Scripts/validation.js"></script>
+<script src="~/Scripts/ajaxSubmit.js"></script>
 
 <div id="cntntDiv" contenteditable="false" style="height:100%;resize:none;overflow-y:auto;min-width:inherit;min-height:200px;border-width:thin;border-style: none;font-family:sans-serif;border-color:#555555;font-size:small;font-weight:400;" dir="rtl">
     <table style="padding:5px 5px;border: 1px solid #ccc;margin:auto;width:70%;">
@@ -60,25 +61,14 @@
         var data = {
             "officeName": $('#office_name').val()
         };
-        $.ajax({
-            url: "/Admin/OfficesManage",
-            type: "POST",
-            data: JSON.stringify(data),
-            dataType: "json",
-            contentType: "application/json",
-            success: function (response) {
-                if (response.Success) {
-                    alert("משרד נוסף בהצלחה.");
-                    location.reload();
-                }
-                else {
-                    alert("נכשל");
-                }
+        ajaxSbmt(data, '/Admin/OfficesManage',
+            function (response) {
+                alert("משרד נוסף בהצלחה.");
+                location.reload();
             },
-            error: function () {
-                alert('בעיה בשרת.');
-            }
-        });
+            function (msg) {
+                alert(msg);
+            });
     }
 </script>
 

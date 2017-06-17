@@ -96,8 +96,8 @@
                 <div class="modal-dialog">
                     <div class="loginmodal-container" style="align-items:center;text-align:center;">
                         <h1 style="font-weight:600;">כניסה לחשבון שלך</h1><br>
-                        <input id="email" type="text" name="email" placeholder="אימייל" />
-                        <input id="pass" type="password" name="password" placeholder="סיסמה" />
+                        <input id="__email" type="text" name="email" placeholder="אימייל" />
+                        <input id="__pass" type="password" name="password" placeholder="סיסמה" />
                         <button id="subm" class="login loginmodal-submit" style="width:95%">כניסה</button>
                         <img id="loginLoadIcon" src="~/Content/Images/loadingIcon.gif" style="width:auto;margin:auto;align-self:center;display:none;padding-top:5px;" />
                         <h5 id="logInFailMsg" style="color:red;">* שם המשתמש או הסיסמה שגואים.</h5>
@@ -121,8 +121,8 @@
             $('#logInFailMsg').hide();
             $('#subm').click(function () {
                 var data = {
-                    "email": $("#email").val(),
-                    "password": $("#pass").val()
+                    "email": $("#__email").val(),
+                    "password": $("#__pass").val()
                 };
                 document.getElementById("subm").setAttribute('disabled', true);
                 document.getElementById("subm").style.color = 'dimgrey';
