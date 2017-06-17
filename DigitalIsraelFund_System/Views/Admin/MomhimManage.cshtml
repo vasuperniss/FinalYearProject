@@ -40,7 +40,7 @@
 
 @helper SearchAbleCol(string fieldName, string fieldTitle, bool isSearchable, bool isOrderable)
 {
-    <td style="padding:3px;font-weight:600;text-align:center;">
+    <td style="padding:3px;font-size:small;font-weight:600;text-align:center;">
         @if (isSearchable)
         {
             <img style="width:12px;height:12px;" src="~/Content/Images/search_icon.png" />
@@ -71,11 +71,12 @@
         @if (isSearchable)
         {
             <datalist id="listOptions_@fieldName"></datalist>
-            <div style="width:100%;overflow-wrap:unset;">
+            <div class="input-group" style="width:100%;overflow-wrap:unset;direction:ltr">
+                <span class="input-group-addon" style="background-color:#EC7063;color:white;cursor:pointer;" onclick="clearSearch('@fieldName');">x</span>
                 <input id="searchVal_@fieldName" type="search" value="@Request.Params.Get(fieldName)" list="listOptions_@fieldName" placeholder="חיפוש"
-                        class="myInp" oninput="updateSearchOptions('@fieldName')" onkeypress="searchAttempt(event);" />
-                <button class="btn btn-warning btn-xs" style="border-radius:4px;margin-right:-6px;background-color:#EC7063;" onclick="clearSearch('@fieldName');">x</button>
+                       class="form-control" style="height:100%;" oninput="updateSearchOptions('@fieldName')" onkeypress="searchAttempt(event);" />
             </div>
+            <!-- <button class="btn btn-warning btn-xs" style="border-radius:4px;margin-right:-6px;background-color:#EC7063;" onclick="clearSearch('@fieldName');">x</button> -->
         }
     </td>
 }

@@ -48,6 +48,7 @@ namespace DigitalIsraelFund_System.Controllers
         {
             string where = "file_number='" + file_number + "'";
             ViewData["request"] = RequestManager.Manager.GetAllWhere(where, null, 1, 1)[0];
+            ViewData["names"] = RequestManager.Manager.GetAllColNames();
 
             var requestFile = Server.MapPath("~/App_Data/Forms/MashovForm_v_0.xml");
             string xmlNode = System.IO.File.ReadAllText(@requestFile);

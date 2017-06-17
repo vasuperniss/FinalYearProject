@@ -45,5 +45,18 @@ namespace DigitalIsraelFund_System.DataBase.Managers
         {
             return MySqlCommands.Update("requests", newValues, "file_number='" + file_number + "'");
         }
+
+        public Dictionary<string, string> GetAllColNames()
+        {
+            var names = new Dictionary<string, string>();
+            names.Add("file_number", "מספר תיק");
+            names.Add("comp_name", "שם  חברה או היזם");
+            names.Add("status", "סטטוס התיק");
+            names.Add("submiter_name", "שם  המגיש");
+            names.Add("momhee_name", "בודק של הרשות לחדשנות");
+            names.Add("fund_request", "גובה במענק המבוקש");
+            names.Add("madaan_momhee", "בודק משרדי");
+            return names;
+        }
     }
 }
