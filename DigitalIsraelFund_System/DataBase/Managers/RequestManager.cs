@@ -8,6 +8,8 @@ namespace DigitalIsraelFund_System.DataBase.Managers
 
         public static RequestManager Manager { get { return instance; } }
 
+        private RequestManager() { }
+
         public List<Dictionary<string, string>> GetAllWhere(string where, string orderBy, int page, int resultsPerPage)
         {
             List<string> fields = new List<string>();

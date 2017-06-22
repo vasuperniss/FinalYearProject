@@ -132,6 +132,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RequestController.cs" />
     <Compile Include="DataBase\DataBase.cs" />
+    <Compile Include="DataBase\Managers\LogManager.cs" />
     <Compile Include="DataBase\Managers\OfficeManager.cs" />
     <Compile Include="DataBase\Managers\RequestManager.cs" />
     <Compile Include="DataBase\Managers\UserManager.cs" />
