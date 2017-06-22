@@ -53,9 +53,10 @@
 <script src="~/Scripts/validation.js"></script>
 <script src="~/Scripts/ajaxSubmit.js"></script>
 
+
 @helper SearchAbleCol(string fieldName, string fieldTitle, bool isSearchable, bool isOrderable)
 {
-    <td style="padding:3px;font-weight:600;text-align:center;vertical-align:bottom;">
+    <td style="padding:3px;font-size:small;font-weight:600;text-align:center;">
         @if (isSearchable)
         {
             <img style="width:12px;height:12px;" src="~/Content/Images/search_icon.png" />
@@ -86,11 +87,12 @@
         @if (isSearchable)
         {
             <datalist id="listOptions_@fieldName"></datalist>
-            <div style="width:100%;overflow-wrap:unset;">
+            <div class="input-group" style="width:100%;overflow-wrap:unset;direction:ltr">
+                <span class="input-group-addon" style="background-color:#EC7063;color:white;cursor:pointer;" onclick="clearSearch('@fieldName');">x</span>
                 <input id="searchVal_@fieldName" type="search" value="@Request.Params.Get(fieldName)" list="listOptions_@fieldName" placeholder="חיפוש"
-                       class="myInp" oninput="updateSearchOptions('@fieldName')" onkeypress="searchAttempt(event);" />
-                <button class="btn btn-warning btn-xs" style="margin-right:-6px;background-color:#EC7063;" onclick="clearSearch('@fieldName');">x</button>
+                       class="form-control" style="height:100%;" oninput="updateSearchOptions('@fieldName')" onkeypress="searchAttempt(event);" />
             </div>
+            <!-- <button class="btn btn-warning btn-xs" style="border-radius:4px;margin-right:-6px;background-color:#EC7063;" onclick="clearSearch('@fieldName');">x</button> -->
         }
     </td>
 }
@@ -211,7 +213,7 @@
             "searchVal": document.getElementById('searchVal_' + field).value,
             "searchBy": field
         };
-        ajaxSbmt(data, '/Admin/SearchUserBy',
+        ajaxSbmt(data, '/Admin/SearchRequestBy',
             function (response) {
                 var options = '';
                 $.each(response.List, function (index, item) {
@@ -236,10 +238,12 @@
     function reload() {
         window.location.href = "/Admin/RequestsManage?isDesc=@Model.isDesc&orderBy=@Model.OrderBy" +
                         "&page=1&resultsPerPage=@Model.ResultsPerPage" +
-                        "&fname=" + document.getElementById('searchVal_fname').value +
-                        "&lname=" + document.getElementById('searchVal_lname').value +
-                        "&office_name=" + document.getElementById('searchVal_office_name').value +
-                        "&email=" + document.getElementById('searchVal_email').value;
+                        "&file_number=" + document.getElementById('searchVal_file_number').value +
+                        "&comp_name=" + document.getElementById('searchVal_comp_name').value +
+                        "&status=" + document.getElementById('searchVal_status').value +
+                        "&momhee_name=" + document.getElementById('searchVal_momhee_name').value +
+                        "&madaan_momhee=" + document.getElementById('searchVal_madaan_momhee').value +
+                        "&submiter_name=" + document.getElementById('searchVal_submiter_name').value;
     }
 
 </script>

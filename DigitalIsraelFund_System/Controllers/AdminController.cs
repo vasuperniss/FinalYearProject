@@ -24,9 +24,12 @@ namespace DigitalIsraelFund_System.Controllers
         }
 
         [HttpGet]
-        public ActionResult MomhimManage(string page, string resultsPerPage, string orderBy, string isDesc,
-            string fname , string lname, string email, string office_name)
+        public ActionResult MomhimManage(string page, string resultsPerPage, string orderBy, string isDesc)
         {
+            string fname = Request.Params["fname"],
+                lname = Request.Params["lname"],
+                email = Request.Params["email"],
+                office_name = Request.Params["office_name"];
             int pageNum, resultsPerPageNum;
             bool isDescBool = false;
             if (orderBy != "" && !bool.TryParse(isDesc, out isDescBool)) isDescBool = false;
@@ -107,6 +110,12 @@ namespace DigitalIsraelFund_System.Controllers
         [HttpGet]
         public ActionResult RequestsManage(string page, string resultsPerPage, string orderBy, string isDesc)
         {
+            string file_number = Request.Params["file_number"],
+                comp_name = Request.Params["comp_name"],
+                status = Request.Params["status"],
+                momhee_name = Request.Params["momhee_name"],
+                madaan_momhee = Request.Params["madaan_momhe"],
+                submiter_name = Request.Params["submiter_name"];
             int pageNum, resultsPerPageNum;
             bool isDescBool;
             if (!bool.TryParse(isDesc, out isDescBool)) isDescBool = false;
@@ -114,7 +123,14 @@ namespace DigitalIsraelFund_System.Controllers
             if (!int.TryParse(resultsPerPage, out resultsPerPageNum)) resultsPerPageNum = 10;
             string isDescString = "";
             if (isDescBool) isDescString = " DESC";
-            string where = "";
+            string where = Request.Params["momhee_id"] == null ? "true" : "users.id='" + Request.Params["momhee_id"] + "'";
+            if (file_number != null) where += " and file_number LIKE '%" + file_number + "%'";
+            if (comp_name != null) where += " and comp_name LIKE '%" + comp_name + "%'";
+            if (status != null) where += " and status LIKE '%" + status + "%'";
+            if (momhee_name != null) where += " and CONCAT_WS(' ', fname, lname) LIKE '%" + momhee_name + "%'";
+            if (madaan_momhee != null) where += " and madaan_momhee LIKE '%" + madaan_momhee + "%'";
+            if (submiter_name != null) where += " and submiter_name LIKE '%" + submiter_name + "%'";
+
             var table = RequestManager.Manager.GetAllWhere(where, orderBy + isDescString, pageNum, resultsPerPageNum);
             var count = RequestManager.Manager.Count("");
             return View(new TableResult
@@ -126,6 +142,22 @@ namespace DigitalIsraelFund_System.Controllers
                 ResultsPerPage = resultsPerPageNum,
                 OrderBy = orderBy
             });
+        }
+
+        [HttpPost]
+        public JsonResult SearchRequestBy(string searchVal, string searchBy)
+        {
+            if (searchBy == "momhee_name") searchBy = "CONCAT_WS(' ', fname, lname)";
+            var table = RequestManager.Manager.GetFieldWhere(searchBy, searchBy + " LIKE '%" + searchVal + "%'", searchBy, 1, 5);
+            List<string> results = new List<string>();
+            if (table != null)
+            {
+                foreach (Dictionary<string, string> row in table)
+                {
+                    results.Add(row[searchBy]);
+                }
+            }
+            return Json(new { Success = true, List = results }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
