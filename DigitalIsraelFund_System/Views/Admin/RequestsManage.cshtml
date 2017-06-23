@@ -236,14 +236,18 @@
     }
 
     function reload() {
+        var momh_name = document.getElementById('searchVal_momhee_name');
+        var add = "";
+        if (momh_name != null)
+            add = "&momhee_name=" + momh_name.value;
         window.location.href = "/Admin/RequestsManage?isDesc=@Model.isDesc&orderBy=@Model.OrderBy" +
                         "&page=1&resultsPerPage=@Model.ResultsPerPage" +
                         "&file_number=" + document.getElementById('searchVal_file_number').value +
                         "&comp_name=" + document.getElementById('searchVal_comp_name').value +
                         "&status=" + document.getElementById('searchVal_status').value +
-                        "&momhee_name=" + document.getElementById('searchVal_momhee_name').value +
                         "&madaan_momhee=" + document.getElementById('searchVal_madaan_momhee').value +
-                        "&submiter_name=" + document.getElementById('searchVal_submiter_name').value;
+                        "&submiter_name=" + document.getElementById('searchVal_submiter_name').value +
+                        add;
     }
 
 </script>

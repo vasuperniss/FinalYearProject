@@ -1,10 +1,12 @@
 ﻿using DigitalIsraelFund_System.DataBase.Managers;
 using DigitalIsraelFund_System.Models;
+using DigitalIsraelFund_System.Filters;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace DigitalIsraelFund_System.Controllers
 {
+    [AdminFilter]
     public class AdminController : Controller
     {
 
@@ -110,12 +112,14 @@ namespace DigitalIsraelFund_System.Controllers
         [HttpGet]
         public ActionResult RequestsManage(string page, string resultsPerPage, string orderBy, string isDesc)
         {
+            UserData user = (UserData)this.Session["user"];
             string file_number = Request.Params["file_number"],
                 comp_name = Request.Params["comp_name"],
                 status = Request.Params["status"],
                 momhee_name = Request.Params["momhee_name"],
                 madaan_momhee = Request.Params["madaan_momhe"],
-                submiter_name = Request.Params["submiter_name"];
+                submiter_name = Request.Params["submiter_name"],
+                momhee_id = Request.Params["momhee_id"];
             int pageNum, resultsPerPageNum;
             bool isDescBool;
             if (!bool.TryParse(isDesc, out isDescBool)) isDescBool = false;
@@ -123,13 +127,18 @@ namespace DigitalIsraelFund_System.Controllers
             if (!int.TryParse(resultsPerPage, out resultsPerPageNum)) resultsPerPageNum = 10;
             string isDescString = "";
             if (isDescBool) isDescString = " DESC";
-            string where = Request.Params["momhee_id"] == null ? "true" : "users.id='" + Request.Params["momhee_id"] + "'";
-            if (file_number != null) where += " and file_number LIKE '%" + file_number + "%'";
-            if (comp_name != null) where += " and comp_name LIKE '%" + comp_name + "%'";
-            if (status != null) where += " and status LIKE '%" + status + "%'";
-            if (momhee_name != null) where += " and CONCAT_WS(' ', fname, lname) LIKE '%" + momhee_name + "%'";
-            if (madaan_momhee != null) where += " and madaan_momhee LIKE '%" + madaan_momhee + "%'";
-            if (submiter_name != null) where += " and submiter_name LIKE '%" + submiter_name + "%'";
+            string where = "";
+            if (user.Type.ToLower() == "admin")
+                where = momhee_id == null ? "true" : "users.id='" + momhee_id + "'";
+            if (user.Type.ToLower() == "momhee")
+                where = momhee_id = "'" + user.Id + "'";
+            where += " and file_number LIKE '%" + file_number + "%'";
+            where += " and comp_name LIKE '%" + comp_name + "%'";
+            where += " and status LIKE '%" + status + "%'";
+            if (user.Type.ToLower() == "admin")
+                where += " and CONCAT_WS(' ', fname, lname) LIKE '%" + momhee_name + "%'";
+            where += " and madaan_momhee LIKE '%" + madaan_momhee + "%'";
+            where += " and submiter_name LIKE '%" + submiter_name + "%'";
 
             var table = RequestManager.Manager.GetAllWhere(where, orderBy + isDescString, pageNum, resultsPerPageNum);
             var count = RequestManager.Manager.Count("");
