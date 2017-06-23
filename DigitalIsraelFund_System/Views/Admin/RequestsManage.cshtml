@@ -8,25 +8,6 @@
 }
 
 <style>
-    .myInp {
-        width: 70%;
-        box-sizing: border-box;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 12px;
-        background-color: white;
-        background-image: url('~/Content/Images/search_icon.png');
-        background-position: 10px 10px;
-        background-repeat: no-repeat;
-        padding: 3px 3px 3px 3px;
-        -webkit-transition: width 0.4s ease-in-out;
-        transition: width 0.4s ease-in-out;
-    }
-
-        .myInp:focus {
-            width: 85%;
-        }
-
     .fakeInput {
         border: solid 0px #00A;
         border-radius: 4px;
@@ -53,8 +34,12 @@
 <script src="~/Scripts/validation.js"></script>
 <script src="~/Scripts/ajaxSubmit.js"></script>
 
+<input type="hidden" id="orderBy" value="@Model.OrderBy" />
+<input type="hidden" id="isDesc" value="@Model.isDesc.ToString()" />
+<input type="hidden" id="page" value="@Model.Page" />
+<input type="hidden" id="resultsPerPage" value="@Model.ResultsPerPage" />
 
-@helper SearchAbleCol(string fieldName, string fieldTitle, bool isSearchable, bool isOrderable)
+@helper SearchAbleCol(string fieldName, string fieldTitle, bool isSearchable, bool isOrderable, List<string> options)
 {
     <td style="padding:3px;font-size:small;font-weight:600;text-align:center;">
         @if (isSearchable)
@@ -63,21 +48,11 @@
         }
         @if (isOrderable)
         {
-            @Html.ActionLink(fieldTitle, "MomhimManage", "Admin", new
-       {
-           orderBy = fieldName,
-           isDesc = Model.OrderBy == fieldName ? !Model.isDesc : Model.isDesc,
-           page = Model.Page,
-           resultsPerPage = Model.ResultsPerPage,
-           search = Model.Search,
-           searchBy = Model.SearchField
-       }, null)
+            <a href="#" onclick="setOrderBy('@fieldName');">@fieldTitle</a>
             if (Model.OrderBy == fieldName)
             {
-                if (!Model.isDesc)
-                { <font>🠟</font> }
-                else
-                { <font>🠝</font> }
+                if (!Model.isDesc) { <font>🠟</font> }
+                else { <font>🠝</font> }
             }
         }
         else
@@ -86,13 +61,27 @@
         }
         @if (isSearchable)
         {
-            <datalist id="listOptions_@fieldName"></datalist>
-            <div class="input-group" style="width:100%;overflow-wrap:unset;direction:ltr">
-                <span class="input-group-addon" style="background-color:#EC7063;color:white;cursor:pointer;" onclick="clearSearch('@fieldName');">x</span>
-                <input id="searchVal_@fieldName" type="search" value="@Request.Params.Get(fieldName)" list="listOptions_@fieldName" placeholder="חיפוש"
-                       class="form-control" style="height:100%;" oninput="updateSearchOptions('@fieldName')" onkeypress="searchAttempt(event);" />
-            </div>
-            <!-- <button class="btn btn-warning btn-xs" style="border-radius:4px;margin-right:-6px;background-color:#EC7063;" onclick="clearSearch('@fieldName');">x</button> -->
+            if (options == null) {
+                <datalist id="listOptions_@fieldName"></datalist>
+                <div class="input-group" style="width:100%;overflow-wrap:unset;direction:ltr">
+                    <span class="input-group-addon" style="background-color:#EC7063;color:white;cursor:pointer;padding:6px;padding-left:10px;padding-right:10px;"
+                           onclick="clearSearch('@fieldName');">x</span>
+                    <input id="searchVal_@fieldName" type="search" value="@Request.Params.Get(fieldName)" list="listOptions_@fieldName" placeholder="חיפוש"
+                           class="form-control" style="height:100%;padding:6px;" oninput="updateSearchOptions('@fieldName')" onkeypress="searchAttempt(event);" />
+                </div>
+            } else
+            {
+                <div>
+                    <select id="searchVal_@fieldName" class="form-control" style="width:auto;height:100%;padding:4px;padding-left:6px;" onchange="reload();">
+                        <option value="">הכל</option>
+                        @foreach (var op in options)
+                        {
+                            var selected = op == Request.Params[fieldName] ? "selected" : "";
+                            <option value="@op" @selected>@op</option>
+                        }
+                    </select>
+                </div>
+            }
         }
     </td>
 }
@@ -123,14 +112,7 @@
                 {
                     if (Model.Page != i)
                     {
-                        @Html.ActionLink(i + "", "MomhimManage", "Admin", new
-                   {
-                       orderBy = Model.OrderBy,
-                       isDesc = Model.isDesc,
-                       page = i,
-                       resultsPerPage = Model.ResultsPerPage
-                   }, null)
-                        <font>&nbsp;</font>
+                        <a href="#" style="font-size:small;" onclick="changePage(@i);">@i</a><font>&nbsp;</font>
                     }
                     else
                     {
@@ -146,18 +128,18 @@
     <table style="padding:5px 5px;border: 1px solid #ccc;margin:auto;width:100%;">
         <tr style="background-color:#E3E4FA;">
             <td style="padding:3px;font-weight:600;text-align:center;vertical-align:bottom;"></td>
-            @SearchAbleCol("file_number", "מספר תיק", true, true)
-            @SearchAbleCol("comp_name", "שם  חברה או היזם", true, true)
-            @SearchAbleCol("status", "סטטוס התיק", true, true)
-            @SearchAbleCol("submiter_name", "שם  המגיש", true, true)
+            @SearchAbleCol("file_number", "מספר תיק", true, true, null)
+            @SearchAbleCol("comp_name", "שם  חברה או היזם", true, true, null)
+            @SearchAbleCol("status", "סטטוס התיק", true, true, null)
+            @SearchAbleCol("submiter_name", "שם  המגיש", true, true, null)
             @if (type == "admin")
             {
-                @SearchAbleCol("momhee_name", "בודק של הרשות לחדשנות", true, true)
+                @SearchAbleCol("momhee_name", "בודק של הרשות לחדשנות", true, true, null)
             }
-            @SearchAbleCol("fund_request", "גובה במענק המבוקש", false, false)
-            @SearchAbleCol("madaan_momhee", "בודק משרדי", true, true)
+            @SearchAbleCol("mashov", "משוב מומחה", true, true, new List<string>() { "אין", "בתהליך", "/" })
+            @SearchAbleCol("fund_request", "גובה במענק המבוקש", false, false, null)
+            @SearchAbleCol("madaan_momhee", "בודק משרדי", true, true, null)
             <td style="padding:3px;font-weight:600;text-align:center;"></td>
-            @if (type == "momhee") { <td></td> }
         </tr>
         @{ var count = (Model.Page - 1) * Model.ResultsPerPage + 1; }
         @foreach (Dictionary<string, string> line in Model.Table)
@@ -183,17 +165,28 @@
                         }
                     </td>
                 }
+                <td style="padding:3px;border: 0px solid #888;text-align:center;">
+                    @if (type == "momhee")
+                    {
+                        @Html.ActionLink("צרף משוב", "AddMashov", "GovExp", new { file_number = line["file_number"] }, new { @class = "btn btn-primary btn-xs" })
+                    }
+                    else if (type == "admin")
+                    {
+                        if (!line["mashov"].Contains("/"))
+                        {
+                            @line["mashov"]
+                        }
+                        else
+                        {
+                            @Html.ActionLink("צפה במשוב", "ViewMashov", "Admin", new { file_number = line["file_number"] }, new { @class = "btn btn-primary btn-xs" })
+                        }
+                    }
+                </td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["fund_request"]</td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["madaan_momhee"]</td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">
                     <button id="files_@line["file_number"]" class="btn btn-info btn-xs" onclick="showFiles('@line["file_number"]');">קבצים</button>
                 </td>
-                @if (type == "momhee")
-                {
-                    <td style="padding:3px;border: 0px solid #888;text-align:center;">
-                        @Html.ActionLink("צרף משוב", "AddMashov", "GovExp", new { file_number = line["file_number"] }, new { @class = "btn btn-primary btn-xs" })
-                    </td>
-                }
             </tr>
         }
         @numbersRow()
@@ -204,8 +197,13 @@
 
     function changeResultsPerPage() {
         var pp = document.getElementById('selectPP').value;
-        window.location.href = "/Admin/MomhimManage?isDesc=@Model.isDesc&page=1&resultsPerPage=" + pp
-                        + "&search=@Model.Search&searchBy=@Model.SearchField";
+        document.getElementById('resultsPerPage').value = pp;
+        reload();
+    }
+
+    function changePage(pageNum) {
+        document.getElementById('page').value = pageNum;
+        reload();
     }
 
     function updateSearchOptions(field) {
@@ -235,18 +233,33 @@
         reload();
     }
 
+    function setOrderBy(fieldName) {
+        var orderBy = document.getElementById('orderBy');
+        var order = document.getElementById('isDesc');
+        if (orderBy.value == fieldName) {
+            order.value = order.value == "True" ? "False" : "True";
+        } else {
+            order.value = "False";
+        }
+        orderBy.value = fieldName;
+        reload();
+    }
+
     function reload() {
         var momh_name = document.getElementById('searchVal_momhee_name');
         var add = "";
         if (momh_name != null)
             add = "&momhee_name=" + momh_name.value;
-        window.location.href = "/Admin/RequestsManage?isDesc=@Model.isDesc&orderBy=@Model.OrderBy" +
-                        "&page=1&resultsPerPage=@Model.ResultsPerPage" +
+        window.location.href = "/Admin/RequestsManage?isDesc=" + document.getElementById('isDesc').value +
+                        "&orderBy=" + document.getElementById('orderBy').value +
+                        "&page=" + document.getElementById('page').value +
+                        "&resultsPerPage=" + document.getElementById('resultsPerPage').value +
                         "&file_number=" + document.getElementById('searchVal_file_number').value +
                         "&comp_name=" + document.getElementById('searchVal_comp_name').value +
                         "&status=" + document.getElementById('searchVal_status').value +
                         "&madaan_momhee=" + document.getElementById('searchVal_madaan_momhee').value +
                         "&submiter_name=" + document.getElementById('searchVal_submiter_name').value +
+                        "&mashov=" + document.getElementById('searchVal_mashov').value +
                         add;
     }
 

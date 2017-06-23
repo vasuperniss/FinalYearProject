@@ -1,5 +1,6 @@
 ﻿using DigitalIsraelFund_System.DataBase;
 using DigitalIsraelFund_System.DataBase.Managers;
+using DigitalIsraelFund_System.Filters;
 using DigitalIsraelFund_System.Models;
 using System.Collections.Generic;
 using System.IO;
@@ -8,6 +9,7 @@ using System.Xml;
 
 namespace DigitalIsraelFund_System.Controllers
 {
+    [GovExpFilter]
     public class GovExpController : Controller
     {
 

@@ -119,7 +119,7 @@ namespace DigitalIsraelFund_System.Controllers
                 momhee_name = Request.Params["momhee_name"],
                 madaan_momhee = Request.Params["madaan_momhe"],
                 submiter_name = Request.Params["submiter_name"],
-                momhee_id = Request.Params["momhee_id"];
+                mashov = Request.Params["mashov"];
             int pageNum, resultsPerPageNum;
             bool isDescBool;
             if (!bool.TryParse(isDesc, out isDescBool)) isDescBool = false;
@@ -127,11 +127,9 @@ namespace DigitalIsraelFund_System.Controllers
             if (!int.TryParse(resultsPerPage, out resultsPerPageNum)) resultsPerPageNum = 10;
             string isDescString = "";
             if (isDescBool) isDescString = " DESC";
-            string where = "";
-            if (user.Type.ToLower() == "admin")
-                where = momhee_id == null ? "true" : "users.id='" + momhee_id + "'";
+            string where = "true";
             if (user.Type.ToLower() == "momhee")
-                where = momhee_id = "'" + user.Id + "'";
+                where = "momhee_id='" + user.Id + "'";
             where += " and file_number LIKE '%" + file_number + "%'";
             where += " and comp_name LIKE '%" + comp_name + "%'";
             where += " and status LIKE '%" + status + "%'";
@@ -139,6 +137,7 @@ namespace DigitalIsraelFund_System.Controllers
                 where += " and CONCAT_WS(' ', fname, lname) LIKE '%" + momhee_name + "%'";
             where += " and madaan_momhee LIKE '%" + madaan_momhee + "%'";
             where += " and submiter_name LIKE '%" + submiter_name + "%'";
+            where += " and mashov LIKE '%" + mashov + "%'";
 
             var table = RequestManager.Manager.GetAllWhere(where, orderBy + isDescString, pageNum, resultsPerPageNum);
             var count = RequestManager.Manager.Count("");

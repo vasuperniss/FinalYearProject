@@ -18,6 +18,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             fields.Add("status");
             fields.Add("submiter_name");
             fields.Add("CONCAT_WS(' ', fname, lname) AS momhee_name");
+            fields.Add("mashov");
             fields.Add("fund_request");
             fields.Add("madaan_momhee");
             string limit = ((page - 1) * resultsPerPage) + "," + resultsPerPage;
@@ -58,6 +59,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             names.Add("momhee_name", "בודק של הרשות לחדשנות");
             names.Add("fund_request", "גובה במענק המבוקש");
             names.Add("madaan_momhee", "בודק משרדי");
+            names.Add("mashov", "משוב מומחה");
             return names;
         }
     }
