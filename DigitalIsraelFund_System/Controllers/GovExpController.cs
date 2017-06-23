@@ -30,7 +30,7 @@ namespace DigitalIsraelFund_System.Controllers
             var requestFile = Server.MapPath("~/App_Data/Forms/MashovForm_v_0.xml");
             string xmlNode = System.IO.File.ReadAllText(@requestFile);
             XmlReader xmlReader = XmlReader.Create(new StringReader(xmlNode));
-            FormComponent requestForm = new FormComponent(xmlReader);
+            FormComponent mashovForm = new FormComponent(xmlReader);
             xmlReader.Close();
 
             ViewData["postToController"] = "../GovExp/AddMashov";
@@ -38,7 +38,7 @@ namespace DigitalIsraelFund_System.Controllers
             ViewData["fileNumberRequest"] = file_number;
             ViewData["nameGovExp"] = ((UserData)this.Session["user"]).Name;
             ViewData["officeGovExp"] = ((UserData)this.Session["user"]).Office;
-            return View("../Home/Form2", requestForm.FormComponents[0]);
+            return View("../Home/Form2", mashovForm.FormComponents[0]);
         }
 
         [HttpPost]
@@ -50,7 +50,7 @@ namespace DigitalIsraelFund_System.Controllers
             System.IO.File.WriteAllText(@dataFile, json);
 
             RequestManager.Manager.UpdateMashov(fTV.Values["file_number"], jsonPath);
-            return RedirectToAction("~/Admin/RequestsManage");
+            return RedirectToAction("../Admin/RequestsManage");
         }
 
         [HttpPost]

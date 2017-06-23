@@ -92,7 +92,7 @@
         <td colspan="4" style="direction:rtl;background:linear-gradient(to left, #E3E4FA , white);">
             &nbsp;&nbsp;
             <font>תוצאות לעמוד : </font>&nbsp;
-            <select id="selectPP" onchange="changeResultsPerPage()">
+            <select id="selectPP" onchange="changeResultsPerPage();">
                 @for (int i = 1; i <= 5; ++i)
                 {
                     if (i * 10 == Model.ResultsPerPage)

@@ -70,7 +70,6 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             names.Add("momhee_name", "בודק של הרשות לחדשנות");
             names.Add("fund_request", "גובה במענק המבוקש");
             names.Add("madaan_momhee", "בודק משרדי");
-            names.Add("mashov", "משוב מומחה");
             return names;
         }
     }

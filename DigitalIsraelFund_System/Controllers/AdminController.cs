@@ -3,6 +3,8 @@ using DigitalIsraelFund_System.Models;
 using DigitalIsraelFund_System.Filters;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using System.IO;
+using System.Xml;
 
 namespace DigitalIsraelFund_System.Controllers
 {
@@ -175,6 +177,28 @@ namespace DigitalIsraelFund_System.Controllers
             newVals["momhee_id"] = momhee_id;
             RequestManager.Manager.Change(file_number, newVals);
             Response.Redirect("/Admin/RequestsManage");
+        }
+
+        [HttpGet]
+        public ActionResult ViewMashov(string file_number)
+        {
+            var dataFile = Server.MapPath("~/App_Data/Mashovs/mashov_" + file_number + ".json");
+            string json = System.IO.File.ReadAllText(@dataFile);
+            Dictionary<string, string> values = FormValues.LoadJson(json).Values;
+
+            var requestFile = Server.MapPath("~/App_Data/Forms/MashovForm_v_0.xml");
+            string xmlNode = System.IO.File.ReadAllText(@requestFile);
+            XmlReader xmlReader = XmlReader.Create(new StringReader(xmlNode));
+            FormComponent mashovForm = new FormComponent(xmlReader);
+            xmlReader.Close();
+
+            PostedForm pR = new PostedForm(mashovForm.FormComponents[0], values);
+
+            string where = "file_number='" + file_number + "'";
+            ViewData["request"] = RequestManager.Manager.GetAllWhere(where, null, 1, 1)[0];
+            ViewData["names"] = RequestManager.Manager.GetAllColNames();
+
+            return View("../Home/PostedForm", pR);
         }
     }
 }

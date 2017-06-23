@@ -146,6 +146,7 @@
     </Compile>
     <Compile Include="Models\FormComponent.cs" />
     <Compile Include="Models\FormValues.cs" />
+    <Compile Include="Models\PostedForm.cs" />
     <Compile Include="Models\StaticPage.cs" />
     <Compile Include="Models\TableResult.cs" />
     <Compile Include="Models\UserData.cs" />
@@ -167,6 +168,7 @@
     <Content Include="Views\Admin\RequestsManage.cshtml" />
     <Content Include="Views\GovExp\AddMashov.cshtml" />
     <Content Include="Views\Home\Form2.cshtml" />
+    <Content Include="Views\Home\PostedForm.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
