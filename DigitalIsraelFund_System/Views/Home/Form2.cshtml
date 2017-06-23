@@ -72,7 +72,7 @@
     }
 </style>
 
-@helper DrawWidget(FormComponent w)
+@helper DrawComponent(FormComponent w)
 {
 switch (w.Type)
 {
@@ -123,7 +123,7 @@ id += this.repeatableIds;
     <table id="@id" style="padding:5px 5px;border: 1px solid @borderColor;margin-bottom:10px;width:100%;">
         @foreach (FormComponent subW in w.FormComponents)
         {
-            @DrawWidget(subW);
+            @DrawComponent(subW);
         }
     </table>
 }
@@ -134,7 +134,7 @@ var color = w.Properties.ContainsKey("color") ? w.Properties["color"] : "#ffffff
     <tr style="background-color:@color;">
         @foreach (FormComponent subW in w.FormComponents)
         {
-            @DrawWidget(subW);
+            @DrawComponent(subW);
         }
     </tr>
 }
@@ -146,7 +146,7 @@ var color = w.Properties.ContainsKey("color") ? w.Properties["color"] : "null";
     <td align="center" style="font-size:small;padding:3px;border: 0px solid #ff0000;vertical-align:central;background-color:@color;" colspan="@span ">
         @foreach (FormComponent subW in w.FormComponents)
         {
-            @DrawWidget(subW);
+            @DrawComponent(subW);
         }
     </td>
 }
@@ -160,7 +160,7 @@ this.repeatableIds += addition;
 var repeated = "";
 foreach (FormComponent subW in w.FormComponents)
 {
-    repeated += @DrawWidget(subW);
+    repeated += @DrawComponent(subW);
 }
 var indexStr = repeatableIds.Replace("{", "{Index");
 this.repeatableIds = this.repeatableIds.Substring(0, this.repeatableIds.Length - addition.Length);
@@ -276,7 +276,7 @@ else if (w.Properties["type"] == "checkbox")
 else if (w.Properties["type"] == "dropdown")
 {
         <select form="textForm" class="form-control" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" id="@id" name="Values[@id]"
-                onchange="validate('@id',@required,'@range', false);">
+                oninput="validate('@id',@required,'@range', false);">
             @foreach (FormComponent option in w.FormComponents)
             {
                 <option value="@option.Text">@option.Text</option>
@@ -286,22 +286,22 @@ else if (w.Properties["type"] == "dropdown")
 else if (w.Properties["type"] == "multiline")
 {
         <textarea form="textForm" class="form-control" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;min-width: 100%;"
-                rows="6" id="@id" name="Values[@id]" value=""
-                oninput="validate('@id',@required,'@range', false);"></textarea>
+                  rows="6" id="@id" name="Values[@id]" value=""
+                  oninput="validate('@id',@required,'@range', false);"></textarea>
 }
 else if (w.Properties["type"] == "file")
 {
     var width = w.Properties.ContainsKey("width") ? w.Properties["width"] + "px" : "160px";
         <input form="textForm" class="form-control" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;width:@width;"
-                id="@id" name="Files[@id]" type="file" value=""
-                onchange="validate('@id',@required,'@range', false);" />
+               id="@id" name="Files[@id]" type="file" value=""
+               oninput="validate('@id',@required,'@range', false);" />
 }
 else
 {
     var width = w.Properties.ContainsKey("width") ? w.Properties["width"] + "px" : "160px";
         <input form="textForm" class="form-control form-control-sm" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;width:@width;"
-                id="@id" name="Values[@id]" type="@w.Properties["type"]" value="@value"
-                oninput="validateInput('@id', 'Letters');" @readOnlyString/>
+               id="@id" name="Values[@id]" type="@w.Properties["type"]" value="@value"
+               oninput="validate('@id', @required, '@range', false);" @readOnlyString />
 }
 fields.Add(id + "|" + required + "|" + range);
     <div id="@id-ErrMsg" style="display:none;color:red;">לא בפורמט המתאים</div>
@@ -355,7 +355,7 @@ fields.Add(id + "|" + required + "|" + range);
             <div id="t-@p" class="tabcontent">
                 @foreach (FormComponent w in page.FormComponents)
                 {
-                    @DrawWidget(w);
+                    @DrawComponent(w);
                 }
             </div>
         }
@@ -387,33 +387,28 @@ fields.Add(id + "|" + required + "|" + range);
         else if (isRequired && val == "") {
             inpControl.style.borderRightColor = '#ff0000';
             $("#" + inputId + "-ErrMsg").fadeOut(300);
-        } else if (val != "" && !isValidForRange(val, range)) {
-            inpControl.style.borderRightColor = '#ff0000';
-            $("#" + inputId + "-ErrMsg").fadeIn(300);
         } else {
-            inpControl.style.borderRightColor = '#38ACEC';
-            inpControl.parentElement.style.borderWidth = '0px';
-            $("#" + inputId + "-ErrMsg").fadeOut(300);
-            inpControl.parentElement.style.borderWidth = '0px';
-            return 0;
+            validateInput(inputId, range);
         }
-        if (markParent)
-            inpControl.parentElement.style.borderWidth = '1px';
-        return 1;
     }
 
-    function miniCheckAll(field, isSubmited) {
-        var inpControl = document.getElementById(field[0]);
-        var val = inpControl.value;
-        if (field[1] && val == "") {
-            document.getElementById(field[0]).style.borderRightColor = '#ff0000';
+    function openTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
         }
-        return 0;
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        $('#' + tabName).fadeIn(150);
+        evt.currentTarget.className += " active";
     }
 
-    function CheckAll(field, isSubmited) {
-        return validate(field[0], field[1], field[2], isSubmited);
-    }
+    document.getElementById("t-0").style.display = "block";
+    document.getElementById("t-b-0").className += " active";
+    RunThrewAllInputs(miniCheckAll, false);
 
     function RunThrewAllInputs(checkFnc, isSubmited) {
         var numErrors = 0;
@@ -452,42 +447,16 @@ fields.Add(id + "|" + required + "|" + range);
         return numErrors;
     }
 
-    function isValidForRange(val, range) {
-        if (range == 'Letters') return regLetters.test(val);
-        if (range == 'Email') return regEmail.test(val);
-        if (range == 'Integer') return regInteger.test(val);
-        if (range == 'Real') return regReal.test(val);
-        if (range == 'Date') return regDate.test(val) && val > "1900-01-01" && val < "2050-01-01";
-        if (range == 'File') return val.endsWith('.pdf');
-        return true;
-    }
-
-    function openTab(evt, tabName) {
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
+    function miniCheckAll(field, isSubmited) {
+        var inpControl = document.getElementById(field[0]);
+        var val = inpControl.value;
+        if (field[1] && val == "") {
+            document.getElementById(field[0]).style.borderRightColor = '#ff0000';
         }
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-        $('#' + tabName).fadeIn(150);
-        evt.currentTarget.className += " active";
+        return 0;
     }
 
     function validateAndSubmit() {
-        var numErrors = RunThrewAllInputs(CheckAll, true);
-        if (numErrors > 0) {
-            alert('הטופס הנ"ל מכיל ' + numErrors + ' שדות חובה שלא מולאו או שדות שמולאו שלא כנדרש' + '\n' + 'השדות הלא תקינים סומנו בייתר דגש.');
-            $('#textForm').submit();
-        }
-        else {
-            $('#textForm').submit();
-        }
+        $('#textForm').submit();
     }
-
-    document.getElementById("t-0").style.display = "block";
-    document.getElementById("t-b-0").className += " active";
-    RunThrewAllInputs(miniCheckAll, false);
 </script>

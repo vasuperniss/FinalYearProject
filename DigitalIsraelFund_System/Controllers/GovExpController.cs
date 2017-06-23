@@ -21,31 +21,6 @@ namespace DigitalIsraelFund_System.Controllers
         }
 
         [HttpGet]
-        public ActionResult RequestsManage(string page, string resultsPerPage, string orderBy, string isDesc)
-        {
-            UserData momhee = (UserData)Session["user"];
-            int pageNum, resultsPerPageNum;
-            bool isDescBool;
-            if (!bool.TryParse(isDesc, out isDescBool)) isDescBool = false;
-            if (!int.TryParse(page, out pageNum)) pageNum = 1;
-            if (!int.TryParse(resultsPerPage, out resultsPerPageNum)) resultsPerPageNum = 10;
-            string isDescString = "";
-            if (isDescBool) isDescString = " DESC";
-            string where = "momhee_id='" + momhee.Id + "'";
-            var table = RequestManager.Manager.GetAllWhere(where, orderBy + isDescString, pageNum, resultsPerPageNum);
-            var count = RequestManager.Manager.Count("");
-            return View("../Admin/RequestsManage", new TableResult
-            {
-                Table = table,
-                NumPages = (int)System.Math.Ceiling((double)count / resultsPerPageNum),
-                isDesc = isDescBool,
-                Page = pageNum,
-                ResultsPerPage = resultsPerPageNum,
-                OrderBy = orderBy
-            });
-        }
-
-        [HttpGet]
         public ActionResult AddMashov(string file_number)
         {
             string where = "file_number='" + file_number + "'";
@@ -63,7 +38,19 @@ namespace DigitalIsraelFund_System.Controllers
             ViewData["fileNumberRequest"] = file_number;
             ViewData["nameGovExp"] = ((UserData)this.Session["user"]).Name;
             ViewData["officeGovExp"] = ((UserData)this.Session["user"]).Office;
-            return View("../Home/Form", requestForm.FormComponents[0]);
+            return View("../Home/Form2", requestForm.FormComponents[0]);
+        }
+
+        [HttpPost]
+        public ActionResult AddMashov(FormValues fTV)
+        {
+            string jsonPath = "mashov_" + fTV.Values["file_number"];
+            var dataFile = Server.MapPath("~/App_Data/Mashovs/" + jsonPath + ".json");
+            string json = fTV.GetJson();
+            System.IO.File.WriteAllText(@dataFile, json);
+
+            RequestManager.Manager.UpdateMashov(fTV.Values["file_number"], jsonPath);
+            return RedirectToAction("~/Admin/RequestsManage");
         }
 
         [HttpPost]

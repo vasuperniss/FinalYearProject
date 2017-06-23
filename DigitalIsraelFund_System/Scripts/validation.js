@@ -1,12 +1,12 @@
 ﻿function validateText(id, type) {
-    validate(document.getElementById(id).innerText, type, id);
+    _validate(document.getElementById(id).innerText, type, id);
 }
 
 function validateInput(id, type) {
-    validate(document.getElementById(id).value, type, id);
+    _validate(document.getElementById(id).value, type, id);
 }
 
-function validate(value, type, id) {
+function _validate(value, type, id) {
     var data = {
         "value": value,
         "type": type

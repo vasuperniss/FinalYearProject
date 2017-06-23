@@ -39,7 +39,7 @@
 <input type="hidden" id="page" value="@Model.Page" />
 <input type="hidden" id="resultsPerPage" value="@Model.ResultsPerPage" />
 
-@helper SearchAbleCol(string fieldName, string fieldTitle, bool isSearchable, bool isOrderable, List<string> options)
+@helper SearchAbleCol(string fieldName, string fieldTitle, bool isSearchable, bool isOrderable, Dictionary<string, string> options)
 {
     <td style="padding:3px;font-size:small;font-weight:600;text-align:center;">
         @if (isSearchable)
@@ -74,10 +74,10 @@
                 <div>
                     <select id="searchVal_@fieldName" class="form-control" style="width:auto;height:100%;padding:4px;padding-left:6px;" onchange="reload();">
                         <option value="">הכל</option>
-                        @foreach (var op in options)
+                        @foreach (var op in options.Keys)
                         {
-                            var selected = op == Request.Params[fieldName] ? "selected" : "";
-                            <option value="@op" @selected>@op</option>
+                            var selected = options[op] == Request.Params[fieldName] ? "selected" : "";
+                            <option value="@options[op]" @selected>@op</option>
                         }
                     </select>
                 </div>
@@ -97,11 +97,11 @@
                 {
                     if (i * 10 == Model.ResultsPerPage)
                     {
-                        <option selected value="@(i*10)">@(i * 10)</option>
+                        <option selected value="@(i * 10)">@(i * 10)</option>
                     }
                     else
                     {
-                        <option value="@(i*10)">@(i * 10)</option>
+                        <option value="@(i * 10)">@(i * 10)</option>
                     }
                 }
             </select>
@@ -136,7 +136,13 @@
             {
                 @SearchAbleCol("momhee_name", "בודק של הרשות לחדשנות", true, true, null)
             }
-            @SearchAbleCol("mashov", "משוב מומחה", true, true, new List<string>() { "אין", "בתהליך", "/" })
+            @{
+                var dict = new Dictionary<string, string>();
+                dict["אין"] = "אין";
+                dict["בתהליך"] = "בתהליך";
+                dict["מוגש"] = "_";
+            }
+            @SearchAbleCol("mashov", "משוב מומחה", true, true, dict)
             @SearchAbleCol("fund_request", "גובה במענק המבוקש", false, false, null)
             @SearchAbleCol("madaan_momhee", "בודק משרדי", true, true, null)
             <td style="padding:3px;font-weight:600;text-align:center;"></td>
@@ -172,7 +178,7 @@
                     }
                     else if (type == "admin")
                     {
-                        if (!line["mashov"].Contains("/"))
+                        if (!line["mashov"].Contains("_"))
                         {
                             @line["mashov"]
                         }

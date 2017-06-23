@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Review>
   <page title="כללי">
-    <input id="request_id" type="hidden" pullFrom="request_id" fillOnly="false"></input>
     <table>
       <row color="#F5CBA7">
         <col span="4">

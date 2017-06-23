@@ -10,6 +10,17 @@ namespace DigitalIsraelFund_System.DataBase.Managers
 
         private RequestManager() { }
 
+        public bool UpdateMashov(string file_number, string json_path)
+        {
+            string date = System.DateTime.Now.Date.Year + "/"
+                + System.DateTime.Now.Date.Month + "/"
+                + System.DateTime.Now.Date.Day;
+            var newValues = new Dictionary<string, string>();
+            newValues["mashov"] = json_path;
+            newValues["mashov_date"] = date;
+            return MySqlCommands.Update("requests", newValues, "file_number='" + file_number + "'");
+        }
+
         public List<Dictionary<string, string>> GetAllWhere(string where, string orderBy, int page, int resultsPerPage)
         {
             List<string> fields = new List<string>();
