@@ -23,11 +23,15 @@ namespace DigitalIsraelFund_System.Controllers
         [HttpGet]
         public ActionResult AddMashov(string file_number)
         {
+            var dataFile = Server.MapPath("~/App_Data/Settings.json");
+            string json = System.IO.File.ReadAllText(@dataFile);
+            Settings sett = Settings.LoadJson(json);
+
             string where = "file_number='" + file_number + "'";
             ViewData["request"] = RequestManager.Manager.GetAllWhere(where, null, 1, 1)[0];
             ViewData["names"] = RequestManager.Manager.GetAllColNames();
 
-            var mashovFile = Server.MapPath("~/App_Data/Forms/MashovForm_v_0.xml");
+            var mashovFile = Server.MapPath("~/App_Data/Forms/MashovForm_v_" + sett.MashovVersion + ".xml");
             FormComponent mashovForm = FormManager.Manager.Load(mashovFile);
 
             ViewData["postToController"] = "../GovExp/AddMashov";
@@ -35,6 +39,7 @@ namespace DigitalIsraelFund_System.Controllers
             ViewData["fileNumberRequest"] = file_number;
             ViewData["nameGovExp"] = ((UserData)this.Session["user"]).Name;
             ViewData["officeGovExp"] = ((UserData)this.Session["user"]).Office;
+            ViewData["file_version"] = sett.MashovVersion;
             return View("../Home/Form", mashovForm.FormComponents[0]);
         }
 
@@ -46,7 +51,7 @@ namespace DigitalIsraelFund_System.Controllers
             string json = fTV.GetJson();
             System.IO.File.WriteAllText(@dataFile, json);
 
-            RequestManager.Manager.UpdateMashov(fTV.Values["file_number"], jsonPath);
+            RequestManager.Manager.UpdateMashov(fTV.Values["file_number"], jsonPath, fTV.Values["file_version"]);
             return RedirectToAction("../Admin/RequestsManage");
         }
 

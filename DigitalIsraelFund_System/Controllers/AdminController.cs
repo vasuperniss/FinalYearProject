@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using System.IO;
 using System.Xml;
+using System.Web;
 
 namespace DigitalIsraelFund_System.Controllers
 {
@@ -202,6 +203,39 @@ namespace DigitalIsraelFund_System.Controllers
             var dataFile = Server.MapPath("~/App_Data/Settings.json");
             string json = System.IO.File.ReadAllText(@dataFile);
             return View(Models.Settings.LoadJson(json));
+        }
+
+        [HttpPost]
+        public ActionResult ChangeMashovVer(string version)
+        {
+            var dataFile = Server.MapPath("~/App_Data/Settings.json");
+            string json = System.IO.File.ReadAllText(@dataFile);
+            Models.Settings sett = Models.Settings.LoadJson(json);
+
+            sett.MashovVersion = int.Parse(version);
+            json = sett.GetJson();
+            System.IO.File.WriteAllText(@dataFile, json);
+
+            return RedirectToAction("Settings");
+        }
+
+        [HttpPost]
+        public ActionResult AddMashovFile(HttpPostedFileBase file)
+        {
+            var dataFile = Server.MapPath("~/App_Data/Settings.json");
+            string json = System.IO.File.ReadAllText(@dataFile);
+            Models.Settings sett = Models.Settings.LoadJson(json);
+
+            var newVer = sett.PossibleMashovVersions[sett.PossibleMashovVersions.Count - 1] + 1;
+            string filePath = "MashovForm_v_" + newVer + ".xml";
+            var saveTo = Server.MapPath("~/App_Data/Forms/" + filePath);
+            file.SaveAs(saveTo);
+
+            sett.PossibleMashovVersions.Add(newVer);
+            json = sett.GetJson();
+            System.IO.File.WriteAllText(@dataFile, json);
+
+            return RedirectToAction("Settings");
         }
     }
 }

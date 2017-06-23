@@ -10,7 +10,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
 
         private RequestManager() { }
 
-        public bool UpdateMashov(string file_number, string json_path)
+        public bool UpdateMashov(string file_number, string json_path, string version)
         {
             string date = System.DateTime.Now.Date.Year + "/"
                 + System.DateTime.Now.Date.Month + "/"
@@ -18,6 +18,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             var newValues = new Dictionary<string, string>();
             newValues["mashov"] = json_path;
             newValues["mashov_date"] = date;
+            newValues["mashov_ver"] = version;
             return MySqlCommands.Update("requests", newValues, "file_number='" + file_number + "'");
         }
 

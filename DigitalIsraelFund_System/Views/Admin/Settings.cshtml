@@ -16,33 +16,51 @@
                 </div>
             </td>
         </tr>
-        <tr>
-            <td style="padding:3px;font-weight:600;text-align:right;">
-                גרסת משוב
-            </td>
-            <td style="padding:3px;font-weight:600;text-align:center;">
-                <select class="form-control" style="height:100%" id="mashov_ver">
-                    @foreach (int ver in Model.PossibleMashovVersions)
-                    {
-                        var selected = ver == Model.MashovVersion ? "selected" : "";
-                        <option value="@ver" @selected>@ver</option>
-                    }
-                </select>
-            </td>
-            <td style="padding:3px;font-weight:600;text-align:right;">
-                <button id="choose" onclick="editMashovVer();" class="btn btn-warning btn-sm">עדכן גרסת משוב</button>
-            </td>
-        </tr>
-        <tr>
-            <td style="padding:3px;font-weight:600;text-align:right;">
-                משוב חדש
-            </td>
-            <td style="padding:3px;font-weight:600;text-align:center;">
-                <input class="form-control" style="height:100%" id="mashov_file" type="file" />
-            </td>
-            <td style="padding:3px;font-weight:600;text-align:right;">
-                <button id="choose" onclick="submitMashovFile();" class="btn btn-primary btn-sm">הוסף גרסת משוב</button>
-            </td>
-        </tr>
+        @using (Html.BeginForm("ChangeMashovVer", "Admin", FormMethod.Post, new { id = "mashovVersionForm", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            <tr>
+                <td style="padding:3px;font-weight:600;text-align:right;">
+                    גרסת משוב
+                </td>
+                <td style="padding:3px;font-weight:600;text-align:center;">
+                    <select name="version" form="mashovVersionForm" class="form-control" style="height:100%" id="mashov_ver">
+                        @foreach (int ver in Model.PossibleMashovVersions)
+                        {
+                            var selected = ver == Model.MashovVersion ? "selected" : "";
+                            <option value="@ver" @selected>@ver</option>
+                        }
+                    </select>
+                </td>
+                <td style="padding:3px;font-weight:600;text-align:right;">
+                    <button id="choose" onclick="editMashovVer();" class="btn btn-warning btn-sm">עדכן גרסת משוב</button>
+                </td>
+            </tr>
+        }
+        @using (Html.BeginForm("AddMashovFile", "Admin", FormMethod.Post, new { id = "mashovFileForm", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            <tr>
+                <td style="padding:3px;font-weight:600;text-align:right;">
+                    משוב חדש
+                </td>
+                <td style="padding:3px;font-weight:600;text-align:center;">
+                    <input name="file" form="mashovFileForm" class="form-control" style="height:100%" id="mashov_file" type="file" />
+                </td>
+                <td style="padding:3px;font-weight:600;text-align:right;">
+                    <button id="choose" onclick="submitMashovFile();" class="btn btn-primary btn-sm">הוסף גרסת משוב</button>
+                </td>
+            </tr>
+        }
     </table>
 </div>
+
+<script>
+    function submitMashovFile() {
+        $('#mashovFileForm').submit();
+    }
+
+    function editMashovVer() {
+        $('#mashovVersionForm').submit();
+    }
+</script>

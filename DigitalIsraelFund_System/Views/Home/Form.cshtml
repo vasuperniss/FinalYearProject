@@ -335,10 +335,11 @@ fields.Add(id + "|" + required + "|" + range);
     </table>
     <br />
 
-    @using (Html.BeginForm((string)ViewData["postToController"], "Home", FormMethod.Post, new { id = "textForm", enctype = "multipart/form-data" }))
+    @using (Html.BeginForm((string)ViewData["postToController"], "GovExp", FormMethod.Post, new { id = "textForm", enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
         <div class="tab">
+            <input form="textForm" name="Values[file_version]" type="hidden" value="@ViewData["file_version"]" />
             @for (int p = 0; p < pages.Count; ++p)
             {
                 <button type="button" class="tablinks" onclick="openTab(event, 't-@p')" id='t-b-@p'>
