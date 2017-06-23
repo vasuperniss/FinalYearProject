@@ -1,0 +1,48 @@
+﻿@model DigitalIsraelFund_System.Models.Settings
+@{
+    ViewBag.Title = "הגדרות";
+}
+
+<script src="~/Scripts/validation.js"></script>
+<script src="~/Scripts/ajaxSubmit.js"></script>
+
+<div id="cntntDiv" contenteditable="false" style="height:100%;resize:none;overflow-y:auto;min-width:inherit;min-height:200px;border-width:thin;border-style: none;font-family:sans-serif;border-color:#555555;font-size:small;font-weight:400;" dir="rtl">
+    <table style="padding:10px 5px;border: 0px solid #ccc;margin:auto;">
+        <tr style="background-color:white;border-radius:5px;">
+            <td style="padding:3px;font-weight:600;text-align:right;color:black;border: 0px solid #ccc;border-radius:5px;" colspan="2">
+                <div style="height:10px;border-top-left-radius:5px;border-top-right-radius:10px;background:linear-gradient(to left, #E3E4FA , white);"></div>
+                <div style="padding-right:20px;height:20px;border-top-left-radius:0px;border-top-right-radius:0px;background:linear-gradient(to left, #E3E4FA , white);">
+                    הגדרות
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:3px;font-weight:600;text-align:right;">
+                גרסת משוב
+            </td>
+            <td style="padding:3px;font-weight:600;text-align:center;">
+                <select class="form-control" style="height:100%" id="mashov_ver">
+                    @foreach (int ver in Model.PossibleMashovVersions)
+                    {
+                        var selected = ver == Model.MashovVersion ? "selected" : "";
+                        <option value="@ver" @selected>@ver</option>
+                    }
+                </select>
+            </td>
+            <td style="padding:3px;font-weight:600;text-align:right;">
+                <button id="choose" onclick="editMashovVer();" class="btn btn-warning btn-sm">עדכן גרסת משוב</button>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:3px;font-weight:600;text-align:right;">
+                משוב חדש
+            </td>
+            <td style="padding:3px;font-weight:600;text-align:center;">
+                <input class="form-control" style="height:100%" id="mashov_file" type="file" />
+            </td>
+            <td style="padding:3px;font-weight:600;text-align:right;">
+                <button id="choose" onclick="submitMashovFile();" class="btn btn-primary btn-sm">הוסף גרסת משוב</button>
+            </td>
+        </tr>
+    </table>
+</div>

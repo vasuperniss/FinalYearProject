@@ -180,25 +180,28 @@ namespace DigitalIsraelFund_System.Controllers
         }
 
         [HttpGet]
-        public ActionResult ViewMashov(string file_number)
+        public ActionResult ViewMashov(string file_number, string form_ver)
         {
             var dataFile = Server.MapPath("~/App_Data/Mashovs/mashov_" + file_number + ".json");
             string json = System.IO.File.ReadAllText(@dataFile);
             Dictionary<string, string> values = FormValues.LoadJson(json).Values;
 
-            var requestFile = Server.MapPath("~/App_Data/Forms/MashovForm_v_0.xml");
-            string xmlNode = System.IO.File.ReadAllText(@requestFile);
-            XmlReader xmlReader = XmlReader.Create(new StringReader(xmlNode));
-            FormComponent mashovForm = new FormComponent(xmlReader);
-            xmlReader.Close();
-
-            PostedForm pR = new PostedForm(mashovForm.FormComponents[0], values);
+            var mashovFile = Server.MapPath("~/App_Data/Forms/MashovForm_v_" + form_ver + ".xml");
+            PostedForm pR = new PostedForm(FormManager.Manager.Load(mashovFile).FormComponents[0], values);
 
             string where = "file_number='" + file_number + "'";
             ViewData["request"] = RequestManager.Manager.GetAllWhere(where, null, 1, 1)[0];
             ViewData["names"] = RequestManager.Manager.GetAllColNames();
 
             return View("../Home/PostedForm", pR);
+        }
+
+        [HttpGet]
+        public ActionResult Settings()
+        {
+            var dataFile = Server.MapPath("~/App_Data/Settings.json");
+            string json = System.IO.File.ReadAllText(@dataFile);
+            return View(Models.Settings.LoadJson(json));
         }
     }
 }

@@ -27,18 +27,15 @@ namespace DigitalIsraelFund_System.Controllers
             ViewData["request"] = RequestManager.Manager.GetAllWhere(where, null, 1, 1)[0];
             ViewData["names"] = RequestManager.Manager.GetAllColNames();
 
-            var requestFile = Server.MapPath("~/App_Data/Forms/MashovForm_v_0.xml");
-            string xmlNode = System.IO.File.ReadAllText(@requestFile);
-            XmlReader xmlReader = XmlReader.Create(new StringReader(xmlNode));
-            FormComponent mashovForm = new FormComponent(xmlReader);
-            xmlReader.Close();
+            var mashovFile = Server.MapPath("~/App_Data/Forms/MashovForm_v_0.xml");
+            FormComponent mashovForm = FormManager.Manager.Load(mashovFile);
 
             ViewData["postToController"] = "../GovExp/AddMashov";
             ViewData["sendBtnTitle"] = "שלח משוב";
             ViewData["fileNumberRequest"] = file_number;
             ViewData["nameGovExp"] = ((UserData)this.Session["user"]).Name;
             ViewData["officeGovExp"] = ((UserData)this.Session["user"]).Office;
-            return View("../Home/Form2", mashovForm.FormComponents[0]);
+            return View("../Home/Form", mashovForm.FormComponents[0]);
         }
 
         [HttpPost]

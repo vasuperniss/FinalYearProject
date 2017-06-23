@@ -1,0 +1,1053 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Request>
+  <!-- Page number 1 - SENDER'S PERSONAL INFORMATION -->
+  <page title="פרטי ממלא הטופס">
+    <table>
+      <row color="#E3E4FA">
+        <col>
+          <text>משפחה</text>
+        </col>
+        <col>
+          <text>שם פרטי</text>
+        </col>
+      </row>
+      <row color="#FFFFFF">
+        <col>
+          <input id="sender_last_name" type="text" required="true" range="Letters" max="20"></input>
+        </col>
+        <col>
+          <input id="sender_first_name" type="text" required="true" range="Letters" max="20"></input>
+        </col>
+      </row>
+    </table>
+    <table>
+      <row color="#E3E4FA">
+        <col>
+          <text>דואר אלקטרוני</text>
+          <text weight="500" color="#FF0000" fillOnly="false">לצורך בירור סטטוס טיפול בפניתך בעתיד</text>
+        </col>
+        <col>
+          <text>מועד הגשת הטופס</text>
+        </col>
+      </row>
+      <row color="#FFFFFF">
+        <col>
+          <input width="200" id="sender_email" type="email" required="true" range="Email" max="40"></input>
+        </col>
+        <col></col>
+      </row>
+    </table>
+  </page>
+  <!-- Page number 2 - GENERAL INFO -->
+  <page title="מידע כללי">
+    <text size="medium" weight="700" margin="5" color="cornflowerblue">פרטי החברה</text>
+    <text weight="500" color="#ff0000" fillOnly="false">נא לעדכן במידת הצורך</text>
+    <table>
+      <row color="#E3E4FA">
+        <col>
+          <input id="company_number_type" type="radio" required="true">
+            <option>מספר החברה במדען</option>
+            <option>ח.פ של החברה</option>
+          </input>
+        </col>
+      </row>
+      <row color="#FFFFFF">
+        <col>
+          <input id="company_number" type="number" range="Integer" required="false"></input>
+        </col>
+      </row>
+    </table>
+    <table>
+      <row color="#E3E4FA">
+        <col>
+          <text>שם החברה</text>
+        </col>
+        <col>
+          <text>שם חברה לועזי</text>
+        </col>
+      </row>
+      <row color="#FFFFFF">
+        <col>
+          <input id="company_name_heb" type="text" required="true"></input>
+        </col>
+        <col>
+          <input id="company_name_eng" type="text" required="true"></input>
+        </col>
+      </row>
+    </table>
+    <table>
+      <row color="#E3E4FA">
+        <col>
+          <text>סיווג חברה</text>
+        </col>
+      </row>
+      <row color="#FFFFFF">
+        <col>
+          <input id="company_classification" type="dropdown" required="true">
+            <option>רגילה</option>
+            <option>מסורתית</option>
+            <option>מתחילה</option>
+            <option>הסדר</option>
+            <option>תנופה</option>
+            <option>אחר</option>
+          </input>
+        </col>
+      </row>
+    </table>
+    <text size="medium" weight="700" margin="5" color="cornflowerblue">כתובת החברה</text>
+    <table>
+      <row color="#E3E4FA">
+        <col>
+          <text>ישוב</text>
+        </col>
+        <col>
+          <text>רחוב</text>
+        </col>
+        <col>
+          <text>מספר בית</text>
+        </col>
+        <col>
+          <text>מיקוד</text>
+        </col>
+        <col>
+          <text>ת"ד</text>
+        </col>
+      </row>
+      <row>
+        <col>
+          <input id="company_addr_city" type="text" required="true"></input>
+        </col>
+        <col>
+          <input id="company_addr_street" type="text" required="true"></input>
+        </col>
+        <col>
+          <input width="35" id="company_addr_house" type="number" range="Integer" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="company_addr_mikud" type="number" range="Integer" required="false"></input>
+        </col>
+        <col>
+          <input width="30" id="company_addr_td" type="number" range="Integer" required="false"></input>
+        </col>
+      </row>
+    </table>
+    <text size="medium" weight="700" margin="5" color="cornflowerblue">מען מכתבים</text>
+    <table>
+      <row color="#E3E4FA">
+        <col>
+          <text>ישוב</text>
+        </col>
+        <col>
+          <text>רחוב</text>
+        </col>
+        <col>
+          <text>מספר בית</text>
+        </col>
+        <col>
+          <text>מיקוד</text>
+        </col>
+        <col>
+          <text>ת"ד</text>
+        </col>
+      </row>
+      <row>
+        <col>
+          <input id="mailto_addr_city" type="text" required="true"></input>
+        </col>
+        <col>
+          <input id="mailto_addr_street" type="text" required="true"></input>
+        </col>
+        <col>
+          <input width="35" id="mailto_addr_house" type="number" range="Integer" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="mailto_addr_mikud" type="number" range="Integer" required="true"></input>
+        </col>
+        <col>
+          <input width="30" id="mailto_addr_td" type="number" range="Integer" required="true"></input>
+        </col>
+      </row>
+    </table>
+    <text size="medium" weight="700" margin="5" color="cornflowerblue">טלפונים ואינטרנט</text>
+    <table>
+      <row color="#E3E4FA">
+        <col>
+          <text>טלפון</text>
+        </col>
+        <col>
+          <text>טלפון נוסף</text>
+        </col>
+        <col>
+          <text>פקס</text>
+        </col>
+        <col>
+          <text>טלפון סלולרי</text>
+        </col>
+      </row>
+      <row>
+        <col>
+          <input id="company_phone" type="text" required="true"></input>
+        </col>
+        <col>
+          <input id="company_phone_extra" type="text" required="false"></input>
+        </col>
+        <col>
+          <input id="company_fax" type="text" required="false"></input>
+        </col>
+        <col>
+          <input id="company_mobile_phone" type="text" required="true"></input>
+        </col>
+      </row>
+    </table>
+    <table>
+      <row color="#E3E4FA">
+        <col>
+          <text>דואר אלקטרוני</text>
+        </col>
+        <col>
+          <text>אתר אינטרנט</text>
+        </col>
+      </row>
+      <row>
+        <col>
+          <input id="company_email" type="email" range="Email" required="true"></input>
+        </col>
+        <col>
+          <input id="company_website" type="text" range="WebAdrr" required="false"></input>
+        </col>
+      </row>
+    </table>
+    <text size="medium" weight="700" margin="5" color="cornflowerblue">אנשי מפתח וקשר בחברה</text>
+    <table>
+      <row color="#E3E4FA">
+        <col>
+          <text>תפקיד</text>
+        </col>
+        <col>
+          <text>שם</text>
+        </col>
+        <col>
+          <text>טלפון</text>
+        </col>
+        <col>
+          <text>סלולרי</text>
+        </col>
+      </row>
+      <row>
+        <col>
+          <text>מנכל</text>
+        </col>
+        <col>
+          <input id="ceo_name" type="text" required="true"></input>
+        </col>
+        <col>
+          <input id="ceo_phone" type="text" required="false"></input>
+        </col>
+        <col>
+          <input id="ceo_mobile" type="text" required="false"></input>
+        </col>
+      </row>
+      <row>
+        <col>
+          <text>מנהל מפעל</text>
+        </col>
+        <col>
+          <input id="fact_manager_name" type="text" required="false"></input>
+        </col>
+        <col>
+          <input id="fact_manager_phone" type="text" required="false"></input>
+        </col>
+        <col>
+          <input id="fact_manager_mobile" type="text" required="false"></input>
+        </col>
+      </row>
+      <row>
+        <col>
+          <text>מנהל פיתוח</text>
+        </col>
+        <col>
+          <input id="devel_manager_name" type="text" required="true"></input>
+        </col>
+        <col>
+          <input id="devel_manager_phone" type="text" required="false"></input>
+        </col>
+        <col>
+          <input id="devel_manager_mobile" type="text" required="false"></input>
+        </col>
+      </row>
+      <row>
+        <col>
+          <text>איש קשר</text>
+        </col>
+        <col>
+          <input id="contact_name" type="text" required="true"></input>
+        </col>
+        <col>
+          <input id="contact_phone" type="text" required="true"></input>
+        </col>
+        <col>
+          <input id="contact_mobile" type="text" required="true"></input>
+        </col>
+      </row>
+    </table>
+    <table>
+      <row color="#E3E4FA">
+        <col>
+          <text>תפקיד</text>
+        </col>
+        <col>
+          <text>פקס</text>
+        </col>
+        <col>
+          <text>E-mail</text>
+        </col>
+      </row>
+      <row>
+        <col>
+          <text>מנכל</text>
+        </col>
+        <col>
+          <input id="ceo_fax" type="text" required="false"></input>
+        </col>
+        <col>
+          <input id="ceo_email" width="200" type="email" range="Email" required="true"></input>
+        </col>
+      </row>
+      <row>
+        <col>
+          <text>מנהל מפעל</text>
+        </col>
+        <col>
+          <input id="fact_fax" type="text" required="false"></input>
+        </col>
+        <col>
+          <input id="fact_email" width="200" type="email" range="Email" required="false"></input>
+        </col>
+      </row>
+      <row>
+        <col>
+          <text>מנהל פיתוח</text>
+        </col>
+        <col>
+          <input id="devel_fax" type="text" required="false"></input>
+        </col>
+        <col>
+          <input id="devel_email" width="200" type="email" range="Email" required="true"></input>
+        </col>
+      </row>
+      <row>
+        <col>
+          <text>איש קשר</text>
+        </col>
+        <col>
+          <input id="contact_fax" type="text" required="false"></input>
+        </col>
+        <col>
+          <input id="contact_email" width="200" type="email" range="Email" required="true"></input>
+        </col>
+      </row>
+    </table>
+    <text size="medium" weight="700" margin="5" color="cornflowerblue">פרטי מגיש הבקשה</text>
+    <table>
+      <row color="#E3E4FA">
+        <col>
+          <text>מפעל/חטיבה</text>
+        </col>
+        <col>
+          <text>שם קודם לחברה</text>
+        </col>
+      </row>
+      <row color="#FFFFFF">
+        <col>
+          <input id="company_fact" type="text" required="false"></input>
+        </col>
+        <col>
+          <input id="company_prev_name" type="text" required="false"></input>
+        </col>
+      </row>
+    </table>
+    <table>
+      <row color="#E3E4FA">
+        <col>
+          <text>תאריך הקמת החברה</text>
+        </col>
+      </row>
+      <row color="#FFFFFF">
+        <col>
+          <input id="company_found_date" type="date" range="Date" required="true"></input>
+        </col>
+      </row>
+    </table>
+  </page>
+  <!-- Page number 3 - OWNERSHIP INFO & GENERAL DATA -->
+  <page title="נתוני בעלות ונתונים כללים">
+    <text size="medium" weight="700" margin="5" color="cornflowerblue">נתוני בעלי המניות (מעל 5%),כפי שמופיעים במדען</text>
+    <text color="#ff0000" fillOnly="false">נא לעדכן במידת הצורך</text>
+    <text fillOnly="false">במקרים הבאים יש לסמן: חברה זרה – 9, תושב זר – 99, כלל הציבור – 999.</text>
+    <table id="r1table">
+      <row color="#E3E4FA">
+        <col></col>
+        <col></col>
+        <col>
+          <text>מספר ת.ז/ ח.פ</text>
+        </col>
+        <col>
+          <text>שם בעל מניות</text>
+        </col>
+        <col>
+          <text>% בעלות</text>
+        </col>
+      </row>
+      <repeatable id="r1" pasteTo="r1table">
+        <row>
+          <col>
+            <del delFrom="r1table" id="r1"></del>
+          </col>
+          <col>
+            <index id="r1"></index>
+          </col>
+          <col>
+            <input id="shareholder_id" type="text" required="true"></input>
+          </col>
+          <col>
+            <input id="shareholder_name" type="text" required="true"></input>
+          </col>
+          <col>
+            <input id="shareholder_ownership" type="number" range="Real" required="true" width="60"></input>
+          </col>
+        </row>
+      </repeatable>
+    </table>
+    <repeater repeaterId="r1" pasteTo="r1table">הוספת בעל מנייה</repeater>
+    <text size="medium" weight="700" margin="5" color="cornflowerblue">נתוני מוצרי החברה</text>
+    <table id="r2table">
+      <row color="#E3E4FA">
+        <col></col>
+        <col></col>
+        <col>
+          <text>שם מוצר</text>
+        </col>
+        <col>
+          <text>% מכירה</text>
+        </col>
+      </row>
+      <repeatable id="r2" pasteTo="r2table">
+        <row>
+          <col>
+            <del delFrom="r2table" id="r2"></del>
+          </col>
+          <col>
+            <index id="r2"></index>
+          </col>
+          <col>
+            <input id="product_name" type="text" required="true"></input>
+          </col>
+          <col>
+            <input width="60" id="product_sales" type="number" range="Real" required="true"></input>
+          </col>
+        </row>
+      </repeatable>
+    </table>
+    <repeater repeaterId="r2" pasteTo="r2table">הוספת פרטי מוצר</repeater>
+    <text size="medium" weight="700" margin="5" color="cornflowerblue">תאור החברה</text>
+    <text fillOnly="false">
+      תיאור החברה ומאפיינים ייחודיים (יש לתאר את החברה ויכולותיה הרלבנטיות לבקשות המצורפות, המוצרים והשווקים בהם
+      החברה פעילה. במקרה של חברה חדשה יש לכלול היסטוריה קצרה של החברה. בכל מקרה יש לתאר את ההתפתחויות
+      בחברה בשנה האחרונה)
+    </text>
+    <table>
+      <row color="#E3E4FA">
+        <col>
+          <text>מס' התווים שניתן להקליד: 1500</text>
+        </col>
+      </row>
+      <row>
+        <col>
+          <input id="company_description" type="multiline" required="true" max_chars="1500"></input>
+        </col>
+      </row>
+    </table>
+    <text size="medium" weight="700" margin="5" color="cornflowerblue">נתונים שוטפים</text>
+    <text color="#ff0000" fillOnly="false">* הנתונים חייבים להיות עדכניים לתאריך הבקשה או עד 6 חודשים קודם לה. </text>
+    <table>
+      <row color="#E3E4FA">
+        <col>
+          <text>שנת יסוד החברה</text>
+        </col>
+        <col>
+          <text>תאריך הון עצמי</text>
+        </col>
+        <col>
+          <text>הון עצמי (אלפי $)</text>
+        </col>
+      </row>
+      <row>
+        <col>
+          <input id="company_found_year" type="number" range="Integer" required="true"></input>
+        </col>
+        <col>
+          <input id="self_wealth_date" type="date" range="Date" required="true"></input>
+        </col>
+        <col>
+          <input id="self_wealth" type="number" range="Real" required="true"></input>
+        </col>
+      </row>
+    </table>
+    <table>
+      <row color="#E3E4FA">
+        <col>
+          <text>תאריך הלוואת בעלים</text>
+        </col>
+        <col>
+          <text>הלוואת בעלים (אלפי $)</text>
+        </col>
+      </row>
+      <row>
+        <col>
+          <input id="owners_loan_date" type="date" range="Date" required="true"></input>
+        </col>
+        <col>
+          <input id="owners_loan" type="number" range="Real" required="true"></input>
+        </col>
+      </row>
+    </table>
+    <table>
+      <row color="#E3E4FA">
+        <col>
+          <text>תאריך יתרת מזומנים</text>
+        </col>
+        <col>
+          <text>יתרת מזומנים (אלפי $)</text>
+        </col>
+      </row>
+      <row>
+        <col>
+          <input id="yetra_date" type="date" range="Date" required="true"></input>
+        </col>
+        <col>
+          <input id="yetra" type="number" range="Real" required="true"></input>
+        </col>
+      </row>
+    </table>
+    <table>
+      <row color="#E3E4FA">
+        <col>
+          <text>תאריך שווי שוק</text>
+        </col>
+        <col>
+          <text>שווי שוק (אלפי $)</text>
+        </col>
+      </row>
+      <row>
+        <col>
+          <input id="market_value_date" type="date" range="Date" required="true"></input>
+        </col>
+        <col>
+          <input id="market_value" type="number" range="Real" required="true"></input>
+        </col>
+      </row>
+    </table>
+    <table>
+      <row color="#E3E4FA">
+        <col>
+          <text>תאריך קצב הוצאות חודשי</text>
+        </col>
+        <col>
+          <text>קצב הוצאות חודשי (אלפי $)</text>
+        </col>
+      </row>
+      <row>
+        <col>
+          <input id="monthly_spends_date" type="date" range="Date" required="true"></input>
+        </col>
+        <col>
+          <input id="monthly_spends" type="number" range="Real" required="true"></input>
+        </col>
+      </row>
+    </table>
+    <text size="medium" weight="700" margin="5" color="cornflowerblue">פרופיל עסקי של החברה (אלפי $) (של החברה הישראלית מגישת הבקשה)</text>
+    <text color="#ff0000" fillOnly="false">* יש למלא את כל הסעיפים. במידה ולא רלוונטי, יש למלא – 0. </text>
+    <table>
+      <row color="#E3E4FA">
+        <col></col>
+        <col>
+          <text>שנתיים קודם לנוכחית</text>
+        </col>
+        <col>
+          <text>השנה הקודמת לנוכחית</text>
+        </col>
+        <col>
+          <text>השנה הנוכחית בה מוגשת הבקשה</text>
+        </col>
+        <col>
+          <text>השנה הבאה</text>
+        </col>
+      </row>
+      <row>
+        <col>
+          <text>שנה</text>
+        </col>
+        <col>
+          <input width="100" id="two_years_ago_year" type="number" range="Integer" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="one_year_ago_year" type="number" range="Integer" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="current_year_year" type="number" range="Integer" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="next_year_year" type="number" range="Integer" required="true"></input>
+        </col>
+      </row>
+      <row>
+        <col>
+          <text>סה"כ מכירות</text>
+        </col>
+        <col>
+          <input width="100" id="two_years_ago_total_sales" type="number" range="Real" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="one_year_ago_total_sales" type="number" range="Real" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="current_year_total_sales" type="number" range="Real" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="next_year_total_sales" type="number" range="Real" required="true"></input>
+        </col>
+      </row>
+      <row>
+        <col>
+          <text>סה"כ ליצוא</text>
+        </col>
+        <col>
+          <input width="100" id="two_years_ago_total_out" type="number" range="Real" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="one_year_ago_total_out" type="number" range="Real" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="current_year_total_out" type="number" range="Real" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="next_year_total_out" type="number" range="Real" required="true"></input>
+        </col>
+      </row>
+      <row>
+        <col>
+          <text>מכירות נתמכי מדען</text>
+        </col>
+        <col>
+          <input width="100" id="two_years_ago_sales_sien" type="number" range="Real" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="one_year_ago_sales_sien" type="number" range="Real" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="current_year_sales_sien" type="number" range="Real" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="next_year_sales_sien" type="number" range="Real" required="true"></input>
+        </col>
+      </row>
+      <row>
+        <col>
+          <text>רווח הפסד גולמי</text>
+        </col>
+        <col>
+          <input width="100" id="two_years_ago_earn_loss_golmi" type="number" range="Real" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="one_year_ago_earn_loss_golmi" type="number" range="Real" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="current_year_earn_loss_golmi" type="number" range="Real" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="next_year_earn_loss_golmi" type="number" range="Real" required="true"></input>
+        </col>
+      </row>
+      <row>
+        <col>
+          <text>רווח הפסד נקי</text>
+        </col>
+        <col>
+          <input width="100" id="two_years_ago_earn_loss_clean" type="number" range="Real" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="one_year_ago_earn_loss_clean" type="number" range="Real" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="current_year_earn_loss_clean" type="number" range="Real" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="next_year_earn_loss_clean" type="number" range="Real" required="true"></input>
+        </col>
+      </row>
+      <row>
+        <col>
+          <text>השקעות במו"פ</text>
+        </col>
+        <col>
+          <input width="100" id="two_years_ago_mop_invests" type="number" range="Real" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="one_year_ago_mop_invests" type="number" range="Real" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="current_year_mop_invests" type="number" range="Real" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="next_year_mop_invests" type="number" range="Real" required="true"></input>
+        </col>
+      </row>
+      <row>
+        <col>
+          <text>השתתפות המדען הראשי</text>
+        </col>
+        <col>
+          <input width="100" id="two_years_ago_sien_assist" type="number" range="Real" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="one_year_ago_sien_assist" type="number" range="Real" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="current_year_sien_assist" type="number" range="Real" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="next_year_sien_assist" type="number" range="Real" required="true"></input>
+        </col>
+      </row>
+      <row>
+        <col>
+          <text>תשלומי תמלוגים</text>
+        </col>
+        <col>
+          <input width="100" id="two_years_ago_tagmol_payments" type="number" range="Real" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="one_year_ago_tagmol_payments" type="number" range="Real" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="current_year_tagmol_payments" type="number" range="Real" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="next_year_tagmol_payments" type="number" range="Real" required="true"></input>
+        </col>
+      </row>
+      <row>
+        <col>
+          <text>סה"כ עובדים בישראל</text>
+        </col>
+        <col>
+          <input width="100" id="two_years_ago_total_isreal_workers" type="number" range="Integer" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="one_year_ago_total_isreal_workers" type="number" range="Integer" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="current_year_total_isreal_workers" type="number" range="Integer" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="next_year_total_isreal_workers" type="number" range="Integer" required="true"></input>
+        </col>
+      </row>
+      <row>
+        <col>
+          <text>עובדי פיתוח</text>
+        </col>
+        <col>
+          <input width="100" id="two_years_ago_devel_workers" type="number" range="Integer" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="one_year_ago_devel_workers" type="number" range="Integer" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="current_year_devel_workers" type="number" range="Integer" required="true"></input>
+        </col>
+        <col>
+          <input width="100" id="next_year_devel_workers" type="number" range="Integer" required="true"></input>
+        </col>
+      </row>
+    </table>
+    <text size="medium" weight="700" margin="5" color="cornflowerblue">פרטי אנשי מפתח/מנהלים בחברה</text>
+    <text size="medium" weight="700" margin="5" color="cornflowerblue">תוכניות מחקר ופיתוח</text>
+    <text color="#ff0000" fillOnly="false">* נא לציין כל תכניות המו"פ המבוצעות בחברה בשנה הקלנדארית החופפת (חלקית או מלא) לתקופת בקשה זו בין במימון עצמי ובין במימון מקור נוסף (כגון: קרנות דו-לאומיות, תוכניות מדען ראשי במסלולים שונים, מקור ממשלתי אחר וכו'). </text>
+  </page>
+  <!-- Page number 4 - REQUEST INFO -->
+  <page title="פירוט הבקשה">
+    <table id="r9table">
+      <row color="#E3E4FA">
+        <col>
+          <text>מספר בקשות : </text>
+        </col>
+      </row>
+      <repeatable id="r9" pasteTo="r9table">
+        <row>
+          <col>
+            <table color="#555555">
+              <row>
+                <col>
+                  <del delFrom="r9table" id="r9"></del>
+                </col>
+                <col>
+                  <index id="r9"></index>
+                </col>
+                <col>
+                  <table>
+                    <row color="#E3E4FA">
+                      <col>
+                        <text>דרוג הבקשה</text>
+                      </col>
+                      <col>
+                        <text>שם התוכנית</text>
+                      </col>
+                      <col>
+                        <text>מספר תיק תוכנית</text>
+                      </col>
+                    </row>
+                    <row>
+                      <col>
+                        <input id="request_rank" type="number" range="Integer" required="true"></input>
+                      </col>
+                      <col>
+                        <input id="request_name" type="text" required="true"></input>
+                      </col>
+                      <col>
+                        <input id="request_tik_number" type="number" range="Integer" required="false"></input>
+                      </col>
+                    </row>
+                  </table>
+                  <table>
+                    <row color="#E3E4FA">
+                      <col>
+                        <text>תחילת ביצוע מבוקש</text>
+                      </col>
+                      <col>
+                        <text>סיום ביצוע מבוקש</text>
+                      </col>
+                      <col>
+                        <text>תקציב מבוקש בש"ח</text>
+                      </col>
+                    </row>
+                    <row>
+                      <col>
+                        <input id="idea_start_date_year" type="dropdown" required="true">
+                          <option>2017</option>
+                          <option>2018</option>
+                          <option>2019</option>
+                        </input>
+                        <input id="idea_start_date_month" type="dropdown" required="true">
+                          <option>1 - ינואר</option>
+                          <option>2 - פברואר</option>
+                          <option>3 - מרץ</option>
+                          <option>4 - אפריל</option>
+                          <option>5 - מאי</option>
+                          <option>6 - יוני</option>
+                          <option>7 - יולי</option>
+                          <option>8 - אוגוסט</option>
+                          <option>9 - ספטמבר</option>
+                          <option>10 - אוקטובר</option>
+                          <option>11 - נובמבר</option>
+                          <option>12 - דצמבר</option>
+                        </input>
+                      </col>
+                      <col>
+                        <input id="idea_fin_date_year" type="dropdown" required="true">
+                          <option>2017</option>
+                          <option>2018</option>
+                          <option>2019</option>
+                          <option>2020</option>
+                          <option>2021</option>
+                        </input>
+                        <input id="idea_fin_date_month" type="dropdown" required="true">
+                          <option>1 - ינואר</option>
+                          <option>2 - פברואר</option>
+                          <option>3 - מרץ</option>
+                          <option>4 - אפריל</option>
+                          <option>5 - מאי</option>
+                          <option>6 - יוני</option>
+                          <option>7 - יולי</option>
+                          <option>8 - אוגוסט</option>
+                          <option>9 - ספטמבר</option>
+                          <option>10 - אוקטובר</option>
+                          <option>11 - נובמבר</option>
+                          <option>12 - דצמבר</option>
+                        </input>
+                      </col>
+                      <col>
+                        <input id="idea_requested_fund" type="number" range="Real" required="true"></input>
+                      </col>
+                    </row>
+                  </table>
+                  <table>
+                    <row color="#E3E4FA">
+                      <col>
+                        <text>מסלול הבקשה</text>
+                      </col>
+                    </row>
+                    <row>
+                      <col>
+                        <input id="request_plan_type" type="dropdown" required="true">
+                          <option>רגילה</option>
+                          <option>קידמ"ה</option>
+                          <option>חברות מתחילות</option>
+                          <option>טכנולוגיות חלל</option>
+                          <option>חברות גדולות בפריפריה</option>
+                          <option>מו"פ פיננסי</option>
+                          <option>שת"פ בין-לאומי</option>
+                          <option>התאמת מוצרים</option>
+                          <option>מסורתי</option>
+                          <option>חדשנות במגזר הציבורי</option>
+                          <option>צרכים מיוחדים</option>
+                          <option>אחר</option>
+                        </input>
+                      </col>
+                    </row>
+                  </table>
+                  <table>
+                    <row color="#E3E4FA">
+                      <col>
+                        <text>תמצית הבקשה</text>
+                      </col>
+                    </row>
+                    <row>
+                      <col>
+                        <input id="resor_gest" type="multiline" required="true"></input>
+                      </col>
+                    </row>
+                  </table>
+                  <table>
+                    <row>
+                      <col span="2">
+                        <input id="accept_checkbox" type="checkbox" range="CheckBox" required="true">הריני מאשר כי סעיפים 5, 8 ו- 9 בטופס בקשת מו"פ מולאו כנדרש (ללא מילוי של הסעיפים הנ"ל, הבקשה לא תטופל ותוחזר לחברה).</input>
+                      </col>
+                    </row>
+                    <row color="#E3E4FA">
+                      <col>
+                        <text>שם הקובץ</text>
+                      </col>
+                      <col>
+                        <text>קבצים מצורפים</text>
+                      </col>
+                    </row>
+                    <row>
+                      <col>
+                        <text>בקשת מו"פ</text>
+                      </col>
+                      <col>
+                        <input width="250" id="mop_file" type="file" range="File" required="true"></input>
+                      </col>
+                    </row>
+                    <row>
+                      <col>
+                        <text>תקציב של בקשת מו"פ</text>
+                      </col>
+                      <col>
+                        <input width="250" id="mop_budget_file" type="file" range="File" required="true"></input>
+                      </col>
+                    </row>
+                  </table>
+                  <table id="r6table">
+                    <row color="#E3E4FA">
+                      <col></col>
+                      <col></col>
+                      <col>
+                        <text>קבצים נוספים</text>
+                      </col>
+                      <col></col>
+                    </row>
+                    <repeatable id="r6" pasteTo="r6table">
+                      <row>
+                        <col>
+                          <del delFrom="r6table" id="r6"></del>
+                        </col>
+                        <col>
+                          <index id="r6"></index>
+                        </col>
+                        <col>
+                          <input id="additional_file_type" type="dropdown" required="true">
+                            <option>בקשת מו"פ</option>
+                            <option>תקציב של בקשת מו"פ</option>
+                            <option>ריכוז משאבים בתוכנית מו"פ</option>
+                            <option>נספח לבקשה</option>
+                            <option>תקציב קבלן משנה</option>
+                          </input>
+                        </col>de
+                        <col>
+                          <input width="250" id="additional_file" type="file" range="File" required="true"></input>
+                        </col>
+                      </row>
+                    </repeatable>
+                  </table>
+                  <repeater repeaterId="r6" pasteTo="r6table">הוספת קובץ</repeater>
+                </col>
+              </row>
+            </table>
+          </col>
+        </row>
+      </repeatable>
+    </table>
+    <repeater repeaterId="r9" pasteTo="r9table">הוספת בקשה</repeater>
+  </page>
+  <!-- Page number 5 - DECLARATIONS -->
+  <page title="התחייבות והצהרת מגיש הבקשה">
+    <text fillOnly="false">יש להוריד ולמלא טופס הצהרה לאישור הגשת בקשות ללשכת המדען הראשי מאתר המדען (ראה סעיף 9 טופס הצהרה והרשאה)</text>
+    <text color="red" fillOnly="false">יש להדפיס ולשלוח טופס ההצהרה החתומה ב- 2 עותקים בדואר ללשכת המדען הראשי, מחלקת קליטת בקשות, רחוב בנק ישראל 5, ירושלים מיקוד: 91036.</text>
+    <table id="r0table">
+      <row color="#E3E4FA">
+        <col></col>
+        <col></col>
+        <col>
+          <text>תאריך</text>
+        </col>
+        <col>
+          <text>תפקיד החותם</text>
+        </col>
+        <col>
+          <text>שם החותם</text>
+        </col>
+        <col>
+          <text>ת.ז.</text>
+        </col>
+        <col>
+          <text>חתימה וחותמת</text>
+        </col>
+      </row>
+      <repeatable id="r0" pasteTo="r0table">
+        <row>
+          <col>
+            <del delFrom="r0table" id="r0"></del>
+          </col>
+          <col>
+            <index id="r0"></index>
+          </col>
+          <col>
+            <input id="signiture_date" type="date" range="Date" required="true"></input>
+          </col>
+          <col>
+            <input id="signiture_proffesion" type="dropdown" required="true">
+              <option>מנכ"ל</option>
+              <option>חשב</option>
+              <option>גזבר</option>
+              <option>רו"ח</option>
+              <option>מבקר פנים</option>
+              <option>מזכיר העמותה</option>
+              <option>חבר הנהלה</option>
+              <option>נציג גוף</option>
+            </input>
+          </col>
+          <col>
+            <input id="signiture_name" type="text" required="true"></input>
+          </col>
+          <col>
+            <input id="signiture_id" type="number" range="Integer" required="true"></input>
+          </col>
+          <col></col>
+        </row>
+      </repeatable>
+    </table>
+    <repeater repeaterId="r0" pasteTo="r0table">הוספת חותם</repeater>
+  </page>
+</Request>

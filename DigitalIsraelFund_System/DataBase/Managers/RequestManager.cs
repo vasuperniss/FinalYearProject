@@ -30,6 +30,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             fields.Add("submiter_name");
             fields.Add("CONCAT_WS(' ', fname, lname) AS momhee_name");
             fields.Add("mashov");
+            fields.Add("mashov_ver");
             fields.Add("fund_request");
             fields.Add("madaan_momhee");
             string limit = ((page - 1) * resultsPerPage) + "," + resultsPerPage;

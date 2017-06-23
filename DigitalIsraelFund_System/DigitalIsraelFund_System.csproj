@@ -93,6 +93,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Forms\RequestForm_v_0.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="App_Data\Forms\MashovForm_v_0.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -114,6 +117,7 @@
     <Content Include="App_Data\Pages\Events.json" />
     <Content Include="App_Data\Pages\CommonQuestions.json" />
     <Content Include="App_Data\Pages\ApplyForRequest.json" />
+    <Content Include="App_Data\Settings.json" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -132,6 +136,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RequestController.cs" />
     <Compile Include="DataBase\DataBase.cs" />
+    <Compile Include="DataBase\Managers\FormManager.cs" />
     <Compile Include="DataBase\Managers\LogManager.cs" />
     <Compile Include="DataBase\Managers\OfficeManager.cs" />
     <Compile Include="DataBase\Managers\RequestManager.cs" />
@@ -147,6 +152,7 @@
     <Compile Include="Models\FormComponent.cs" />
     <Compile Include="Models\FormValues.cs" />
     <Compile Include="Models\PostedForm.cs" />
+    <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\StaticPage.cs" />
     <Compile Include="Models\TableResult.cs" />
     <Compile Include="Models\UserData.cs" />
@@ -162,13 +168,13 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-    <Content Include="Views\Home\Form.cshtml" />
     <Content Include="Views\GovExp\EditSelf.cshtml" />
     <Content Include="Views\Admin\OfficesManage.cshtml" />
     <Content Include="Views\Admin\RequestsManage.cshtml" />
     <Content Include="Views\GovExp\AddMashov.cshtml" />
-    <Content Include="Views\Home\Form2.cshtml" />
+    <Content Include="Views\Home\Form.cshtml" />
     <Content Include="Views\Home\PostedForm.cshtml" />
+    <Content Include="Views\Admin\Settings.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

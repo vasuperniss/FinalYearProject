@@ -184,7 +184,7 @@
                         }
                         else
                         {
-                            @Html.ActionLink("צפה במשוב", "ViewMashov", "Admin", new { file_number = line["file_number"] }, new { @class = "btn btn-primary btn-xs" })
+                            @Html.ActionLink("צפה במשוב", "ViewMashov", "Admin", new { file_number = line["file_number"], form_ver = line["mashov_ver"] }, new { @class = "btn btn-primary btn-xs" })
                         }
                     }
                 </td>
