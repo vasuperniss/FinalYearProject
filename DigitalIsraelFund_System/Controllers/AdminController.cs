@@ -302,20 +302,37 @@ namespace DigitalIsraelFund_System.Controllers
         }
 
         [HttpPost]
-        public ActionResult LoadMadanMomhimTableFromExcel(HttpPostedFileBase file2)
+        public ActionResult LoadMadanMomhimTableFromExcel(HttpPostedFileBase file)
         {
             var dataFile = Server.MapPath("~/App_Data/Settings.json");
             string json = System.IO.File.ReadAllText(@dataFile);
             Models.Settings sett = Models.Settings.LoadJson(json);
 
-            string filePath = file2.FileName;
+            string filePath = file.FileName;
             var saveTo = Server.MapPath("~/App_Data/Excels/" + filePath);
-            file2.SaveAs(saveTo);
+            file.SaveAs(saveTo);
 
             var table = ExcelManager.Manager.LoadTableFromExcel(saveTo);
             MadaanMomhimManager.Manager.AddOrUpdate(table, sett);
 
             return RedirectToAction("MadanMomhimManage");
+        }
+
+        [HttpPost]
+        public ActionResult LoadRequestsTableFromExcel(HttpPostedFileBase file)
+        {
+            var dataFile = Server.MapPath("~/App_Data/Settings.json");
+            string json = System.IO.File.ReadAllText(@dataFile);
+            Models.Settings sett = Models.Settings.LoadJson(json);
+
+            string filePath = file.FileName;
+            var saveTo = Server.MapPath("~/App_Data/Excels/" + filePath);
+            file.SaveAs(saveTo);
+
+            var table = ExcelManager.Manager.LoadTableFromExcel(saveTo);
+            RequestManager.Manager.AddOrUpdate(table, sett);
+
+            return RedirectToAction("RequestsManage");
         }
     }
 }

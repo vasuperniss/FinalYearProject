@@ -34,6 +34,22 @@ namespace DigitalIsraelFund_System.DataBase
             return MySqlConnector.Connector.RunNonQueryCommand(query);
         }
 
+        public static bool InsertOrUpdate(string tableName, Dictionary<string, string> values, string keyField)
+        {
+            string query = "INSERT INTO " + tableName + " (";
+            query += String.Join(",", values.Keys) + ")";
+            query += " VALUES(";
+            foreach (string key in values.Keys)
+                query += "'" + values[key] + "',";
+            query = query.Substring(0, query.Length - 1) + ")";
+            values.Remove(keyField);
+            query += " ON DUPLICATE KEY UPDATE ";
+            foreach (string key in values.Keys)
+                query += key + "='" + values[key] + "',";
+            query = query.Substring(0, query.Length - 1);
+            return MySqlConnector.Connector.RunNonQueryCommand(query);
+        }
+
         public static List<Dictionary<string, string>> Select(string tableName, List<string> fields, string on,
             string where, string orderBy, string limit)
         {

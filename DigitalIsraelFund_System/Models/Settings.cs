@@ -8,7 +8,7 @@ namespace DigitalIsraelFund_System.Models
         public int MashovVersion { get; set; }
         public List<int> PossibleMashovVersions { get; set; }
         public Dictionary<string, List<string>> MadaanMomhimExcelFieldsMatching { get; set; }
-        //public Dictionary<string, List<string>> RequestsExcelFieldsMatching { get; set; }
+        public Dictionary<string, List<string>> RequestsExcelFieldsMatching { get; set; }
 
         public static Settings LoadJson(string json)
         {
@@ -20,15 +20,25 @@ namespace DigitalIsraelFund_System.Models
             return new JavaScriptSerializer().Serialize(this);
         }
 
-        public Dictionary<string, string> CreateConversionTable(ICollection<string> colNames)
+        public Dictionary<string, string> CreateConversionTableMadaanMomhim(ICollection<string> colNames)
+        {
+            return this.CreateConversionTable(colNames, this.MadaanMomhimExcelFieldsMatching);
+        }
+
+        public Dictionary<string, string> CreateConversionTableRequests(ICollection<string> colNames)
+        {
+            return this.CreateConversionTable(colNames, this.RequestsExcelFieldsMatching);
+        }
+
+        private Dictionary<string, string> CreateConversionTable(ICollection<string> colNames, Dictionary<string, List<string>> FieldsMatching)
         {
             Dictionary<string, string> conv = new Dictionary<string, string>();
             foreach (string name in colNames)
             {
-                foreach (string key in this.MadaanMomhimExcelFieldsMatching.Keys)
+                foreach (string key in FieldsMatching.Keys)
                 {
                     bool found = false;
-                    foreach (string posibleMatch in this.MadaanMomhimExcelFieldsMatching[key])
+                    foreach (string posibleMatch in FieldsMatching[key])
                     {
                         if (name == posibleMatch)
                         {

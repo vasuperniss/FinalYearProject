@@ -92,7 +92,7 @@
         <td colspan="4" style="direction:rtl;background:linear-gradient(to left, #E3E4FA , white);">
             &nbsp;&nbsp;
             <font>תוצאות לעמוד : </font>&nbsp;
-            <select id="selectPP" onchange="changeResultsPerPage();">
+            <select id="selectPP" onchange="changeResultsPerPage()">
                 @for (int i = 1; i <= 5; ++i)
                 {
                     if (i * 10 == Model.ResultsPerPage)
@@ -127,12 +127,12 @@
 <div id="cntntDiv" contenteditable="false" style="height:100%;resize:none;overflow-y:auto;min-width:inherit;min-height:200px;border-width:thin;border-style: none;font-family:sans-serif;border-color:#555555;font-size:small;font-weight:400;" dir="rtl">
     <table>
         <tr style="background:linear-gradient(to left, #E3E4FA , white);">
-            @using (Html.BeginForm("LoadMadanMomhimTableFromExcel", "Admin", FormMethod.Post, new { id = "fileForm", enctype = "multipart/form-data" }))
+            @using (Html.BeginForm("LoadRequestsTableFromExcel", "Admin", FormMethod.Post, new { id = "fileForm", enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
                 <td>טען טבלה מ excel :</td>
-                <td><input id="momhim_file2" name="file2" form="fileForm" class="form-control input-sm" type="file" /></td>
-                <td><button id="loadBtn" class="btn btn-warning btn-sm" onclick="loadFile();">טען</button></td>
+                <td><input id="momhim_file" name="file" form="fileForm" class="form-control input-sm" type="file" /></td>
+                <td><button id="loadBtn" class="btn btn-warning btn-sm" onclick="loadFile()">טען</button></td>
             }
         </tr>
     </table>
@@ -279,6 +279,10 @@
                         "&submiter_name=" + document.getElementById('searchVal_submiter_name').value +
                         "&mashov=" + document.getElementById('searchVal_mashov').value +
                         add;
+    }
+
+    function loadFile() {
+        $('#fileFrom').submit();
     }
 
 </script>

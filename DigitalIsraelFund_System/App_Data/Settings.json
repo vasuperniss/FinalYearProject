@@ -16,5 +16,12 @@
     "tester_email": [ "דואל בודק" ],
     "phone": [ "טלפון" ],
     "cellphone": [ "סלולרי" ]
+  },
+  "RequestsExcelFieldsMatching": {
+    "file_number": [ "מספר תיק רשות לחדשנות" ],
+    "comp_name": [ "שם  חברה או היזם" ],
+    "submiter_name": [ "שם  המגיש" ],
+    "fund_request": [ "גובה במענק המבוקש" ],
+    "madaan_momhee": [ "בודק משרדי" ]
   }
 }

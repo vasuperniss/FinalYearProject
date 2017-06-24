@@ -13,7 +13,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
 
         public void AddOrUpdate(List<Dictionary<string, string>> table, Settings sett)
         {
-            Dictionary<string, string> conv = sett.CreateConversionTable(table[0].Keys);
+            Dictionary<string, string> conv = sett.CreateConversionTableMadaanMomhim(table[0].Keys);
             foreach (Dictionary<string, string> line in table)
             {
                 var values = new Dictionary<string, string>();

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DigitalIsraelFund_System.Models;
+using System.Collections.Generic;
 
 namespace DigitalIsraelFund_System.DataBase.Managers
 {
@@ -9,6 +10,26 @@ namespace DigitalIsraelFund_System.DataBase.Managers
         public static RequestManager Manager { get { return instance; } }
 
         private RequestManager() { }
+
+        public void AddOrUpdate(List<Dictionary<string, string>> table, Settings sett)
+        {
+            Dictionary<string, string> conv = sett.CreateConversionTableRequests(table[0].Keys);
+            foreach (Dictionary<string, string> line in table)
+            {
+                var values = new Dictionary<string, string>();
+                foreach (string key in line.Keys)
+                {
+                    if (conv.ContainsKey(key))
+                        values[conv[key]] = line[key];
+                }
+                values["status"] = "נקלט";
+                values["mashov"] = "אין";
+                if (values.ContainsKey("file_number"))
+                {
+                    MySqlCommands.InsertOrUpdate("requests", values, "file_number");
+                }
+            }
+        }
 
         public bool UpdateMashov(string file_number, string json_path, string version)
         {
