@@ -55,6 +55,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             fields.Add("mashov_ver");
             fields.Add("fund_request");
             fields.Add("madaan_momhee");
+            fields.Add("(SELECT COUNT(*) FROM files WHERE requests.file_number=files.file_number) as num_files");
             string limit = ((page - 1) * resultsPerPage) + "," + resultsPerPage;
             string on = "users.id=requests.momhee_id";
             List<Dictionary<string, string>> requestsResult = MySqlCommands.Select("requests LEFT JOIN users",

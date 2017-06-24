@@ -156,8 +156,8 @@
             }
             @SearchAbleCol("mashov", "משוב מומחה", true, true, dict)
             @SearchAbleCol("fund_request", "גובה במענק המבוקש", false, false, null)
+            @SearchAbleCol("num_files", "קבצים", false, false, null)
             @SearchAbleCol("madaan_momhee", "בודק משרדי", true, true, null)
-            <td style="padding:3px;font-weight:600;text-align:center;"></td>
         </tr>
         @{ var count = (Model.Page - 1) * Model.ResultsPerPage + 1; }
         @foreach (Dictionary<string, string> line in Model.Table)
@@ -201,10 +201,12 @@
                     }
                 </td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["fund_request"]</td>
-                <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["madaan_momhee"]</td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">
-                    <button id="files_@line["file_number"]" class="btn btn-info btn-xs" onclick="showFiles('@line["file_number"]');">קבצים</button>
+                    <button type="button" id="files_@line["file_number"]" class="btn btn-info btn-xs" onclick="showFiles('@line["file_number"]');">
+                        הצג  &nbsp;<span class="label label-primary">@line["num_files"]</span>
+                    </button>
                 </td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["madaan_momhee"]</td>
             </tr>
         }
         @numbersRow()

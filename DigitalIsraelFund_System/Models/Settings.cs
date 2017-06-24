@@ -7,6 +7,7 @@ namespace DigitalIsraelFund_System.Models
     {
         public int MashovVersion { get; set; }
         public List<int> PossibleMashovVersions { get; set; }
+        public string LastUIDSeen { get; set; }
         public Dictionary<string, List<string>> MadaanMomhimExcelFieldsMatching { get; set; }
         public Dictionary<string, List<string>> RequestsExcelFieldsMatching { get; set; }
 
