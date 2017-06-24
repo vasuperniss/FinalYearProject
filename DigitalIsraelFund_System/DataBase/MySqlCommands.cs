@@ -16,6 +16,13 @@ namespace DigitalIsraelFund_System.DataBase
             return MySqlConnector.Connector.RunNonQueryCommand(query);
         }
 
+        public static bool Delete(string tableName, string where)
+        {
+            string query = "DELETE FROM " + tableName;
+            query += " WHERE " + where;
+            return MySqlConnector.Connector.RunNonQueryCommand(query);
+        }
+
         public static bool Insert(string tableName, Dictionary<string, string> values)
         {
             string query = "INSERT INTO " + tableName + " (";

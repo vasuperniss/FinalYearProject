@@ -1,35 +1,8 @@
 ﻿@model DigitalIsraelFund_System.Models.TableResult
 @using DigitalIsraelFund_System.Models
 @{
-    ViewBag.Title = "ניהול בקשות";
-
-    UserData user = (UserData)Session["user"];
-    var type = user != null ? user.Type.ToLower() : "";
+    ViewBag.Title = "מומחי מדען";
 }
-
-<style>
-    .fakeInput {
-        border: solid 0px #00A;
-        border-radius: 4px;
-        border-right-color: #38ACEC;
-        border-right-width: 0px;
-        min-width: 50px;
-        display: inline-block;
-        white-space: nowrap;
-    }
-
-    .xBtn {
-        background-color: #f44336;
-        border: none;
-        color: white;
-        padding: 2px 6px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 10px;
-        border-radius: 4px;
-    }
-</style>
 
 <script src="~/Scripts/validation.js"></script>
 <script src="~/Scripts/ajaxSubmit.js"></script>
@@ -39,9 +12,10 @@
 <input type="hidden" id="page" value="@Model.Page" />
 <input type="hidden" id="resultsPerPage" value="@Model.ResultsPerPage" />
 
-@helper SearchAbleCol(string fieldName, string fieldTitle, bool isSearchable, bool isOrderable, Dictionary<string, string> options)
+
+@helper SearchAbleCol(string fieldName, string fieldTitle, bool isSearchable, bool isOrderable, List<string> options)
 {
-    <td style="padding:3px;font-size:small;font-weight:600;text-align:center;white-space:nowrap;">
+    <td style="white-space:nowrap;padding:3px;font-size:small;font-weight:600;text-align:center;">
         @if (isSearchable)
         {
             <img style="width:12px;height:12px;" src="~/Content/Images/search_icon.png" />
@@ -51,8 +25,10 @@
             <a href="#" onclick="setOrderBy('@fieldName');" style="white-space:nowrap;">@fieldTitle</a>
             if (Model.OrderBy == fieldName)
             {
-                if (!Model.isDesc) { <font>🠟</font> }
-                else { <font>🠝</font> }
+                if (!Model.isDesc)
+                { <font>🠟</font> }
+                else
+                { <font>🠝</font> }
             }
         }
         else
@@ -61,23 +37,25 @@
         }
         @if (isSearchable)
         {
-            if (options == null) {
+            if (options == null)
+            {
                 <datalist id="listOptions_@fieldName"></datalist>
                 <div class="input-group" style="width:100%;overflow-wrap:unset;direction:ltr">
                     <span class="input-group-addon" style="background-color:#EC7063;color:white;cursor:pointer;padding:6px;padding-left:10px;padding-right:10px;"
-                           onclick="clearSearch('@fieldName');">x</span>
+                          onclick="clearSearch('@fieldName');">x</span>
                     <input id="searchVal_@fieldName" type="search" value="@Request.Params.Get(fieldName)" list="listOptions_@fieldName" placeholder="חיפוש"
-                           class="form-control" style="height:100%;padding:6px;" oninput="updateSearchOptions('@fieldName')" onkeypress="searchAttempt(event);" />
+                           class="form-control" style="height:100%;padding:6px;min-width:80px;" oninput="updateSearchOptions('@fieldName')" onkeypress="searchAttempt(event);" />
                 </div>
-            } else
+            }
+            else
             {
                 <div>
                     <select id="searchVal_@fieldName" class="form-control" style="width:auto;height:100%;padding:4px;padding-left:6px;" onchange="reload();">
                         <option value="">הכל</option>
-                        @foreach (var op in options.Keys)
+                        @foreach (var op in options)
                         {
-                            var selected = options[op] == Request.Params[fieldName] ? "selected" : "";
-                            <option value="@options[op]" @selected>@op</option>
+                            var selected = op == Request.Params[fieldName] ? "selected" : "";
+                            <option value="@op" @selected>@op</option>
                         }
                     </select>
                 </div>
@@ -92,16 +70,16 @@
         <td colspan="4" style="direction:rtl;background:linear-gradient(to left, #E3E4FA , white);">
             &nbsp;&nbsp;
             <font>תוצאות לעמוד : </font>&nbsp;
-            <select id="selectPP" onchange="changeResultsPerPage();">
+            <select id="selectPP" onchange="changeResultsPerPage()">
                 @for (int i = 1; i <= 5; ++i)
                 {
                     if (i * 10 == Model.ResultsPerPage)
                     {
-                        <option selected value="@(i * 10)">@(i * 10)</option>
+                        <option selected value="@(i*10)">@(i * 10)</option>
                     }
                     else
                     {
-                        <option value="@(i * 10)">@(i * 10)</option>
+                        <option value="@(i*10)">@(i * 10)</option>
                     }
                 }
             </select>
@@ -139,74 +117,43 @@
     <br />
     <table style="padding:5px 5px;border: 1px solid #ccc;margin:auto;width:100%;">
         <tr style="background-color:#E3E4FA;">
-            <td style="padding:3px;font-weight:600;text-align:center;vertical-align:bottom;"></td>
-            @SearchAbleCol("file_number", "מספר תיק", true, true, null)
-            @SearchAbleCol("comp_name", "שם  חברה או היזם", true, true, null)
-            @SearchAbleCol("status", "סטטוס התיק", true, true, null)
-            @SearchAbleCol("submiter_name", "שם  המגיש", true, true, null)
-            @if (type == "admin")
-            {
-                @SearchAbleCol("momhee_name", "בודק של הרשות לחדשנות", true, true, null)
-            }
-            @{
-                var dict = new Dictionary<string, string>();
-                dict["אין"] = "אין";
-                dict["בתהליך"] = "בתהליך";
-                dict["מוגש"] = "_";
-            }
-            @SearchAbleCol("mashov", "משוב מומחה", true, true, dict)
-            @SearchAbleCol("fund_request", "גובה במענק המבוקש", false, false, null)
-            @SearchAbleCol("madaan_momhee", "בודק משרדי", true, true, null)
             <td style="padding:3px;font-weight:600;text-align:center;"></td>
+            @SearchAbleCol("file_number", "מספר תיק", true, true, null)
+            @SearchAbleCol("comp_number", "מספר חברה", true, true, null)
+            @SearchAbleCol("comp_name", "שם חברה", true, true, null)
+            @SearchAbleCol("status", "סטטוס", true, true, null)
+            @SearchAbleCol("status_date", "תאריך סטטוס", true, true, null)
+            @SearchAbleCol("request_date", "תאריך בקשה", true, true, null)
+            @SearchAbleCol("name", "שם בודק", true, true, null)
+            @SearchAbleCol("head_field", "ראש תחום", true, true, null)
+            @SearchAbleCol("theme", "נושא", false, false, null)
+            @SearchAbleCol("tester_phone", "טלפון בודק", true, true, null)
+            @SearchAbleCol("tester_email", "אימייל בודק", true, true, null)
+            @SearchAbleCol("phone", "טלפון", true, true, null)
+            @SearchAbleCol("cellphone", "פלפון", true, true, null)
         </tr>
         @{ var count = (Model.Page - 1) * Model.ResultsPerPage + 1; }
         @foreach (Dictionary<string, string> line in Model.Table)
         {
             <tr style="border: 1px solid #ccc;">
-                <td style="padding:3px;border: 0px solid #888;text-align:center;">@(count++)</td>
-                <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["file_number"]</td>
-                <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["comp_name"]</td>
-                <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["status"]</td>
-                <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["submiter_name"]</td>
-                @if (type == "admin")
-                {
-                    <td style="padding:3px;border: 0px solid #888;text-align:center;">
-                        @{
-                            if (line["momhee_name"] == "")
-                            {
-                                @Html.ActionLink("צרף מומחה", "MomhimManage", "Admin", new { file_number = line["file_number"] }, new { @class = "btn btn-primary btn-xs" })
-                            }
-                            else
-                            {
-                                @line["momhee_name"]
-                            }
-                        }
-                    </td>
-                }
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">
-                    @if (type == "momhee")
-                    {
-                        @Html.ActionLink("צרף משוב", "AddMashov", "GovExp", new { file_number = line["file_number"] }, new { @class = "btn btn-primary btn-xs" })
-                    }
-                    else if (type == "admin")
-                    {
-                        if (!line["mashov"].Contains("_"))
-                        {
-                            @line["mashov"]
-                        }
-                        else
-                        {
-                            @Html.ActionLink("צפה במשוב", "ViewMashov", "Admin", new { file_number = line["file_number"], form_ver = line["mashov_ver"] }, new { @class = "btn btn-primary btn-xs" })
-                        }
-                    }
+                    @(count++)
                 </td>
-                <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["fund_request"]</td>
-                <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["madaan_momhee"]</td>
-                <td style="padding:3px;border: 0px solid #888;text-align:center;">
-                    <button id="files_@line["file_number"]" class="btn btn-info btn-xs" onclick="showFiles('@line["file_number"]');">קבצים</button>
-                </td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;"><div>@line["file_number"]</div></td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;"><div>@line["comp_number"]</div></td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;"><div>@line["comp_name"]</div></td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;"><div>@line["status"]</div></td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;"><div>@line["status_date"]</div></td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;"><div>@line["request_date"]</div></td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;"><div>@line["name"]</div></td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;"><div>@line["head_field"]</div></td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;white-space:nowrap;overflow:hidden;max-width:140px;"><div title="@line["theme"]">@line["theme"]</div></td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;"><div>@line["tester_phone"]</div></td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;"><a href="mailto:@line["tester_email"]">@line["tester_email"]</a></td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;"><div>@line["phone"]</div></td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;"><div>@line["cellphone"]</div></td>
             </tr>
-        }
+                        }
         @numbersRow()
     </table>
 </div>
@@ -229,7 +176,7 @@
             "searchVal": document.getElementById('searchVal_' + field).value,
             "searchBy": field
         };
-        ajaxSbmt(data, '/Admin/SearchRequestBy',
+        ajaxSbmt(data, '/Admin/SearchMadanMonheeBy',
             function (response) {
                 var options = '';
                 $.each(response.List, function (index, item) {
@@ -264,21 +211,26 @@
     }
 
     function reload() {
-        var momh_name = document.getElementById('searchVal_momhee_name');
-        var add = "";
-        if (momh_name != null)
-            add = "&momhee_name=" + momh_name.value;
-        window.location.href = "/Admin/RequestsManage?isDesc=" + document.getElementById('isDesc').value +
+        window.location.href = "/Admin/MadanMomhimManage?isDesc=" + document.getElementById('isDesc').value +
                         "&orderBy=" + document.getElementById('orderBy').value +
                         "&page=" + document.getElementById('page').value +
                         "&resultsPerPage=" + document.getElementById('resultsPerPage').value +
                         "&file_number=" + document.getElementById('searchVal_file_number').value +
+                        "&comp_number=" + document.getElementById('searchVal_comp_number').value +
                         "&comp_name=" + document.getElementById('searchVal_comp_name').value +
                         "&status=" + document.getElementById('searchVal_status').value +
-                        "&madaan_momhee=" + document.getElementById('searchVal_madaan_momhee').value +
-                        "&submiter_name=" + document.getElementById('searchVal_submiter_name').value +
-                        "&mashov=" + document.getElementById('searchVal_mashov').value +
-                        add;
+                        "&status_date=" + document.getElementById('searchVal_status_date').value +
+                        "&request_date=" + document.getElementById('searchVal_request_date').value +
+                        "&name=" + document.getElementById('searchVal_name').value +
+                        "&head_field=" + document.getElementById('searchVal_head_field').value +
+                        "&tester_phone=" + document.getElementById('searchVal_tester_phone').value +
+                        "&tester_email=" + document.getElementById('searchVal_tester_email').value +
+                        "&phone=" + document.getElementById('searchVal_phone').value +
+                        "&cellphone=" + document.getElementById('searchVal_cellphone').value;
+    }
+
+    function loadFile() {
+        $('#fileFrom').submit();
     }
 
 </script>

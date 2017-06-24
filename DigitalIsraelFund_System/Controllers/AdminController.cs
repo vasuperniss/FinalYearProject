@@ -3,8 +3,6 @@ using DigitalIsraelFund_System.Models;
 using DigitalIsraelFund_System.Filters;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using System.IO;
-using System.Xml;
 using System.Web;
 
 namespace DigitalIsraelFund_System.Controllers
@@ -171,6 +169,21 @@ namespace DigitalIsraelFund_System.Controllers
             return Json(new { Success = true, List = results }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public JsonResult SearchMadanMonheeBy(string searchVal, string searchBy)
+        {
+            var table = MadaanMomhimManager.Manager.GetFieldWhere(searchBy, searchBy + " LIKE '%" + searchVal + "%'", searchBy, 1, 5);
+            List<string> results = new List<string>();
+            if (table != null)
+            {
+                foreach (Dictionary<string, string> row in table)
+                {
+                    results.Add(row[searchBy]);
+                }
+            }
+            return Json(new { Success = true, List = results }, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpGet]
         public void JoinMomheeAndRequest(string file_number, string momhee_id)
         {
@@ -236,6 +249,73 @@ namespace DigitalIsraelFund_System.Controllers
             System.IO.File.WriteAllText(@dataFile, json);
 
             return RedirectToAction("Settings");
+        }
+
+        [HttpGet]
+        public ActionResult MadanMomhimManage(string page, string resultsPerPage, string orderBy, string isDesc)
+        {
+            string file_number = Request.Params["file_number"],
+                comp_number = Request.Params["comp_number"],
+                comp_name = Request.Params["comp_name"],
+                status = Request.Params["status"],
+                status_date = Request.Params["status_date"],
+                request_date = Request.Params["request_date"],
+                name = Request.Params["name"],
+                head_field = Request.Params["head_field"],
+                tester_phone = Request.Params["tester_phone"],
+                tester_email = Request.Params["tester_email"],
+                phone = Request.Params["phone"],
+                cellphone = Request.Params["cellphone"];
+
+            int pageNum, resultsPerPageNum;
+            bool isDescBool;
+            if (!bool.TryParse(isDesc, out isDescBool)) isDescBool = false;
+            if (!int.TryParse(page, out pageNum)) pageNum = 1;
+            if (!int.TryParse(resultsPerPage, out resultsPerPageNum)) resultsPerPageNum = 10;
+            string isDescString = "";
+            if (isDescBool) isDescString = " DESC";
+            string where = "true";
+            where += " and file_number LIKE '%" + file_number + "%'";
+            where += " and comp_name LIKE '%" + comp_name + "%'";
+            where += " and comp_number LIKE '%" + comp_number + "%'";
+            where += " and status LIKE '%" + status + "%'";
+            where += " and status_date LIKE '%" + status_date + "%'";
+            where += " and request_date LIKE '%" + request_date + "%'";
+            where += " and name LIKE '%" + name + "%'";
+            where += " and head_field LIKE '%" + head_field + "%'";
+            where += " and tester_phone LIKE '%" + tester_phone + "%'";
+            where += " and tester_email LIKE '%" + tester_email + "%'";
+            where += " and phone LIKE '%" + phone + "%'";
+            where += " and cellphone LIKE '%" + cellphone + "%'";
+
+            var table = MadaanMomhimManager.Manager.GetAllWhere(where, orderBy + isDescString, pageNum, resultsPerPageNum);
+            var count = RequestManager.Manager.Count("");
+            return View(new TableResult
+            {
+                Table = table,
+                NumPages = (int)System.Math.Ceiling((double)count / resultsPerPageNum),
+                isDesc = isDescBool,
+                Page = pageNum,
+                ResultsPerPage = resultsPerPageNum,
+                OrderBy = orderBy
+            });
+        }
+
+        [HttpPost]
+        public ActionResult LoadMadanMomhimTableFromExcel(HttpPostedFileBase file2)
+        {
+            var dataFile = Server.MapPath("~/App_Data/Settings.json");
+            string json = System.IO.File.ReadAllText(@dataFile);
+            Models.Settings sett = Models.Settings.LoadJson(json);
+
+            string filePath = file2.FileName;
+            var saveTo = Server.MapPath("~/App_Data/Excels/" + filePath);
+            file2.SaveAs(saveTo);
+
+            var table = ExcelManager.Manager.LoadTableFromExcel(saveTo);
+            MadaanMomhimManager.Manager.AddOrUpdate(table, sett);
+
+            return RedirectToAction("MadanMomhimManage");
         }
     }
 }
