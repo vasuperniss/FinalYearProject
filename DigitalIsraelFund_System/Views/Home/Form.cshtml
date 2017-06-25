@@ -457,7 +457,20 @@ fields.Add(id + "|" + required + "|" + range);
         return 0;
     }
 
+    function checkIfBlue(field, isSubmited) {
+        var inpControl = document.getElementById(field[0]);
+        var val = inpControl.value;
+        if (inpControl.style.borderRightColor == 'rgb(255, 0, 0)')
+            return 1;
+        return 0;
+    }
+
     function validateAndSubmit() {
-        $('#textForm').submit();
+        var numErrs = RunThrewAllInputs(checkIfBlue, true);
+        if (numErrs == 0) {
+            $('#textForm').submit();
+        } else {
+            alert('לא כל השדות מולאו כנדרש, יש ' + numErrs + ' שדות שלא מולאו כנדרש');
+        }
     }
 </script>

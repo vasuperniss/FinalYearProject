@@ -36,7 +36,9 @@ namespace DigitalIsraelFund_System.Filters
             if (user != null)
             {
                 if (user.Type.ToLower() == "momhee" &&
-                    (action == "RequestsManage" || action == "SearchRequestBy"))
+                    (action == "RequestsManage" || action == "SearchRequestBy"
+                    || action == "GetFilesForRequest" || action == "DownloadFile"
+                    || action == "ViewMashov"))
                     return true;
                 if (user.Type.ToLower() == "admin")
                     return true;

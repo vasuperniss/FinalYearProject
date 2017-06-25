@@ -1,5 +1,6 @@
 ﻿using DigitalIsraelFund_System.Models;
 using System.Collections.Generic;
+using System;
 
 namespace DigitalIsraelFund_System.DataBase.Managers
 {
@@ -95,6 +96,16 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             names.Add("fund_request", "גובה במענק המבוקש");
             names.Add("madaan_momhee", "בודק משרדי");
             return names;
+        }
+
+        internal List<Dictionary<string, string>> GetFilesForRequest(string file_number)
+        {
+            List<string> fields = new List<string>();
+            fields.Add("path");
+            string where = "file_number='" + file_number + "'";
+            List<Dictionary<string, string>> requestsResult = MySqlCommands.Select("files",
+                fields, null, where, null, null);
+            return requestsResult;
         }
     }
 }

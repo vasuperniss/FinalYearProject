@@ -44,7 +44,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
                             att.Save(saveTo);
                             Dictionary<string, string> values = new Dictionary<string, string>();
                             values["file_number"] = request_id;
-                            values["path"] = "_" + att.Filename;
+                            values["path"] = att.Filename;
                             MySqlCommands.Insert("files", values);
                         }
                     }

@@ -152,7 +152,7 @@
                 var dict = new Dictionary<string, string>();
                 dict["אין"] = "אין";
                 dict["בתהליך"] = "בתהליך";
-                dict["מוגש"] = "_";
+                dict["מוגש"] = "mashov_";
             }
             @SearchAbleCol("mashov", "משוב מומחה", true, true, dict)
             @SearchAbleCol("fund_request", "גובה במענק המבוקש", false, false, null)
@@ -162,7 +162,7 @@
         @{ var count = (Model.Page - 1) * Model.ResultsPerPage + 1; }
         @foreach (Dictionary<string, string> line in Model.Table)
         {
-            <tr style="border: 1px solid #ccc;">
+            <tr style="border: 1px solid #ccc;vertical-align:top;">
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">@(count++)</td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["file_number"]</td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["comp_name"]</td>
@@ -186,11 +186,18 @@
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">
                     @if (type == "momhee")
                     {
-                        @Html.ActionLink("צרף משוב", "AddMashov", "GovExp", new { file_number = line["file_number"] }, new { @class = "btn btn-primary btn-xs" })
+                        if (!line["mashov"].Contains("mashov_"))
+                        {
+                            @Html.ActionLink("צרף משוב", "AddMashov", "GovExp", new { file_number = line["file_number"] }, new { @class = "btn btn-warning btn-xs" })
+                        }
+                        else
+                        {
+                            @Html.ActionLink("צפה במשוב", "ViewMashov", "Admin", new { file_number = line["file_number"], form_ver = line["mashov_ver"] }, new { @class = "btn btn-primary btn-xs" })
+                        }
                     }
                     else if (type == "admin")
                     {
-                        if (!line["mashov"].Contains("_"))
+                        if (!line["mashov"].Contains("mashov_"))
                         {
                             @line["mashov"]
                         }
@@ -202,9 +209,14 @@
                 </td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["fund_request"]</td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">
-                    <button type="button" id="files_@line["file_number"]" class="btn btn-info btn-xs" onclick="showFiles('@line["file_number"]');">
+                    <button type="button" id="files_show_btn_@line["file_number"]" class="btn btn-info btn-xs" onclick="showFiles('@line["file_number"]');">
                         הצג  &nbsp;<span class="label label-primary">@line["num_files"]</span>
                     </button>
+                    <button type="button" id="files_hide_btn_@line["file_number"]" class="btn-warning btn-xs" hidden onclick="hideFiles('@line["file_number"]');">הסתר</button>
+                    <div>
+                        <ul id="files_list_@line["file_number"]" style="list-style-type:circle" hidden>
+                        </ul>
+                    </div>
                 </td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["madaan_momhee"]</td>
             </tr>
@@ -285,6 +297,31 @@
 
     function loadFile() {
         $('#fileFrom').submit();
+    }
+
+    function showFiles(file_number) {
+        var data = {
+            "file_number": file_number
+        };
+        ajaxSbmt(data, '/Admin/GetFilesForRequest',
+            function (response) {
+                var options = '';
+                $.each(response.List, function (index, item) {
+                    options += '<li style="white-space:nowrap;"><a href="/Admin/DownloadFile?fileN=' + file_number + '&file=' + item + '">' + item + '</a></li>';
+                });
+                document.getElementById('files_list_' + file_number).innerHTML = options;
+                $('#files_show_btn_' + file_number).fadeOut(0);
+                $('#files_hide_btn_' + file_number).fadeIn(0);
+                $('#files_list_' + file_number).fadeIn(200);
+            },
+            function (msg) { });
+    }
+
+    function hideFiles(file_number) {
+        document.getElementById('files_list_' + file_number).innerHTML = "";
+        $('#files_show_btn_' + file_number).fadeIn(0);
+        $('#files_hide_btn_' + file_number).fadeOut(0);
+        $('#files_list_' + file_number).fadeOut(200);
     }
 
 </script>

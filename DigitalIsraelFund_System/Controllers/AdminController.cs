@@ -118,7 +118,7 @@ namespace DigitalIsraelFund_System.Controllers
                 comp_name = Request.Params["comp_name"],
                 status = Request.Params["status"],
                 momhee_name = Request.Params["momhee_name"],
-                madaan_momhee = Request.Params["madaan_momhe"],
+                madaan_momhee = Request.Params["madaan_momhee"],
                 submiter_name = Request.Params["submiter_name"],
                 mashov = Request.Params["mashov"];
             int pageNum, resultsPerPageNum;
@@ -333,6 +333,28 @@ namespace DigitalIsraelFund_System.Controllers
             RequestManager.Manager.AddOrUpdate(table, sett);
 
             return RedirectToAction("RequestsManage");
+        }
+
+        [HttpPost]
+        public JsonResult GetFilesForRequest(string file_number)
+        {
+            var table = RequestManager.Manager.GetFilesForRequest(file_number);
+            List<string> results = new List<string>();
+            if (table != null)
+            {
+                foreach (Dictionary<string, string> row in table)
+                {
+                    results.Add(row["path"]);
+                }
+            }
+            return Json(new { Success = true, List = results }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public FileResult DownloadFile(string fileN, string file)
+        {
+            var filename = fileN + "_" + file;
+            return File(Server.MapPath("~/App_Data/RequestFiles/" + filename), System.Net.Mime.MediaTypeNames.Application.Octet, filename);
         }
     }
 }
