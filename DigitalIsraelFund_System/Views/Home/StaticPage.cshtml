@@ -7,8 +7,10 @@
 @{
     UserData user = (UserData)this.Session["user"];
 }
-@if (user != null && user.Type.ToLower() == "Admin".ToLower())
+@if (user != null && user.Type.ToLower() == "admin")
 {
+    <!-- Editing Options, rendered only for the Admin -->
+
     <style>
         .button {
             border: none;
@@ -63,8 +65,9 @@
     <div style="min-width:100%;text-align:left;" dir="ltr">
         <button id="edit" onclick="editToggled()" class="button blue-button">ערוך</button>
     </div>
+    <!-- input for the title of the page -->
     <input placeholder="כותרת העמוד" type="text" id="titleDiv" contenteditable="true" dir="rtl" value="@Model.Title" hidden />
-
+    <!-- editing buttons -->
     <div id="mDiv" style="min-width:inherit;" dir="rtl" hidden>
         <button onmousedown="event.preventDefault();" onclick="document.execCommand('bold', false, null);" class="button dark-button"><b>bold</b></button>
         <button onmousedown="event.preventDefault();" onclick="document.execCommand('italic', false, null);" class="button dark-button"><i>italic</i></button>
@@ -80,6 +83,7 @@
         <button id="saveBtn" onmousedown="event.preventDefault();" onclick="saveChanges()" class="button green-button">שמור שינויים</button>
         <img id="loadIcon" src="~/Content/Images/bannerfund_logo.png" style="display:none;" />
         <br>
+        <!-- color picks -->
         <button onmousedown="event.preventDefault();" onclick="setColor(this)" class="color-button black-button"></button>
         <button onmousedown="event.preventDefault();" onclick="setColor(this)" class="color-button dark-button"></button>
         <button onmousedown="event.preventDefault();" onclick="setColor(this)" class="color-button gray-button"></button>
@@ -89,121 +93,128 @@
     </div>
 }
 
+<!-- div to display the page -->
 <div id="cntntDiv" contenteditable="false" style="height:100%;resize:none;overflow-y:auto;min-width:inherit;min-height:200px;border-width:thin;border-style: none;font-family:sans-serif;border-color:#555555;font-size:medium;font-weight:300;" dir="rtl">
     @Html.Raw(System.Web.HttpUtility.HtmlDecode(Model.HtmlContent))
 </div>
 
-@if (user != null && user.Type.ToLower() == "Admin".ToLower())
+@if (user != null && user.Type.ToLower() == "admin")
 {
+    <!-- html\text options and js scripts to send revisions to the server, rendered for admin only -->
     <div id="txtHtmlDiv" style="min-width:100%;text-align:left;" dir="ltr" hidden>
         <button id="toTxt" onclick="toText()" disabled class="button gray-button" style="color:dimgrey;">Text</button>
         <button id="toHtm" onclick="toHtml()" class="button gray-button">Html</button>
     </div>
 
     <script>
-    var isEditHidden = true;
+        var isEditHidden = true;
+        var isInTextMode = true;
 
-    function editToggled() {
-        if (isEditHidden) {
-            isEditHidden = false;
-            $('#mDiv').show(500);
-            $('#txtHtmlDiv').show(500);
-            $('#titleDiv').show(500);
-            document.getElementById("cntntDiv").style.borderStyle = 'solid';
-            document.getElementById("cntntDiv").style.height = '400px';
-            document.getElementById("cntntDiv").style.resize = 'vertical';
+        function editToggled() {
+            if (isEditHidden) {
+                isEditHidden = false;
+                $('#mDiv').show(500);
+                $('#txtHtmlDiv').show(500);
+                $('#titleDiv').show(500);
+                document.getElementById("cntntDiv").style.borderStyle = 'solid';
+                document.getElementById("cntntDiv").style.height = '400px';
+                document.getElementById("cntntDiv").style.resize = 'vertical';
 
-            document.getElementById("edit").innerText = "סיים עריכה";
-            document.getElementById("cntntDiv").contentEditable = true;
-        } else {
-            isEditHidden = true;
-            $('#mDiv').hide(500);
-            $('#txtHtmlDiv').hide(500);
-            $('#titleDiv').hide(500);
-            document.getElementById("cntntDiv").style.borderStyle = 'none';
-            document.getElementById("cntntDiv").style.resize = 'none';
-            document.getElementById("cntntDiv").style.height = '100%';
-            document.getElementById("edit").innerText = "ערוך";
-            document.getElementById("cntntDiv").contentEditable = false;
-        }
-    }
-
-    function setColor(btn) {
-        var style = window.getComputedStyle(btn);
-        var color = style.getPropertyValue('background-color');
-        document.execCommand('foreColor', false, color);
-        document.getElementById("mDiv").focus();
-        return false;
-    }
-
-    function toHtml() {
-        document.getElementById("toTxt").removeAttribute('disabled');
-        document.getElementById("toTxt").style.color = 'black';
-        document.getElementById("toHtm").setAttribute('disabled', true);
-        document.getElementById("toHtm").style.color = 'dimgrey';
-
-        document.getElementById("cntntDiv").style.textAlign = 'left';
-        var htm = document.getElementById("cntntDiv").innerHTML;
-        document.getElementById("cntntDiv").innerText = htm;
-        var innerHtm = document.getElementById("cntntDiv").innerHTML;
-
-        innerHtm = innerHtm.split("<br>&lt;div").join("&lt;div");
-        innerHtm = innerHtm.split("&lt;div").join("<br />&lt;div");
-        innerHtm = innerHtm.split("&lt;").join("<font color=\"blue\"><i>&lt;");
-        innerHtm = innerHtm.split("&gt;").join("&gt;</i></font>");
-
-        document.getElementById("cntntDiv").innerHTML = innerHtm;
-    }
-
-    function toText() {
-        document.getElementById("toHtm").removeAttribute('disabled');
-        document.getElementById("toHtm").style.color = 'black';
-        document.getElementById("toTxt").setAttribute('disabled', true);
-        document.getElementById("toTxt").style.color = 'dimgrey';
-
-        document.getElementById("cntntDiv").style.textAlign = 'right';
-        document.getElementById("cntntDiv").innerHTML = document.getElementById("cntntDiv").innerText;
-    }
-
-    function commmandWithInput(cmdName, promptText, defaultText) {
-        var text = prompt(promptText, defaultText);
-        if (text != null && text != "") {
-            document.execCommand(cmdName, true, text);
-        }
-    }
-
-    function saveChanges() {
-        var title = document.getElementById("titleDiv").value;
-        var html = document.getElementById("cntntDiv").innerHTML;
-        var data = {
-            "page": '@ViewData["page"]',
-            "title": title,
-            "html": html
-        };
-        document.getElementById("saveBtn").setAttribute('disabled', true);
-        document.getElementById("saveBtn").style.backgroundColor = 'dimgrey';
-        $('#loadIcon').fadeIn(100);
-        $.ajax({
-            url: "/Admin/PageUpdate",
-            type: "POST",
-            data: JSON.stringify(data),
-            dataType: "json",
-            contentType: "application/json",
-            success: function (response) {
-                if (response.Success) {
-                    alert('הדף נשמר בהצלחה');
-                }
-                else {
-                    alert('בעיה בשמירת הדף');
-                }
-                document.getElementById("saveBtn").style.backgroundColor = '#4CAF50';
-                document.getElementById("saveBtn").removeAttribute('disabled');
-                $('#loadIcon').fadeOut(100);
-            },
-            error: function () {
-                alert('בעיה בשרת');
+                document.getElementById("edit").innerText = "סיים עריכה";
+                document.getElementById("cntntDiv").contentEditable = true;
+            } else {
+                isEditHidden = true;
+                $('#mDiv').hide(500);
+                $('#txtHtmlDiv').hide(500);
+                $('#titleDiv').hide(500);
+                document.getElementById("cntntDiv").style.borderStyle = 'none';
+                document.getElementById("cntntDiv").style.resize = 'none';
+                document.getElementById("cntntDiv").style.height = '100%';
+                document.getElementById("edit").innerText = "ערוך";
+                document.getElementById("cntntDiv").contentEditable = false;
             }
-        });
-    }
+        }
+
+        function setColor(btn) {
+            var style = window.getComputedStyle(btn);
+            var color = style.getPropertyValue('background-color');
+            document.execCommand('foreColor', false, color);
+            document.getElementById("mDiv").focus();
+            return false;
+        }
+
+        function toHtml() {
+            document.getElementById("saveBtn").setAttribute('disabled', true);
+            this.isInTextMode = false;
+            document.getElementById("toTxt").removeAttribute('disabled');
+            document.getElementById("toTxt").style.color = 'black';
+            document.getElementById("toHtm").setAttribute('disabled', true);
+            document.getElementById("toHtm").style.color = 'dimgrey';
+
+            document.getElementById("cntntDiv").style.textAlign = 'left';
+            var htm = document.getElementById("cntntDiv").innerHTML;
+            document.getElementById("cntntDiv").innerText = htm;
+            var innerHtm = document.getElementById("cntntDiv").innerHTML;
+
+            innerHtm = innerHtm.split("<br>&lt;div").join("&lt;div");
+            innerHtm = innerHtm.split("&lt;div").join("<br />&lt;div");
+            innerHtm = innerHtm.split("&lt;").join("<font color=\"blue\"><i>&lt;");
+            innerHtm = innerHtm.split("&gt;").join("&gt;</i></font>");
+
+            document.getElementById("cntntDiv").innerHTML = innerHtm;
+        }
+
+        function toText() {
+            document.getElementById("saveBtn").removeAttribute('disabled');
+            this.isInTextMode = true;
+            document.getElementById("toHtm").removeAttribute('disabled');
+            document.getElementById("toHtm").style.color = 'black';
+            document.getElementById("toTxt").setAttribute('disabled', true);
+            document.getElementById("toTxt").style.color = 'dimgrey';
+
+            document.getElementById("cntntDiv").style.textAlign = 'right';
+            document.getElementById("cntntDiv").innerHTML = document.getElementById("cntntDiv").innerText;
+        }
+
+        function commmandWithInput(cmdName, promptText, defaultText) {
+            var text = prompt(promptText, defaultText);
+            if (text != null && text != "") {
+                document.execCommand(cmdName, true, text);
+            }
+        }
+
+        function saveChanges() {
+            var title = document.getElementById("titleDiv").value;
+            var html = document.getElementById("cntntDiv").innerHTML;
+            var data = {
+                "page": '@ViewData["page"]',
+                "title": title,
+                "html": html
+            };
+            document.getElementById("saveBtn").setAttribute('disabled', true);
+            document.getElementById("saveBtn").style.backgroundColor = 'dimgrey';
+            $('#loadIcon').fadeIn(100);
+            $.ajax({
+                url: "/Admin/PageUpdate",
+                type: "POST",
+                data: JSON.stringify(data),
+                dataType: "json",
+                contentType: "application/json",
+                success: function (response) {
+                    if (response.Success) {
+                        alert('הדף נשמר בהצלחה');
+                    }
+                    else {
+                        alert('בעיה בשמירת הדף');
+                    }
+                    document.getElementById("saveBtn").style.backgroundColor = '#4CAF50';
+                    document.getElementById("saveBtn").removeAttribute('disabled');
+                    $('#loadIcon').fadeOut(100);
+                },
+                error: function () {
+                    alert('בעיה בשרת');
+                }
+            });
+        }
     </script>
 }

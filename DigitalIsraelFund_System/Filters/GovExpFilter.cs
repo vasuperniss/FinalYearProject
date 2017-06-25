@@ -1,43 +1,14 @@
-﻿using DigitalIsraelFund_System.Models;
-using System.Web.Mvc;
+﻿using System.Collections.Generic;
 
 namespace DigitalIsraelFund_System.Filters
 {
-    public class GovExpFilter : ActionFilterAttribute
+    public class GovExpFilter : BaseFilter
     {
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        protected override List<string> getAllowedUsers()
         {
-            if (!this.Validate(filterContext))
-                filterContext.Result = new RedirectResult("~/Home/Page");
-        }
-
-        public override void OnActionExecuted(ActionExecutedContext filterContext)
-        {
-            if (!this.Validate(filterContext))
-                filterContext.Result = new RedirectResult("~/Home/Page");
-        }
-
-        public override void OnResultExecuting(ResultExecutingContext filterContext)
-        {
-            if (!this.Validate(filterContext))
-                filterContext.Result = new RedirectResult("~/Home/Page");
-        }
-
-        public override void OnResultExecuted(ResultExecutedContext filterContext)
-        {
-            if (!this.Validate(filterContext))
-                filterContext.Result = new RedirectResult("~/Home/Page");
-        }
-
-        private bool Validate(ControllerContext context)
-        {
-            UserData user = (UserData)context.HttpContext.Session["user"];
-            if (user != null)
-            {
-                if (user.Type.ToLower() == "momhee")
-                    return true;
-            }
-            return false;
+            List<string> allowed = new List<string>();
+            allowed.Add("momhee");
+            return allowed;
         }
     }
 }

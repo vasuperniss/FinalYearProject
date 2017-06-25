@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Web.Script.Serialization;
+using System.Web.Hosting;
 
 namespace DigitalIsraelFund_System.Models
 {
@@ -11,14 +12,17 @@ namespace DigitalIsraelFund_System.Models
         public Dictionary<string, List<string>> MadaanMomhimExcelFieldsMatching { get; set; }
         public Dictionary<string, List<string>> RequestsExcelFieldsMatching { get; set; }
 
-        public static Settings LoadJson(string json)
+        public static Settings GetSettings()
         {
+            var dataFile = HostingEnvironment.MapPath("~/App_Data/Settings.json");
+            string json = System.IO.File.ReadAllText(@dataFile);
             return new JavaScriptSerializer().Deserialize<Settings>(json);
         }
 
-        public string GetJson()
+        public void Save()
         {
-            return new JavaScriptSerializer().Serialize(this);
+            var json = new JavaScriptSerializer().Serialize(this);
+            System.IO.File.WriteAllText(HostingEnvironment.MapPath("~/App_Data/Settings.json"), json);
         }
 
         public Dictionary<string, string> CreateConversionTableMadaanMomhim(ICollection<string> colNames)

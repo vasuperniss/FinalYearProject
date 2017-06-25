@@ -49,7 +49,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             return currIncorrectAttempt;
         }
 
-        public void Add(string email, string password, string fname, string lname, string type, string office, string phone, string cellPhone)
+        public bool Add(string email, string password, string fname, string lname, string type, string office, string phone, string cellPhone)
         {
             var values = new Dictionary<string, string>();
             values["email"] = email;
@@ -60,7 +60,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             values["office"] = office;
             values["phone"] = phone;
             values["cell_phone"] = cellPhone;
-            MySqlCommands.Insert("users", values);
+            return MySqlCommands.Insert("users", values);
         }
 
         public UserData GetIfCorrect(string email, string password)
@@ -122,7 +122,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             return requestsResult;
         }
 
-        public List<Dictionary<string, string>> GetFieldWhere(string field, string where, string orderBy, int page, int resultsPerPage)
+        public List<string> GetFieldWhere(string field, string where, string orderBy, int page, int resultsPerPage)
         {
             List<string> fields = new List<string>();
             fields.Add("DISTINCT " + field);
@@ -130,7 +130,11 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             string on = "users.office=offices.id";
             List<Dictionary<string, string>> requestsResult = MySqlCommands.Select("users LEFT JOIN offices",
                 fields, on, where, orderBy, limit);
-            return requestsResult;
+            List<string> results = new List<string>();
+            if (requestsResult != null)
+                foreach (Dictionary<string, string> row in requestsResult)
+                    results.Add(row[field]);
+            return results;
         }
     }
 }

@@ -158,6 +158,8 @@
     <Content Include="App_Data\Pages\CommonQuestions.json" />
     <Content Include="App_Data\Pages\ApplyForRequest.json" />
     <Content Include="App_Data\Settings.json" />
+    <None Include="Properties\PublishProfiles\dif.pubxml" />
+    <None Include="Properties\PublishProfiles\idf.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -172,9 +174,11 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AdminGovExpController.cs" />
     <Compile Include="Controllers\GovExpController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RequestController.cs" />
+    <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="DataBase\DataBase.cs" />
     <Compile Include="DataBase\Managers\EmailManager.cs" />
     <Compile Include="DataBase\Managers\ExcelManager.cs" />
@@ -188,6 +192,8 @@
     <Compile Include="DataBase\MySqlConnector.cs" />
     <Compile Include="DataBase\TypeValidator.cs" />
     <Compile Include="Filters\AdminFilter.cs" />
+    <Compile Include="Filters\AdminGovExpFilter.cs" />
+    <Compile Include="Filters\BaseFilter.cs" />
     <Compile Include="Filters\GovExpFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -231,7 +237,9 @@
     <Folder Include="App_Data\Mashovs\" />
     <Folder Include="App_Data\RequestFiles\" />
     <Folder Include="Views\Account\" />
+    <Folder Include="Views\AdminGovExp\" />
     <Folder Include="Views\Request\" />
+    <Folder Include="Views\Settings\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
