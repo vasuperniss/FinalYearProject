@@ -145,7 +145,7 @@ namespace DigitalIsraelFund_System.Controllers
             newVals["momhee_id"] = momhee_id;
             RequestManager.Manager.Change(file_number, newVals);
             // redirect back to requests manage
-            Response.Redirect("/Admin/RequestsManage");
+            Response.Redirect("/AdminGovExp/RequestsManage");
         }
 
         [HttpGet]
@@ -237,7 +237,7 @@ namespace DigitalIsraelFund_System.Controllers
             // attempt to add or update the requests data base with the excel table
             RequestManager.Manager.AddOrUpdate(table, sett);
 
-            return RedirectToAction("RequestsManage");
+            return RedirectToAction("/AdminGovExp/RequestsManage");
         }
     }
 }

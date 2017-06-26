@@ -20,7 +20,7 @@
                 שם פרטי
             </td>
             <td style="padding:3px;font-weight:600;text-align:center;">
-                <input id="firstname" class="form-control" oninput="validateInput('firstname', 'Letters');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="text" />
+                <input id="firstname" class="form-control" oninput="validateInput('firstname', 'Letters');" style="border-right-color: #ff0000;border-right-width: 3px;height:100%;" type="text" />
             </td>
         </tr>
         <tr>
@@ -28,7 +28,7 @@
                 שם משפחה
             </td>
             <td style="padding:3px;font-weight:600;text-align:center;">
-                <input id="lastname" class="form-control" oninput="validateInput('lastname', 'Letters');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="text" />
+                <input id="lastname" class="form-control" oninput="validateInput('lastname', 'Letters');" style="border-right-color: #ff0000;border-right-width: 3px;height:100%;" type="text" />
             </td>
         </tr>
         <tr>
@@ -36,7 +36,7 @@
                 אימייל
             </td>
             <td style="padding:3px;font-weight:600;text-align:center;">
-                <input id="email" class="form-control" oninput="validateInput('email', 'Email');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="text" />
+                <input id="email" class="form-control" oninput="validateInput('email', 'Email');" style="border-right-color: #ff0000;border-right-width: 3px;height:100%;" type="text" />
             </td>
         </tr>
         <tr>
@@ -76,7 +76,7 @@
                 סיסמה
             </td>
             <td style="padding:3px;font-weight:600;text-align:center;">
-                <input id="password" class="form-control" oninput="validateInput('password', 'Password');" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" type="text" />
+                <input id="password" class="form-control" oninput="validateInput('password', 'Password');" style="border-right-color: #ff0000;border-right-width: 3px;height:100%;" type="text" />
             </td>
         </tr>
         <tr style="background-color:white;">
@@ -88,6 +88,16 @@
 </div>
 <script>
     function addGovExp() {
+        if (document.getElementById('firstname').style.borderRightColor == 'rgb(255, 0, 0)'
+            || document.getElementById('lastname').style.borderRightColor == 'rgb(255, 0, 0)'
+            || document.getElementById('email').style.borderRightColor == 'rgb(255, 0, 0)'
+            || document.getElementById('office').style.borderRightColor == 'rgb(255, 0, 0)'
+            || document.getElementById('password').style.borderRightColor == 'rgb(255, 0, 0)'
+            || document.getElementById('phone').style.borderRightColor == 'rgb(255, 0, 0)'
+            || document.getElementById('cell_phone').style.borderRightColor == 'rgb(255, 0, 0)') {
+            alert('לא כל השדות מולאו כנדרש');
+            return;
+        }
         var data = {
             "fname": $('#firstname').val(),
             "lname": $('#lastname').val(),

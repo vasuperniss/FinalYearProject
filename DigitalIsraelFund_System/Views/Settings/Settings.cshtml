@@ -16,7 +16,7 @@
                 </div>
             </td>
         </tr>
-        @using (Html.BeginForm("ChangeMashovVer", "Admin", FormMethod.Post, new { id = "mashovVersionForm", enctype = "multipart/form-data" }))
+        @using (Html.BeginForm("ChangeMashovVer", "Settings", FormMethod.Post, new { id = "mashovVersionForm", enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
             <tr>
@@ -37,7 +37,7 @@
                 </td>
             </tr>
         }
-        @using (Html.BeginForm("AddMashovFile", "Admin", FormMethod.Post, new { id = "mashovFileForm", enctype = "multipart/form-data" }))
+        @using (Html.BeginForm("AddMashovFile", "Settings", FormMethod.Post, new { id = "mashovFileForm", enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
             <tr>

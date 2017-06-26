@@ -61,15 +61,15 @@
                     <ul class="nav navbar-nav navbar-right">
                         @if (user.Type.ToLower() == "Admin".ToLower())
                         {
-                            <li class="navbar-right">@Html.ActionLink("ניהול בקשות", "RequestsManage", "Admin")</li>
+                            <li class="navbar-right">@Html.ActionLink("ניהול בקשות", "RequestsManage", "AdminGovExp")</li>
                             <li class="navbar-right">@Html.ActionLink("ניהול מומחים ממשלתיים", "MomhimManage", "Admin")</li>
                             <li class="navbar-right">@Html.ActionLink("משרדים", "OfficesManage", "Admin")</li>
                             <li class="navbar-right">@Html.ActionLink("ניהול בודקי מדען", "MadanMomhimManage", "Admin")</li>
-                            <li class="navbar-right">@Html.ActionLink("הגדרות", "Settings", "Admin")</li>
+                            <li class="navbar-right">@Html.ActionLink("הגדרות", "Settings", "Settings")</li>
                         }
                         else if (user.Type.ToLower() == "momhee".ToLower())
                         {
-                            <li class="navbar-right">@Html.ActionLink("ניהול בקשות", "RequestsManage", "Admin")</li>
+                            <li class="navbar-right">@Html.ActionLink("ניהול בקשות", "RequestsManage", "AdminGovExp")</li>
                             <li class="navbar-right">@Html.ActionLink("עדכון פרטים אישיים\\סיסמה", "EditSelf", "GovExp")</li>
                         }
                     </ul>

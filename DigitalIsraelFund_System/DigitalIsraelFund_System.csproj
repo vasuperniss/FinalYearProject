@@ -219,11 +219,11 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\GovExp\EditSelf.cshtml" />
     <Content Include="Views\Admin\OfficesManage.cshtml" />
-    <Content Include="Views\Admin\RequestsManage.cshtml" />
+    <Content Include="Views\AdminGovExp\RequestsManage.cshtml" />
     <Content Include="Views\GovExp\AddMashov.cshtml" />
     <Content Include="Views\Home\Form.cshtml" />
     <Content Include="Views\Home\PostedForm.cshtml" />
-    <Content Include="Views\Admin\Settings.cshtml" />
+    <Content Include="Views\Settings\Settings.cshtml" />
     <Content Include="Views\Admin\MadanMomhimManage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -237,9 +237,7 @@
     <Folder Include="App_Data\Mashovs\" />
     <Folder Include="App_Data\RequestFiles\" />
     <Folder Include="Views\Account\" />
-    <Folder Include="Views\AdminGovExp\" />
     <Folder Include="Views\Request\" />
-    <Folder Include="Views\Settings\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

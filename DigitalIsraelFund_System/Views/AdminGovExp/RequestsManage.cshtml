@@ -192,7 +192,7 @@
                         }
                         else
                         {
-                            @Html.ActionLink("צפה במשוב", "ViewMashov", "Admin", new { file_number = line["file_number"], form_ver = line["mashov_ver"] }, new { @class = "btn btn-primary btn-xs" })
+                            @Html.ActionLink("צפה במשוב", "ViewMashov", "AdminGovExp", new { file_number = line["file_number"], form_ver = line["mashov_ver"] }, new { @class = "btn btn-primary btn-xs" })
                         }
                     }
                     else if (type == "admin")
@@ -203,7 +203,7 @@
                         }
                         else
                         {
-                            @Html.ActionLink("צפה במשוב", "ViewMashov", "Admin", new { file_number = line["file_number"], form_ver = line["mashov_ver"] }, new { @class = "btn btn-primary btn-xs" })
+                            @Html.ActionLink("צפה במשוב", "ViewMashov", "AdminGovExp", new { file_number = line["file_number"], form_ver = line["mashov_ver"] }, new { @class = "btn btn-primary btn-xs" })
                         }
                     }
                 </td>
@@ -243,7 +243,7 @@
             "searchVal": document.getElementById('searchVal_' + field).value,
             "searchBy": field
         };
-        ajaxSbmt(data, '/Admin/SearchRequestBy',
+        ajaxSbmt(data, '/AdminGovExp/SearchRequestBy',
             function (response) {
                 var options = '';
                 $.each(response.List, function (index, item) {
@@ -256,6 +256,7 @@
 
     function searchAttempt(event) {
         if (event.keyCode == 13) {
+            document.getElementById('page').value = '1';
             reload();
         }
     }
@@ -282,7 +283,7 @@
         var add = "";
         if (momh_name != null)
             add = "&momhee_name=" + momh_name.value;
-        window.location.href = "/Admin/RequestsManage?isDesc=" + document.getElementById('isDesc').value +
+        window.location.href = "/AdminGovExp/RequestsManage?isDesc=" + document.getElementById('isDesc').value +
                         "&orderBy=" + document.getElementById('orderBy').value +
                         "&page=" + document.getElementById('page').value +
                         "&resultsPerPage=" + document.getElementById('resultsPerPage').value +
@@ -303,11 +304,11 @@
         var data = {
             "file_number": file_number
         };
-        ajaxSbmt(data, '/Admin/GetFilesForRequest',
+        ajaxSbmt(data, '/AdminGovExp/GetFilesForRequest',
             function (response) {
                 var options = '';
                 $.each(response.List, function (index, item) {
-                    options += '<li style="white-space:nowrap;"><a href="/Admin/DownloadFile?fileN=' + file_number + '&file=' + item + '">' + item + '</a></li>';
+                    options += '<li style="white-space:nowrap;"><a href="/AdminGovExp/DownloadFile?fileN=' + file_number + '&file=' + item + '">' + item + '</a></li>';
                 });
                 document.getElementById('files_list_' + file_number).innerHTML = options;
                 $('#files_show_btn_' + file_number).fadeOut(0);

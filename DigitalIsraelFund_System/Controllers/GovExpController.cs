@@ -3,9 +3,7 @@ using DigitalIsraelFund_System.DataBase.Managers;
 using DigitalIsraelFund_System.Filters;
 using DigitalIsraelFund_System.Models;
 using System.Collections.Generic;
-using System.IO;
 using System.Web.Mvc;
-using System.Xml;
 
 namespace DigitalIsraelFund_System.Controllers
 {
@@ -23,22 +21,25 @@ namespace DigitalIsraelFund_System.Controllers
         [HttpGet]
         public ActionResult AddMashov(string file_number)
         {
-            var dataFile = Server.MapPath("~/App_Data/Settings.json");
-            string json = System.IO.File.ReadAllText(@dataFile);
-            Settings sett = Settings.LoadJson(json);
-
+            // check if the momhee has this request
+            UserData user = (UserData)this.Session["user"];
+            if (!RequestManager.Manager.IsRequestAllowedForMomhee(user.Id, file_number))
+                Response.Redirect("AdminGovExp/RequestManage");
+            // add extra data of the request for the mashov page
             string where = "file_number='" + file_number + "'";
             ViewData["request"] = RequestManager.Manager.GetAllWhere(where, null, 1, 1)[0];
             ViewData["names"] = RequestManager.Manager.GetAllColNames();
 
+            // load the mashov form
+            Settings sett = Settings.GetSettings();
             var mashovFile = Server.MapPath("~/App_Data/Forms/MashovForm_v_" + sett.MashovVersion + ".xml");
             FormComponent mashovForm = FormManager.Manager.Load(mashovFile);
-
+            // add extra data for "pull from" fields
             ViewData["postToController"] = "../GovExp/AddMashov";
             ViewData["sendBtnTitle"] = "שלח משוב";
             ViewData["fileNumberRequest"] = file_number;
-            ViewData["nameGovExp"] = ((UserData)this.Session["user"]).Name;
-            ViewData["officeGovExp"] = ((UserData)this.Session["user"]).Office;
+            ViewData["nameGovExp"] = user.Name;
+            ViewData["officeGovExp"] = user.Office;
             ViewData["file_version"] = sett.MashovVersion;
             return View("../Home/Form", mashovForm.FormComponents[0]);
         }
@@ -46,13 +47,18 @@ namespace DigitalIsraelFund_System.Controllers
         [HttpPost]
         public ActionResult AddMashov(FormValues fTV)
         {
+            // check if the momhee has this request
+            UserData user = (UserData)this.Session["user"];
+            if (!RequestManager.Manager.IsRequestAllowedForMomhee(user.Id, fTV.Values["file_number"]))
+                Response.Redirect("AdminGovExp/RequestManage");
+            // save the mashov as Json file
             string jsonPath = "mashov_" + fTV.Values["file_number"];
             var dataFile = Server.MapPath("~/App_Data/Mashovs/" + jsonPath + ".json");
             string json = fTV.GetJson();
             System.IO.File.WriteAllText(@dataFile, json);
-
+            // link the mashov to the requests data base row of this request
             RequestManager.Manager.UpdateMashov(fTV.Values["file_number"], jsonPath, fTV.Values["file_version"]);
-            return RedirectToAction("../Admin/RequestsManage");
+            return RedirectToAction("../AdminGovExp/RequestsManage");
         }
 
         [HttpPost]
@@ -60,15 +66,18 @@ namespace DigitalIsraelFund_System.Controllers
         {
             TypeValidator v = TypeValidator.Validator;
             UserData user = (UserData)this.Session["user"];
+            // check if the user is not blocked from password related actions
             if (!UserManager.Manager.isUserAllowed(user.Email))
             {
                 return Json(new { Success = false, ErrMsg = "החשבון הנ\"ל חסום מפעולות למשך 5 דקות." }, JsonRequestBehavior.AllowGet);
             }
+            // check the passwords for type
             if (v.Validate(oldPass, "Password") && v.Validate(newPass, "Password"))
             {
                 UserData passTest = UserManager.Manager.GetIfCorrect(user.Email, oldPass);
                 if (passTest != null && passTest.Id == user.Id)
                 {
+                    // the old password is correct
                     Dictionary<string, string> newValues = new Dictionary<string, string>();
                     newValues["password"] = newPass;
                     bool isSuccess = UserManager.Manager.Change(user.Id, newValues);
@@ -76,6 +85,7 @@ namespace DigitalIsraelFund_System.Controllers
                 }
                 else
                 {
+                    // the old password is NOT correct
                     int badAttempts = UserManager.Manager.addIncorrectAttempt(user.Email);
                     bool isBlocked = !UserManager.Manager.isUserAllowed(user.Email);
                     if (!isBlocked)
@@ -98,28 +108,37 @@ namespace DigitalIsraelFund_System.Controllers
         }
 
         [HttpPost]
-        public JsonResult EditPersonalInfo(string password, string fname, string lname, string email, string office)
+        public JsonResult EditPersonalInfo(string password, string fname, string lname, string email,
+            string office, string phone, string cellPhone)
         {
             TypeValidator v = TypeValidator.Validator;
             UserData user = (UserData)this.Session["user"];
+            // check if the user is not blocked from password related actions
             if (!UserManager.Manager.isUserAllowed(user.Email))
             {
                 return Json(new { Success = false, ErrMsg = "החשבון הנ\"ל חסום מפעולות למשך 5 דקות." }, JsonRequestBehavior.AllowGet);
             }
+            // validate the fields for type
             if (v.Validate(password, "Password") && v.Validate(fname, "Letters")
-                && v.Validate(lname, "Letters") && v.Validate(email, "Email"))
+                && v.Validate(lname, "Letters") && v.Validate(email, "Email")
+                && v.Validate(office, "Integer") && v.Validate(phone, "Phone")
+                && v.Validate(cellPhone, "Phone"))
             {
                 UserData passTest = UserManager.Manager.GetIfCorrect(user.Email, password);
                 if (passTest != null && passTest.Id == user.Id)
                 {
+                    // the old password is correct
                     Dictionary<string, string> newValues = new Dictionary<string, string>();
                     newValues["fname"] = fname;
                     newValues["lname"] = lname;
                     newValues["email"] = email;
                     newValues["office"] = office;
+                    newValues["cell_phone"] = cellPhone;
+                    newValues["phone"] = phone;
                     bool isSuccess = UserManager.Manager.Change(user.Id, newValues);
                     if (isSuccess)
                     {
+                        // update the user in the Session
                         this.Session["user"] = UserManager.Manager.GetIfCorrect(email, password);
                     }
                     return Json(new { Success = isSuccess, ErrMsg = "שגיאה בשרת." }, JsonRequestBehavior.AllowGet);

@@ -32,11 +32,21 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             }
         }
 
+        internal bool IsRequestAllowedForMomhee(string momhee_id, string file_number)
+        {
+            List<string> fields = new List<string>();
+            fields.Add("file_number");
+            var table = MySqlCommands.Select("requests", fields, null,
+                "file_number='" + file_number + "' and momhee_id='" + momhee_id + "'",
+                null, null);
+            return table != null && table.Count != 0;
+        }
+
         public bool UpdateMashov(string file_number, string json_path, string version)
         {
-            string date = System.DateTime.Now.Date.Year + "/"
-                + System.DateTime.Now.Date.Month + "/"
-                + System.DateTime.Now.Date.Day;
+            string date = DateTime.Now.Date.Year + "/"
+                + DateTime.Now.Date.Month + "/"
+                + DateTime.Now.Date.Day;
             var newValues = new Dictionary<string, string>();
             newValues["mashov"] = json_path;
             newValues["mashov_date"] = date;

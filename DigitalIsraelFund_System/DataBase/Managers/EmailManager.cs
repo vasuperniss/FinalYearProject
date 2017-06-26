@@ -16,8 +16,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
 
         public void CheckForNewData()
         {
-            Settings sett = Settings.LoadJson(System.IO.File.ReadAllText(
-                HostingEnvironment.MapPath("~/App_Data/Settings.json")));
+            Settings sett = Settings.GetSettings();
 
             string lastUID;
             string lastSeenUID = (long.Parse(sett.LastUIDSeen) + 1).ToString();
@@ -56,9 +55,11 @@ namespace DigitalIsraelFund_System.DataBase.Managers
                 }
             }
 
-            sett.LastUIDSeen = lastUID;
-            var json = sett.GetJson();
-            System.IO.File.WriteAllText(HostingEnvironment.MapPath("~/App_Data/Settings.json"), json);
+            if (sett.LastUIDSeen != lastUID)
+            {
+                sett.LastUIDSeen = lastUID;
+                sett.Save();
+            }
         }
     }
 }

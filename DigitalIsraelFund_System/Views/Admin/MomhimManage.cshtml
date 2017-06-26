@@ -175,7 +175,7 @@
                     <div id="cell_phone_@line["id"]" contenteditable="false" oninput="validateText('cell_phone_@line["id"]','Phone');" class="fakeInput">@line["cell_phone"]</div>
                 </td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">
-                    @Html.ActionLink("בקשות מקושרות", "RequestsManage", "Admin", new { momhee_name = line["fname"] + " " + line["lname"] }, new { @class = "btn btn-info btn-xs" })
+                    @Html.ActionLink("בקשות מקושרות", "RequestsManage", "AdminGovExp", new { momhee_name = line["fname"] + " " + line["lname"] }, new { @class = "btn btn-info btn-xs" })
                 </td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">
                     <button id="edit_@line["id"]" class="btn btn-warning btn-xs" onclick="showEdit('@line["id"]');">עריכה</button>
@@ -262,6 +262,7 @@
 
     function searchAttempt(event) {
         if (event.keyCode == 13) {
+            document.getElementById('page').value = '1';
             reload();
         }
     }
