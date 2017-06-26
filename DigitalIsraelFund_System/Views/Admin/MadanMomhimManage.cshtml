@@ -84,18 +84,15 @@
                 }
             </select>
             &nbsp;&nbsp;
-            @if (Model.NumPages <= 7)
+            @for (int i = 1; i <= Model.NumPages; ++i)
             {
-                for (int i = 1; i <= Model.NumPages; ++i)
+                if (Model.Page != i)
                 {
-                    if (Model.Page != i)
-                    {
-                        <a href="#" style="font-size:small;" onclick="changePage(@i);">@i</a><font>&nbsp;</font>
-                    }
-                    else
-                    {
-                        <font style="font-size:small;color:darkgrey;">@i</font><font>&nbsp;</font>
-                    }
+                    <a href="#" style="font-size:small;" onclick="changePage(@i);">@i</a><font>&nbsp;</font>
+                }
+                else
+                {
+                    <font style="font-size:small;color:darkgrey;">@i</font><font>&nbsp;</font>
                 }
             }
         </td>
