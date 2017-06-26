@@ -151,7 +151,7 @@
             @{
                 var dict = new Dictionary<string, string>();
                 dict["אין"] = "אין";
-                dict["בתהליך"] = "בתהליך";
+                dict["בתהליך"] = "temp_";
                 dict["מוגש"] = "mashov_";
             }
             @SearchAbleCol("mashov", "משוב מומחה", true, true, dict)
@@ -179,6 +179,11 @@
                             else
                             {
                                 @line["momhee_name"]
+                                if (line["mashov"] == "אין")
+                                {
+                                    <text>&nbsp;</text>
+                                    @Html.ActionLink("החלף", "MomhimManage", "Admin", new { file_number = line["file_number"] }, new { @class = "btn btn-warning btn-xs" })
+                                }
                             }
                         }
                     </td>
@@ -186,24 +191,32 @@
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">
                     @if (type == "momhee")
                     {
-                        if (!line["mashov"].Contains("mashov_"))
+                        if (line["mashov"].Contains("mashov_"))
                         {
-                            @Html.ActionLink("צרף משוב", "AddMashov", "GovExp", new { file_number = line["file_number"] }, new { @class = "btn btn-warning btn-xs" })
+                            @Html.ActionLink("צפה במשוב", "ViewMashov", "AdminGovExp", new { file_number = line["file_number"], form_ver = line["mashov_ver"] }, new { @class = "btn btn-primary btn-xs" })
+                        }
+                        else if (line["mashov"].Contains("temp_"))
+                        {
+                            @Html.ActionLink("המשך משוב", "AddMashov", "GovExp", new { file_number = line["file_number"], form_ver = line["mashov_ver"], isContinue = "true" }, new { @class = "btn btn-warning btn-xs" })
                         }
                         else
                         {
-                            @Html.ActionLink("צפה במשוב", "ViewMashov", "AdminGovExp", new { file_number = line["file_number"], form_ver = line["mashov_ver"] }, new { @class = "btn btn-primary btn-xs" })
+                            @Html.ActionLink("צרף משוב", "AddMashov", "GovExp", new { file_number = line["file_number"], isContinue = "false" }, new { @class = "btn btn-warning btn-xs" })
                         }
                     }
                     else if (type == "admin")
                     {
-                        if (!line["mashov"].Contains("mashov_"))
+                        if (line["mashov"].Contains("mashov_"))
                         {
-                            @line["mashov"]
+                            @Html.ActionLink("צפה במשוב", "ViewMashov", "AdminGovExp", new { file_number = line["file_number"], form_ver = line["mashov_ver"] }, new { @class = "btn btn-primary btn-xs" })
+                        }
+                        else if (line["mashov"].Contains("temp_"))
+                        {
+                            <text>בתהליך</text>
                         }
                         else
                         {
-                            @Html.ActionLink("צפה במשוב", "ViewMashov", "AdminGovExp", new { file_number = line["file_number"], form_ver = line["mashov_ver"] }, new { @class = "btn btn-primary btn-xs" })
+                            @line["mashov"]
                         }
                     }
                 </td>

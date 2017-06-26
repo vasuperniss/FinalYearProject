@@ -1,6 +1,8 @@
 ﻿using AE.Net.Mail;
 using DigitalIsraelFund_System.Models;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Mail;
 using System.Text.RegularExpressions;
 using System.Web.Hosting;
 
@@ -27,17 +29,17 @@ namespace DigitalIsraelFund_System.DataBase.Managers
 
                 lastUID = ic.GetMessage(ic.GetMessageCount() - 1, true).Uid;
 
-                MailMessage[] mm = ic.GetMessages(lastUID, lastSeenUID, true, false, false);
+                AE.Net.Mail.MailMessage[] mm = ic.GetMessages(lastUID, lastSeenUID, true, false, false);
 
-                foreach (MailMessage m in mm)
+                foreach (AE.Net.Mail.MailMessage m in mm)
                 {
                     string title = m.Subject;
-                    ICollection<Attachment> attachments = m.Attachments;
+                    ICollection<AE.Net.Mail.Attachment> attachments = m.Attachments;
                     var request_id = Regex.Match(title, @"[0-9]+").Value;
                     if (request_id != null && request_id != "" && attachments.Count > 0)
                     {
                         // a file for a request
-                        foreach (Attachment att in attachments)
+                        foreach (AE.Net.Mail.Attachment att in attachments)
                         {
                             var saveTo = HostingEnvironment.MapPath("~/App_Data/RequestFiles/" + request_id + "_" + att.Filename);
                             att.Save(saveTo);
@@ -47,17 +49,21 @@ namespace DigitalIsraelFund_System.DataBase.Managers
                             MySqlCommands.Insert("files", values);
                         }
                     }
-                    else if ((request_id == null || request_id == "") && attachments.Count == 1)
+                    else if ((request_id == null || request_id == "") && attachments.Count == 1
+                        && title.Contains("בקשות"))
                     {
                         // a new requests excel
+                        var file = new List<AE.Net.Mail.Attachment>(attachments)[0];
                         // save the excel file to app data
-                        var file = new List<Attachment>(attachments)[0];
-                        var saveTo = HostingEnvironment.MapPath("~/App_Data/Excels/" + file.Filename);
-                        file.Save(saveTo);
-                        // read the excel
-                        var table = ExcelManager.Manager.LoadTableFromExcel(saveTo);
-                        // attempt to add or update the requests data base with the excel table
-                        RequestManager.Manager.AddOrUpdate(table, sett);
+                        if (file.Filename.EndsWith(".xls") || file.Filename.EndsWith(".xlsx"))
+                        {
+                            var saveTo = HostingEnvironment.MapPath("~/App_Data/Excels/" + file.Filename);
+                            file.Save(saveTo);
+                            // read the excel
+                            var table = ExcelManager.Manager.LoadTableFromExcel(saveTo);
+                            // attempt to add or update the requests data base with the excel table
+                            RequestManager.Manager.AddOrUpdate(table, sett);
+                        }
                     }
                 }
             }
@@ -66,6 +72,39 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             {
                 sett.LastUIDSeen = lastUID;
                 sett.Save();
+            }
+        }
+
+        public void SendMail(string email, string title, string content)
+        {
+            var fromAddr = new MailAddress("israel.digital.system@gmail.com");
+            var toAddr = new MailAddress(email);
+
+            const string fromPass = "wwe123654789";
+
+            var smtp = new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromAddr.Address, fromPass)
+            };
+            using (var msg = new System.Net.Mail.MailMessage(fromAddr, toAddr)
+            {
+                Subject = title,
+                Body = content
+            })
+            {
+                try
+                {
+                    smtp.Send(msg);
+                }
+                catch
+                {
+
+                }
             }
         }
     }

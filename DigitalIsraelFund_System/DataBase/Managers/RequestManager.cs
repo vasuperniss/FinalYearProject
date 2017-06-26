@@ -98,7 +98,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
 
         public int Count(string where)
         {
-            return MySqlCommands.Count("requests", where);
+            return MySqlCommands.Count("requests LEFT JOIN users", where, "users.id=requests.momhee_id");
         }
 
         public bool Change(string file_number, Dictionary<string, string> newValues)

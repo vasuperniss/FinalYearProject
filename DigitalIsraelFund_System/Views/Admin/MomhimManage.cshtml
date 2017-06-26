@@ -149,8 +149,8 @@
                         else
                         {
                             @Html.ActionLink("צרף", "JoinMomheeAndRequest", "Admin",
-                           new { file_number = Request.Params["file_number"], momhee_id = line["id"]},
-                           new { @class = "btn btn-primary btn-xs" })
+            new { file_number = Request.Params["file_number"], momhee_id = line["id"], momhee_email = line["email"] },
+            new { @class = "btn btn-primary btn-xs" })
                         }
                     }
                 </td>
@@ -179,7 +179,7 @@
                     <button id="edit_@line["id"]" class="btn btn-warning btn-xs" onclick="showEdit('@line["id"]');">עריכה</button>
                 </td>
             </tr>
-        }
+                        }
         @numbersRow()
     </table>
 </div>
@@ -283,14 +283,24 @@
     }
 
     function reload() {
+        var addition = "";
+        @{
+            var add = "";
+            if (Request.Params["file_number"] != null && Request.Params["file_number"] != "")
+            {
+                add = "file_number=" + Request.Params["file_number"];
+            }
+        }
+        var addition = "@add";
         window.location.href = "/Admin/MomhimManage?isDesc=" + document.getElementById('isDesc').value +
-                        "&orderBy=" + document.getElementById('orderBy').value +
-                        "&page=" + document.getElementById('page').value +
-                        "&resultsPerPage=" + document.getElementById('resultsPerPage').value +
-                        "&fname=" + document.getElementById('searchVal_fname').value +
-                        "&lname=" + document.getElementById('searchVal_lname').value +
-                        "&office_name=" + document.getElementById('searchVal_office_name').value +
-                        "&email=" + document.getElementById('searchVal_email').value;
+        "&orderBy=" + document.getElementById('orderBy').value +
+        "&page=" + document.getElementById('page').value +
+        "&resultsPerPage=" + document.getElementById('resultsPerPage').value +
+        "&fname=" + document.getElementById('searchVal_fname').value +
+        "&lname=" + document.getElementById('searchVal_lname').value +
+        "&office_name=" + document.getElementById('searchVal_office_name').value +
+        "&email=" + document.getElementById('searchVal_email').value
+        + "&" + addition;
     }
 
 </script>

@@ -259,6 +259,8 @@ var pullFrom = w.Properties.ContainsKey("pullFrom") ? w.Properties["pullFrom"] :
 var value = pullFrom != null ? ViewData[pullFrom] : "";
 var readOnly = w.Properties.ContainsKey("readOnly");
 var readOnlyString = readOnly ? "readonly" : "";
+var temps = (Dictionary<string, string>)ViewData["temp"];
+value = (string)value == "" && temps.ContainsKey(id) ? temps[id] : value;
 
 if (w.Properties["type"] == "radio")
 {
@@ -278,7 +280,7 @@ else if (w.Properties["type"] == "dropdown")
         <select form="textForm" class="form-control" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" id="@id" name="Values[@id]"
                 onchange="validate('@id',@required,'@range', false);">
             @foreach (FormComponent option in w.FormComponents)
-            {
+{
                 <option value="@option.Text">@option.Text</option>
             }
         </select>
@@ -286,8 +288,8 @@ else if (w.Properties["type"] == "dropdown")
 else if (w.Properties["type"] == "multiline")
 {
         <textarea form="textForm" class="form-control" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;min-width: 100%;"
-                  rows="6" id="@id" name="Values[@id]" value=""
-                  oninput="validate('@id',@required,'@range', false);"></textarea>
+                  rows="6" id="@id" name="Values[@id]"
+                  oninput="validate('@id',@required,'@range', false);">@value</textarea>
 }
 else if (w.Properties["type"] == "file")
 {
@@ -340,6 +342,7 @@ fields.Add(id + "|" + required + "|" + range);
         @Html.AntiForgeryToken()
         <div class="tab">
             <input form="textForm" name="Values[file_version]" type="hidden" value="@ViewData["file_version"]" />
+            <input form="textForm" id="isSave" name="Values[isSave]" type="hidden" value="false" />
             @for (int p = 0; p < pages.Count; ++p)
             {
                 <button type="button" class="tablinks" onclick="openTab(event, 't-@p')" id='t-b-@p'>
@@ -348,6 +351,9 @@ fields.Add(id + "|" + required + "|" + range);
             }
             <button type="button" onclick="validateAndSubmit();" id='sumbitBtn' style="background-color:lightgreen;float:left;border-top-right-radius:10px;">
                 <div style="padding:8px;padding-top:12px;padding-bottom:2px;">@ViewData["sendBtnTitle"]</div>
+            </button>
+            <button type="button" onclick="saveSubmit();" id='saveBtn' style="background-color:lightblue;float:left;border-top-right-radius:10px;">
+                <div style="padding:8px;padding-top:12px;padding-bottom:2px;">שמור משוב</div>
             </button>
         </div>
         for (int p = 0; p < pages.Count; ++p)
@@ -472,5 +478,10 @@ fields.Add(id + "|" + required + "|" + range);
         } else {
             alert('לא כל השדות מולאו כנדרש, יש ' + numErrs + ' שדות שלא מולאו כנדרש');
         }
+    }
+
+    function saveSubmit() {
+        document.getElementById('isSave').value = "true";
+        $('#textForm').submit();
     }
 </script>

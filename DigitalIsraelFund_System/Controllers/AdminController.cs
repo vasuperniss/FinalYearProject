@@ -111,8 +111,16 @@ namespace DigitalIsraelFund_System.Controllers
                 || !vald.Validate(email, "Email") || !vald.Validate(office, "Integer")
                 || !vald.Validate(phone, "Phone") || !vald.Validate(cellPhone, "Phone"))
                 return Json(new { Success = false, ErrMsg = "השדות לא בפורמט הנכון" }, JsonRequestBehavior.AllowGet);
+            // attempt to mail the momhee
+            var success = UserManager.Manager.Add(email, password, fname, lname, "momhee", office, phone, cellPhone);
+            if (success)
+            {
+                var title = "צורפת למערכת של ישראל דיגיטלית";
+                var body = "הסיסמה הראשונית שלך היא : " + password;
+                EmailManager.Manager.SendMail(email, title, body);
+            }
             // attempt to add the momhee to the data base
-            return Json(new { Success = UserManager.Manager.Add(email, password, fname, lname, "momhee", office, phone, cellPhone) },
+            return Json(new { Success = success },
                 JsonRequestBehavior.AllowGet);
         }
 
@@ -134,7 +142,7 @@ namespace DigitalIsraelFund_System.Controllers
         }
 
         [HttpGet]
-        public void JoinMomheeAndRequest(string file_number, string momhee_id)
+        public void JoinMomheeAndRequest(string file_number, string momhee_id, string momhee_email)
         {
             var vald = TypeValidator.Validator;
             // validate all fields
@@ -144,6 +152,7 @@ namespace DigitalIsraelFund_System.Controllers
             var newVals = new Dictionary<string, string>();
             newVals["momhee_id"] = momhee_id;
             RequestManager.Manager.Change(file_number, newVals);
+            EmailManager.Manager.SendMail(momhee_email, "שובצת לבקשה חדשה", "התבצע שיבוץ שלך לבקשה מס' " + file_number);
             // redirect back to requests manage
             Response.Redirect("/AdminGovExp/RequestsManage");
         }
@@ -188,7 +197,7 @@ namespace DigitalIsraelFund_System.Controllers
             if (cellphone != null && !cellphone.Contains("'")) where += " and cellphone LIKE '%" + cellphone + "%'";
             // load the table and the number of rows
             var table = MadaanMomhimManager.Manager.GetAllWhere(where, orderBy + isDescString, pageNum, resultsPerPageNum);
-            var count = RequestManager.Manager.Count(where);
+            var count = MadaanMomhimManager.Manager.Count(where);
             return View(new TableResult { Table = table, NumPages = (int)System.Math.Ceiling((double)count / resultsPerPageNum),
                 isDesc = isDescBool, Page = pageNum,  ResultsPerPage = resultsPerPageNum, OrderBy = orderBy });
         }

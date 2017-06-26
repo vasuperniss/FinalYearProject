@@ -72,10 +72,13 @@ namespace DigitalIsraelFund_System.DataBase
             return MySqlConnector.Connector.RunQueryCommand(query);
         }
 
-        public static int Count(string tableName, string where)
+        public static int Count(string tableName, string where, string on)
         {
             var whereQ = where == null || where == "" ? "" : " WHERE " + where;
-            string query = "SELECT COUNT(*) AS total FROM " + tableName + whereQ;
+            string query = "SELECT COUNT(*) AS total FROM " + tableName;
+            if (on != null && on != "")
+                query += " ON " + on;
+            query += whereQ;
             return int.Parse(MySqlConnector.Connector.RunQueryCommand(query)[0]["total"]);
         }
     }

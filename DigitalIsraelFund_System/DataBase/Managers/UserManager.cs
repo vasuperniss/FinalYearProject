@@ -102,7 +102,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
 
         public int Count(string where)
         {
-            return MySqlCommands.Count("users", where);
+            return MySqlCommands.Count("users LEFT JOIN offices", where, "users.office=offices.id");
         }
 
         public List<Dictionary<string, string>> GetAllWhere(string where, string orderBy, int page, int resultsPerPage)

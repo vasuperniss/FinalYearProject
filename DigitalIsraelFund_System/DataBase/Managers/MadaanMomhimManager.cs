@@ -1,5 +1,6 @@
 ﻿using DigitalIsraelFund_System.Models;
 using System.Collections.Generic;
+using System;
 
 namespace DigitalIsraelFund_System.DataBase.Managers
 {
@@ -52,14 +53,23 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             return requestsResult;
         }
 
-        public List<Dictionary<string, string>> GetFieldWhere(string field, string where, string orderBy, int page, int resultsPerPage)
+        public List<string> GetFieldWhere(string field, string where, string orderBy, int page, int resultsPerPage)
         {
             List<string> fields = new List<string>();
             fields.Add("DISTINCT " + field);
             string limit = ((page - 1) * resultsPerPage) + "," + resultsPerPage;
             List<Dictionary<string, string>> requestsResult = MySqlCommands.Select("madaan_testers",
                 fields, null, where, orderBy, limit);
-            return requestsResult;
+            List<string> results = new List<string>();
+            if (requestsResult != null)
+                foreach (Dictionary<string, string> row in requestsResult)
+                    results.Add(row[field]);
+            return results;
+        }
+
+        public int Count(string where)
+        {
+            return MySqlCommands.Count("madaan_testers", where, null);
         }
     }
 }

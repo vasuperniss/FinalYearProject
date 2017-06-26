@@ -19,7 +19,7 @@ namespace DigitalIsraelFund_System.Controllers
         }
 
         [HttpGet]
-        public ActionResult AddMashov(string file_number)
+        public ActionResult AddMashov(string file_number, string isContinue, string form_ver)
         {
             // check if the momhee has this request
             UserData user = (UserData)this.Session["user"];
@@ -30,10 +30,7 @@ namespace DigitalIsraelFund_System.Controllers
             ViewData["request"] = RequestManager.Manager.GetAllWhere(where, null, 1, 1)[0];
             ViewData["names"] = RequestManager.Manager.GetAllColNames();
 
-            // load the mashov form
             Settings sett = Settings.GetSettings();
-            var mashovFile = Server.MapPath("~/App_Data/Forms/MashovForm_v_" + sett.MashovVersion + ".xml");
-            FormComponent mashovForm = FormManager.Manager.Load(mashovFile);
             // add extra data for "pull from" fields
             ViewData["postToController"] = "../GovExp/AddMashov";
             ViewData["sendBtnTitle"] = "שלח משוב";
@@ -41,6 +38,21 @@ namespace DigitalIsraelFund_System.Controllers
             ViewData["nameGovExp"] = user.Name;
             ViewData["officeGovExp"] = user.Office;
             ViewData["file_version"] = sett.MashovVersion;
+            ViewData["temp"] = new Dictionary<string, string>();
+
+            // load the mashov form
+            var mashovFile = Server.MapPath("~/App_Data/Forms/MashovForm_v_" + sett.MashovVersion + ".xml");
+            // check if continue
+            if (isContinue != null && isContinue.ToLower() == "true")
+            {
+                // load the save file
+                var dataFile = Server.MapPath("~/App_Data/Mashovs/temp_" + file_number + ".json");
+                string json = System.IO.File.ReadAllText(@dataFile);
+                ViewData["temp"] = FormValues.LoadJson(json).Values;
+                mashovFile = Server.MapPath("~/App_Data/Forms/MashovForm_v_" + form_ver + ".xml");
+            }
+            FormComponent mashovForm = FormManager.Manager.Load(mashovFile);
+
             return View("../Home/Form", mashovForm.FormComponents[0]);
         }
 
@@ -51,8 +63,13 @@ namespace DigitalIsraelFund_System.Controllers
             UserData user = (UserData)this.Session["user"];
             if (!RequestManager.Manager.IsRequestAllowedForMomhee(user.Id, fTV.Values["file_number"]))
                 Response.Redirect("AdminGovExp/RequestManage");
+
+            // check if submit or save
+            var isSubmit = !fTV.Values.ContainsKey("isSave") || fTV.Values["isSave"] == "false" ? true : false;
+
             // save the mashov as Json file
-            string jsonPath = "mashov_" + fTV.Values["file_number"];
+            string jsonPath = isSubmit ? "mashov_" : "temp_";
+            jsonPath += fTV.Values["file_number"];
             var dataFile = Server.MapPath("~/App_Data/Mashovs/" + jsonPath + ".json");
             string json = fTV.GetJson();
             System.IO.File.WriteAllText(@dataFile, json);
