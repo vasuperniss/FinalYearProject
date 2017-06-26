@@ -12,13 +12,13 @@
           <text>שם החברה</text>
         </col>
         <col>
-          <input id="company_name" type="text" required="true" width="250"></input>
+          <input id="company_name" type="text" required="true" range="Letters" width="250"></input>
         </col>
         <col color="#FDEBD0">
           <text>מספר תיק</text>
         </col>
         <col>
-          <input id="file_number" type="text" required="true" width="100" pullFrom="fileNumberRequest" readOnly="true"></input>
+          <input id="file_number" type="text" required="true" range="Integer" width="100" pullFrom="fileNumberRequest" readOnly="true"></input>
         </col>
       </row>
       <row>
@@ -26,7 +26,7 @@
           <text>שם היזם</text>
         </col>
         <col>
-          <input id="achap_name" type="text" required="true" width="250"></input>
+          <input id="achap_name" type="text" required="true" range="Letters" width="250"></input>
         </col>
         <col color="#FDEBD0">
           <text>תוצר המיזם</text>
@@ -44,7 +44,7 @@
           <text>נושא התוכנית</text>
         </col>
         <col span="3">
-          <input id="program_theme" type="multiline" required="true"></input>
+          <input id="program_theme" type="multiline" range="Letters" required="true"></input>
         </col>
       </row>
     </table>
@@ -59,7 +59,7 @@
           <text>שם המשרד</text>
         </col>
         <col span="3">
-          <input id="misrad_name" type="text" required="true" pullFrom="officeGovExp" readOnly="true"></input>
+          <input id="misrad_name" type="text" required="true" range="Letters" pullFrom="officeGovExp" readOnly="true"></input>
         </col>
       </row>
       <row>
@@ -67,7 +67,7 @@
           <text>שם המומחה</text>
         </col>
         <col>
-          <input id="gov_exp_name" type="text" required="true" pullFrom="nameGovExp" readOnly="true"></input>
+          <input id="gov_exp_name" type="text" required="true" range="Letters" pullFrom="nameGovExp" readOnly="true"></input>
         </col>
         <col color="#FDEBD0">
           <text>תאריך קבלת הבקשה</text>
@@ -81,7 +81,7 @@
           <text>תפקיד</text>
         </col>
         <col>
-          <input id="gov_exp_job" type="text" required="true"></input>
+          <input id="gov_exp_job" type="text" range="Letters" required="true"></input>
         </col>
         <col color="#FDEBD0">
           <text>תאריך הגשת חוות</text>
@@ -104,7 +104,7 @@
       </row>
       <row>
         <col>
-          <input id="long1" type="multiline" required="true"></input>
+          <input id="long1" type="multiline" range="Letters" required="true"></input>
         </col>
       </row>
     </table>
@@ -116,7 +116,7 @@
       </row>
       <row>
         <col>
-          <input id="long2" type="multiline" required="true"></input>
+          <input id="long2" type="multiline" range="Letters" required="true"></input>
         </col>
       </row>
     </table>
@@ -128,7 +128,7 @@
       </row>
       <row>
         <col>
-          <input id="long3" type="multiline" required="true"></input>
+          <input id="long3" type="multiline" range="Letters" required="true"></input>
         </col>
       </row>
     </table>
@@ -140,7 +140,7 @@
       </row>
       <row>
         <col>
-          <input id="long4" type="multiline" required="true"></input>
+          <input id="long4" type="multiline" range="Letters" required="true"></input>
         </col>
       </row>
     </table>
@@ -152,7 +152,7 @@
       </row>
       <row>
         <col>
-          <input id="long5" type="multiline" required="true"></input>
+          <input id="long5" type="multiline" range="Letters" required="true"></input>
         </col>
       </row>
     </table>
@@ -164,7 +164,7 @@
       </row>
       <row>
         <col>
-          <input id="long6" type="multiline" required="true"></input>
+          <input id="long6" type="multiline" range="Letters" required="true"></input>
         </col>
       </row>
     </table>
@@ -177,7 +177,7 @@
       </row>
       <row>
         <col>
-          <input id="long7" type="multiline" required="true"></input>
+          <input id="long7" type="multiline" range="Letters" required="true"></input>
         </col>
       </row>
     </table>
@@ -189,7 +189,7 @@
       </row>
       <row>
         <col>
-          <input id="long8" type="multiline" required="true"></input>
+          <input id="long8" type="multiline" range="Letters" required="true"></input>
         </col>
       </row>
     </table>
@@ -208,8 +208,10 @@
           <text>תמצית חוות הדעת</text>
         </col>
         <col color="yellow">
-          <input id="grade" type="dropdown" required="true">
-            <option>ציון</option>
+          <text>ציון</text>
+        </col>
+        <col color="yellow">
+          <input id="grade" type="dropdown" range="Real" required="true">
             <option>1.0</option>
             <option>1.1</option>
             <option>1.2</option>
@@ -255,7 +257,7 @@
         </col>
       </row>
       <row>
-        <col span="2">
+        <col span="3">
           <input id="tamzit" type="multiline" required="true"></input>
         </col>
       </row>

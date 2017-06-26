@@ -10,7 +10,8 @@
         border-radius: 4px;
         border-right-color: #38ACEC;
         border-right-width: 0px;
-        min-width: 50px;
+        text-align: center;
+        width: 100px;
         display: inline-block;
         white-space: nowrap;
     }
@@ -157,22 +158,22 @@
                     }
                 </td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">
-                    <div id="fname_@line["id"]" contenteditable="false" oninput="validateText('fname_@line["id"]','Letters');" class="fakeInput">@line["fname"]</div>
+                    <input id="fname_@line["id"]" oninput="validateInput('fname_@line["id"]','Letters');" class="fakeInput" readonly value="@line["fname"]" />
                 </td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">
-                    <div id="lname_@line["id"]" contenteditable="false" oninput="validateText('lname_@line["id"]','Letters');" class="fakeInput">@line["lname"]</div>
+                    <input id="lname_@line["id"]" oninput="validateInput('lname_@line["id"]','Letters');" class="fakeInput" readonly value="@line["lname"]" />
                 </td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">
-                    <div id="email_@line["id"]" contenteditable="false" oninput="validateText('email_@line["id"]','Email');" class="fakeInput">@line["email"]</div>
+                    <input id="email_@line["id"]" oninput="validateInput('email_@line["id"]','Email');" style="width:180px;" class="fakeInput" readonly value="@line["email"]" />
                 </td>
-                <td style="padding:3px;border: 0px solid #888;text-align:center;">
+                <td style="padding:3px;border: 0px solid #888;text-align:center;white-space:nowrap;">
                     <div id="office_name_div_@line["id"]">@line["office_name"]</div>
                 </td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">
-                    <div id="phone_@line["id"]" contenteditable="false" oninput="validateText('phone_@line["id"]','Phone');" class="fakeInput">@line["phone"]</div>
+                    <input id="phone_@line["id"]" oninput="validateInput('phone_@line["id"]','Phone');" class="fakeInput" readonly value="@line["phone"]" />
                 </td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">
-                    <div id="cell_phone_@line["id"]" contenteditable="false" oninput="validateText('cell_phone_@line["id"]','Phone');" class="fakeInput">@line["cell_phone"]</div>
+                    <input id="cell_phone_@line["id"]" oninput="validateInput('cell_phone_@line["id"]','Phone');" class="fakeInput" readonly value="@line["cell_phone"]" />
                 </td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">
                     @Html.ActionLink("בקשות מקושרות", "RequestsManage", "AdminGovExp", new { momhee_name = line["fname"] + " " + line["lname"] }, new { @class = "btn btn-info btn-xs" })
@@ -195,7 +196,7 @@
             for (i = 0; i < fields.length; ++i) {
                 document.getElementById(fields[i] + user_id).style.borderWidth = '1px';
                 document.getElementById(fields[i] + user_id).style.borderRightWidth = '3px';
-                document.getElementById(fields[i] + user_id).contentEditable = true;
+                document.getElementById(fields[i] + user_id).removeAttribute('readonly');
             }
 
             selectHTML = document.getElementById('officesCopy').innerHTML;
@@ -218,12 +219,12 @@
         } else {
             var data = {
                 "id" : user_id,
-                "fname": document.getElementById('fname_' + user_id).innerText,
-                "lname": document.getElementById('lname_' + user_id).innerText,
-                "email": document.getElementById('email_' + user_id).innerText,
+                "fname": document.getElementById('fname_' + user_id).value,
+                "lname": document.getElementById('lname_' + user_id).value,
+                "email": document.getElementById('email_' + user_id).value,
                 "office": document.getElementById('office_' + user_id).value,
-                "phone": document.getElementById('phone_' + user_id).innerText,
-                "cellPhone": document.getElementById('cell_phone_' + user_id).innerText
+                "phone": document.getElementById('phone_' + user_id).value,
+                "cellPhone": document.getElementById('cell_phone_' + user_id).value
             };
             ajaxSbmt(data, '/Admin/EditMomhee',
                 function (response) {

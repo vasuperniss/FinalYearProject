@@ -112,7 +112,11 @@ var weight = w.Properties.ContainsKey("weight") ? w.Properties["weight"] : "600"
 var size = w.Properties.ContainsKey("size") ? w.Properties["size"] : "small";
 var color = w.Properties.ContainsKey("color") ? w.Properties["color"] : "#333333";
 var margin = w.Properties.ContainsKey("margin") ? w.Properties["margin"] + "px" : "0px";
+var fillOnly = w.Properties.ContainsKey("fillOnly") ? w.Properties["fillOnly"] : "true";
+if (fillOnly == "true")
+{
     <div style="font-size:@size; font-weight:@weight; color:@color; margin:@margin;">@w.Text</div>
+    }
 }
 
 @helper DrawTable(FormComponent w)

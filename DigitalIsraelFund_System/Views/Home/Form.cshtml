@@ -1,7 +1,7 @@
 ﻿@model DigitalIsraelFund_System.Models.FormComponent
 @using DigitalIsraelFund_System.Models
 @{
-    ViewBag.Title = "הגשת בקשה";
+    ViewBag.Title = "הגשת טופס";
 
     FormComponent root = Model;
     List<FormComponent> pages = root.FormComponents;
@@ -276,7 +276,7 @@ else if (w.Properties["type"] == "checkbox")
 else if (w.Properties["type"] == "dropdown")
 {
         <select form="textForm" class="form-control" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" id="@id" name="Values[@id]"
-                oninput="validate('@id',@required,'@range', false);">
+                onchange="validate('@id',@required,'@range', false);">
             @foreach (FormComponent option in w.FormComponents)
             {
                 <option value="@option.Text">@option.Text</option>
