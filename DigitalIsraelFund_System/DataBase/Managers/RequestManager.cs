@@ -12,22 +12,29 @@ namespace DigitalIsraelFund_System.DataBase.Managers
 
         private RequestManager() { }
 
+        private readonly object syncLock = new object();
+
         public void AddOrUpdate(List<Dictionary<string, string>> table, Settings sett)
         {
-            Dictionary<string, string> conv = sett.CreateConversionTableRequests(table[0].Keys);
-            foreach (Dictionary<string, string> line in table)
+            lock (syncLock)
             {
-                var values = new Dictionary<string, string>();
-                foreach (string key in line.Keys)
+                Dictionary<string, string> conv = sett.CreateConversionTableRequests(table[0].Keys);
+                foreach (Dictionary<string, string> line in table)
                 {
-                    if (conv.ContainsKey(key))
-                        values[conv[key]] = line[key];
-                }
-                values["status"] = "נקלט";
-                values["mashov"] = "אין";
-                if (values.ContainsKey("file_number"))
-                {
-                    MySqlCommands.InsertOrUpdate("requests", values, "file_number");
+                    var values = new Dictionary<string, string>();
+                    foreach (string key in line.Keys)
+                    {
+                        if (conv.ContainsKey(key))
+                            values[conv[key]] = line[key];
+                    }
+                    ICollection<string> toUpdate = new List<string>(values.Keys);
+                    toUpdate.Remove("file_number");
+                    values["status"] = "נקלט";
+                    values["mashov"] = "אין";
+                    if (values.ContainsKey("file_number"))
+                    {
+                        MySqlCommands.InsertOrUpdate("requests", values, toUpdate);
+                    }
                 }
             }
         }
@@ -74,7 +81,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             return requestsResult;
         }
 
-        public List<Dictionary<string, string>> GetFieldWhere(string field, string where, string orderBy, int page, int resultsPerPage)
+        public List<string> GetFieldWhere(string field, string where, string orderBy, int page, int resultsPerPage)
         {
             List<string> fields = new List<string>();
             fields.Add("DISTINCT " + field);
@@ -82,7 +89,11 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             string on = "users.id=requests.momhee_id";
             List<Dictionary<string, string>> requestsResult = MySqlCommands.Select("requests LEFT JOIN users",
                 fields, on, where, orderBy, limit);
-            return requestsResult;
+            List<string> results = new List<string>();
+            if (requestsResult != null)
+                foreach (Dictionary<string, string> row in requestsResult)
+                    results.Add(row[field]);
+            return results;
         }
 
         public int Count(string where)
@@ -108,14 +119,18 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             return names;
         }
 
-        internal List<Dictionary<string, string>> GetFilesForRequest(string file_number)
+        internal List<string> GetFilesForRequest(string file_number)
         {
             List<string> fields = new List<string>();
             fields.Add("path");
             string where = "file_number='" + file_number + "'";
             List<Dictionary<string, string>> requestsResult = MySqlCommands.Select("files",
                 fields, null, where, null, null);
-            return requestsResult;
+            List<string> results = new List<string>();
+            if (requestsResult != null)
+                foreach (Dictionary<string, string> row in requestsResult)
+                    results.Add(row["path"]);
+            return results;
         }
     }
 }

@@ -47,10 +47,17 @@ namespace DigitalIsraelFund_System.DataBase.Managers
                             MySqlCommands.Insert("files", values);
                         }
                     }
-                    else if ((request_id == null || request_id == "") && attachments.Count > 1)
+                    else if ((request_id == null || request_id == "") && attachments.Count == 1)
                     {
                         // a new requests excel
-
+                        // save the excel file to app data
+                        var file = new List<Attachment>(attachments)[0];
+                        var saveTo = HostingEnvironment.MapPath("~/App_Data/Excels/" + file.Filename);
+                        file.Save(saveTo);
+                        // read the excel
+                        var table = ExcelManager.Manager.LoadTableFromExcel(saveTo);
+                        // attempt to add or update the requests data base with the excel table
+                        RequestManager.Manager.AddOrUpdate(table, sett);
                     }
                 }
             }

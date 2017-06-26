@@ -51,7 +51,7 @@ namespace DigitalIsraelFund_System.Controllers
             // load the table
             var table = UserManager.Manager.GetAllWhere(where, orderBy + isDescString, pageNum, resultsPerPageNum);
             // get the number of users
-            var count = UserManager.Manager.Count("type='momhee'");
+            var count = UserManager.Manager.Count(where);
             // add the offices into View Data
             ViewData["offices"] = OfficeManager.Manager.GetAll();
             return View(new TableResult { Table = table, NumPages = (int)System.Math.Ceiling((double)count / resultsPerPageNum),
@@ -188,7 +188,7 @@ namespace DigitalIsraelFund_System.Controllers
             if (cellphone != null && !cellphone.Contains("'")) where += " and cellphone LIKE '%" + cellphone + "%'";
             // load the table and the number of rows
             var table = MadaanMomhimManager.Manager.GetAllWhere(where, orderBy + isDescString, pageNum, resultsPerPageNum);
-            var count = RequestManager.Manager.Count("");
+            var count = RequestManager.Manager.Count(where);
             return View(new TableResult { Table = table, NumPages = (int)System.Math.Ceiling((double)count / resultsPerPageNum),
                 isDesc = isDescBool, Page = pageNum,  ResultsPerPage = resultsPerPageNum, OrderBy = orderBy });
         }
@@ -237,7 +237,7 @@ namespace DigitalIsraelFund_System.Controllers
             // attempt to add or update the requests data base with the excel table
             RequestManager.Manager.AddOrUpdate(table, sett);
 
-            return RedirectToAction("/AdminGovExp/RequestsManage");
+            return RedirectToAction("RequestsManage", "AdminGovExp");
         }
     }
 }

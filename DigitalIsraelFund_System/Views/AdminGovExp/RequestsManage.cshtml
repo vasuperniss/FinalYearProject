@@ -92,7 +92,7 @@
         <td colspan="4" style="direction:rtl;background:linear-gradient(to left, #E3E4FA , white);">
             &nbsp;&nbsp;
             <font>תוצאות לעמוד : </font>&nbsp;
-            <select id="selectPP" onchange="changeResultsPerPage()">
+            <select id="selectPP" ondurationchange="changeResultsPerPage()">
                 @for (int i = 1; i <= 5; ++i)
                 {
                     if (i * 10 == Model.ResultsPerPage)
@@ -125,6 +125,8 @@
 }
 
 <div id="cntntDiv" contenteditable="false" style="height:100%;resize:none;overflow-y:auto;min-width:inherit;min-height:200px;border-width:thin;border-style: none;font-family:sans-serif;border-color:#555555;font-size:small;font-weight:400;" dir="rtl">
+    @if (type == "admin")
+    {
     <table>
         <tr style="background:linear-gradient(to left, #E3E4FA , white);">
             @using (Html.BeginForm("LoadRequestsTableFromExcel", "Admin", FormMethod.Post, new { id = "fileForm", enctype = "multipart/form-data" }))
@@ -137,6 +139,7 @@
         </tr>
     </table>
     <br />
+    }
     <table style="padding:5px 5px;border: 1px solid #ccc;margin:auto;width:100%;">
         <tr style="background-color:#E3E4FA;">
             <td style="padding:3px;font-weight:600;text-align:center;vertical-align:bottom;"></td>

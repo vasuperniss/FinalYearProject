@@ -179,7 +179,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RequestController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
-    <Compile Include="DataBase\DataBase.cs" />
     <Compile Include="DataBase\Managers\EmailManager.cs" />
     <Compile Include="DataBase\Managers\ExcelManager.cs" />
     <Compile Include="DataBase\Managers\FormManager.cs" />
