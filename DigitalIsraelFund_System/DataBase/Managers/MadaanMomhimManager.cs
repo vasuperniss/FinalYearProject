@@ -25,8 +25,8 @@ namespace DigitalIsraelFund_System.DataBase.Managers
                 }
                 if (values.ContainsKey("file_number"))
                 {
-                    MySqlCommands.Delete("madaan_testers", "file_number='" + values["file_number"] + "'");
-                    MySqlCommands.Insert("madaan_testers", values);
+                    DBManager.Manager.Cmds.Delete("madaan_testers", "file_number='" + values["file_number"] + "'");
+                    DBManager.Manager.Cmds.Insert("madaan_testers", values);
                 }
             }
         }
@@ -48,7 +48,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             fields.Add("phone");
             fields.Add("cellphone");
             string limit = ((page - 1) * resultsPerPage) + "," + resultsPerPage;
-            List<Dictionary<string, string>> requestsResult = MySqlCommands.Select("madaan_testers",
+            List<Dictionary<string, string>> requestsResult = DBManager.Manager.Cmds.Select("madaan_testers",
                 fields, null, where, orderBy, limit);
             return requestsResult;
         }
@@ -58,7 +58,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             List<string> fields = new List<string>();
             fields.Add("DISTINCT " + field);
             string limit = ((page - 1) * resultsPerPage) + "," + resultsPerPage;
-            List<Dictionary<string, string>> requestsResult = MySqlCommands.Select("madaan_testers",
+            List<Dictionary<string, string>> requestsResult = DBManager.Manager.Cmds.Select("madaan_testers",
                 fields, null, where, orderBy, limit);
             List<string> results = new List<string>();
             if (requestsResult != null)
@@ -69,7 +69,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
 
         public int Count(string where)
         {
-            return MySqlCommands.Count("madaan_testers", where, null);
+            return DBManager.Manager.Cmds.Count("madaan_testers", where, null);
         }
     }
 }

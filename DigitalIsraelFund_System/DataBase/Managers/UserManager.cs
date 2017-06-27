@@ -60,7 +60,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             values["office"] = office;
             values["phone"] = phone;
             values["cell_phone"] = cellPhone;
-            return MySqlCommands.Insert("users", values);
+            return DBManager.Manager.Cmds.Insert("users", values);
         }
 
         public UserData GetIfCorrect(string email, string password)
@@ -77,7 +77,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             fields.Add("phone");
             fields.Add("cell_phone");
             List<Dictionary<string, string>> userResult =
-                MySqlCommands.Select("users LEFT JOIN offices", fields,
+                DBManager.Manager.Cmds.Select("users LEFT JOIN offices", fields,
                 "users.office=offices.id", "email =\'" + email + "\'", null, null);
             if (userResult == null || userResult.Count != 1)
                 return null;
@@ -97,12 +97,12 @@ namespace DigitalIsraelFund_System.DataBase.Managers
 
         public bool Change(string user_id, Dictionary<string, string> newValues)
         {
-            return MySqlCommands.Update("users", newValues, "id='" + user_id + "'");
+            return DBManager.Manager.Cmds.Update("users", newValues, "id='" + user_id + "'");
         }
 
         public int Count(string where)
         {
-            return MySqlCommands.Count("users LEFT JOIN offices", where, "users.office=offices.id");
+            return DBManager.Manager.Cmds.Count("users LEFT JOIN offices", where, "users.office=offices.id");
         }
 
         public List<Dictionary<string, string>> GetAllWhere(string where, string orderBy, int page, int resultsPerPage)
@@ -117,7 +117,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             fields.Add("cell_phone");
             string limit = ((page - 1) * resultsPerPage) + "," + resultsPerPage;
             string on = "users.office=offices.id";
-            List<Dictionary<string, string>> requestsResult = MySqlCommands.Select("users LEFT JOIN offices",
+            List<Dictionary<string, string>> requestsResult = DBManager.Manager.Cmds.Select("users LEFT JOIN offices",
                 fields, on, where, orderBy, limit);
             return requestsResult;
         }
@@ -128,7 +128,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             fields.Add("DISTINCT " + field);
             string limit = ((page - 1) * resultsPerPage) + "," + resultsPerPage;
             string on = "users.office=offices.id";
-            List<Dictionary<string, string>> requestsResult = MySqlCommands.Select("users LEFT JOIN offices",
+            List<Dictionary<string, string>> requestsResult = DBManager.Manager.Cmds.Select("users LEFT JOIN offices",
                 fields, on, where, orderBy, limit);
             List<string> results = new List<string>();
             if (requestsResult != null)

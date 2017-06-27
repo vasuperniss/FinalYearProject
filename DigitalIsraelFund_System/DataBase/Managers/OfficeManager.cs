@@ -18,7 +18,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             List<string> fields = new List<string>();
             fields.Add("id");
             fields.Add("office_name");
-            List<Dictionary<string, string>> requestsResult = MySqlCommands.Select("offices", fields, null, null, null, null);
+            List<Dictionary<string, string>> requestsResult = DBManager.Manager.Cmds.Select("offices", fields, null, null, null, null);
             return requestsResult;
         }
 
@@ -26,7 +26,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
         {
             var values = new Dictionary<string, string>();
             values["office_name"] = office_name;
-            return MySqlCommands.Insert("offices", values);
+            return DBManager.Manager.Cmds.Insert("offices", values);
         }
     }
 }

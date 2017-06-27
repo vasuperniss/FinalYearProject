@@ -20,7 +20,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             fields.Add("CONCAT_WS(' ', fname, lname) AS user_name");
             string limit = ((page - 1) * resultsPerPage) + "," + resultsPerPage;
             string on = "users.id=logs.user_id";
-            List<Dictionary<string, string>> requestsResult = MySqlCommands.Select("logs LEFT JOIN users",
+            List<Dictionary<string, string>> requestsResult = DBManager.Manager.Cmds.Select("logs LEFT JOIN users",
                 fields, on, where, orderBy, limit);
             return requestsResult;
         }
@@ -31,7 +31,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             values["user_id"] = user_id;
             values["action"] = action;
             values["time_stamp"] = System.DateTime.Now.ToLongDateString();
-            MySqlCommands.Insert("logs", values);
+            DBManager.Manager.Cmds.Insert("logs", values);
         }
     }
 }

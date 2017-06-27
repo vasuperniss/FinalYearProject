@@ -37,13 +37,13 @@
             <tr style="border: 1px solid #ccc;">
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">@(count++)</td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">
-                    @Html.ActionLink(iter.Current["office_name"], "MomhimManage", "Admin", new { search = iter.Current["office_name"], searchBy = "office_name" }, null)
+                    @Html.ActionLink(iter.Current["office_name"], "MomhimManage", "Admin", new { office_name = iter.Current["office_name"] }, null)
                 </td>
                 @if (iter.MoveNext())
                 {
                     <td style="padding:3px;border: 0px solid #888;text-align:center;">@(count++)</td>
                     <td style="padding:3px;border: 0px solid #888;text-align:center;">
-                        @Html.ActionLink(iter.Current["office_name"], "MomhimManage", "Admin", new { search = iter.Current["office_name"], searchBy = "office_name" }, null)
+                        @Html.ActionLink(iter.Current["office_name"], "MomhimManage", "Admin", new { office_name = iter.Current["office_name"] }, null)
                     </td>
                 }
             </tr>

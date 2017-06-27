@@ -33,7 +33,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
                     values["mashov"] = "אין";
                     if (values.ContainsKey("file_number"))
                     {
-                        MySqlCommands.InsertOrUpdate("requests", values, toUpdate);
+                        DBManager.Manager.Cmds.InsertOrUpdate("requests", values, toUpdate);
                     }
                 }
             }
@@ -43,7 +43,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
         {
             List<string> fields = new List<string>();
             fields.Add("file_number");
-            var table = MySqlCommands.Select("requests", fields, null,
+            var table = DBManager.Manager.Cmds.Select("requests", fields, null,
                 "file_number='" + file_number + "' and momhee_id='" + momhee_id + "'",
                 null, null);
             return table != null && table.Count != 0;
@@ -58,7 +58,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             newValues["mashov"] = json_path;
             newValues["mashov_date"] = date;
             newValues["mashov_ver"] = version;
-            return MySqlCommands.Update("requests", newValues, "file_number='" + file_number + "'");
+            return DBManager.Manager.Cmds.Update("requests", newValues, "file_number='" + file_number + "'");
         }
 
         public List<Dictionary<string, string>> GetAllWhere(string where, string orderBy, int page, int resultsPerPage)
@@ -76,7 +76,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             fields.Add("(SELECT COUNT(*) FROM files WHERE requests.file_number=files.file_number) as num_files");
             string limit = ((page - 1) * resultsPerPage) + "," + resultsPerPage;
             string on = "users.id=requests.momhee_id";
-            List<Dictionary<string, string>> requestsResult = MySqlCommands.Select("requests LEFT JOIN users",
+            List<Dictionary<string, string>> requestsResult = DBManager.Manager.Cmds.Select("requests LEFT JOIN users",
                 fields, on, where, orderBy, limit);
             return requestsResult;
         }
@@ -87,7 +87,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             fields.Add("DISTINCT " + field);
             string limit = ((page - 1) * resultsPerPage) + "," + resultsPerPage;
             string on = "users.id=requests.momhee_id";
-            List<Dictionary<string, string>> requestsResult = MySqlCommands.Select("requests LEFT JOIN users",
+            List<Dictionary<string, string>> requestsResult = DBManager.Manager.Cmds.Select("requests LEFT JOIN users",
                 fields, on, where, orderBy, limit);
             List<string> results = new List<string>();
             if (requestsResult != null)
@@ -98,12 +98,12 @@ namespace DigitalIsraelFund_System.DataBase.Managers
 
         public int Count(string where)
         {
-            return MySqlCommands.Count("requests LEFT JOIN users", where, "users.id=requests.momhee_id");
+            return DBManager.Manager.Cmds.Count("requests LEFT JOIN users", where, "users.id=requests.momhee_id");
         }
 
         public bool Change(string file_number, Dictionary<string, string> newValues)
         {
-            return MySqlCommands.Update("requests", newValues, "file_number='" + file_number + "'");
+            return DBManager.Manager.Cmds.Update("requests", newValues, "file_number='" + file_number + "'");
         }
 
         public Dictionary<string, string> GetAllColNames()
@@ -124,7 +124,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             List<string> fields = new List<string>();
             fields.Add("path");
             string where = "file_number='" + file_number + "'";
-            List<Dictionary<string, string>> requestsResult = MySqlCommands.Select("files",
+            List<Dictionary<string, string>> requestsResult = DBManager.Manager.Cmds.Select("files",
                 fields, null, where, null, null);
             List<string> results = new List<string>();
             if (requestsResult != null)

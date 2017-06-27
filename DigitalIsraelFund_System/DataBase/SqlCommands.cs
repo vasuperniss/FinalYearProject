@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DigitalIsraelFund_System.DataBase
 {
-    public class MySqlCommands : IDBCommands
+    public class SqlCommands : IDBCommands
     {
         public bool Update(string tableName, Dictionary<string, string> updates, string where)
         {
@@ -13,14 +13,14 @@ namespace DigitalIsraelFund_System.DataBase
             query = query.Substring(0, query.Length - 1);
             if (where != null && where != "")
                 query += " WHERE " + where;
-            return MySqlConnector.Connector.RunNonQueryCommand(query);
+            return SqlConnector.Connector.RunNonQueryCommand(query);
         }
 
         public bool Delete(string tableName, string where)
         {
             string query = "DELETE FROM " + tableName;
             query += " WHERE " + where;
-            return MySqlConnector.Connector.RunNonQueryCommand(query);
+            return SqlConnector.Connector.RunNonQueryCommand(query);
         }
 
         public bool Insert(string tableName, Dictionary<string, string> values)
@@ -31,7 +31,7 @@ namespace DigitalIsraelFund_System.DataBase
             foreach (string key in values.Keys)
                 query += "'" + values[key] + "',";
             query = query.Substring(0, query.Length - 1) + ")";
-            return MySqlConnector.Connector.RunNonQueryCommand(query);
+            return SqlConnector.Connector.RunNonQueryCommand(query);
         }
 
         public bool InsertOrUpdate(string tableName, Dictionary<string, string> values, ICollection<string> toUpdate)
@@ -42,12 +42,12 @@ namespace DigitalIsraelFund_System.DataBase
             foreach (string key in values.Keys)
                 query += "'" + values[key] + "',";
             query = query.Substring(0, query.Length - 1) + ")";
-            
+
             query += " ON DUPLICATE KEY UPDATE ";
             foreach (string key in toUpdate)
                 query += key + "='" + values[key] + "',";
             query = query.Substring(0, query.Length - 1);
-            return MySqlConnector.Connector.RunNonQueryCommand(query);
+            return SqlConnector.Connector.RunNonQueryCommand(query);
         }
 
         public List<Dictionary<string, string>> Select(string tableName, List<string> fields, string on,
@@ -69,7 +69,7 @@ namespace DigitalIsraelFund_System.DataBase
                 query += " ORDER BY " + orderBy;
             if (limit != null && limit != "")
                 query += " LIMIT " + limit;
-            return MySqlConnector.Connector.RunQueryCommand(query);
+            return SqlConnector.Connector.RunQueryCommand(query);
         }
 
         public int Count(string tableName, string where, string on)
@@ -79,7 +79,7 @@ namespace DigitalIsraelFund_System.DataBase
             if (on != null && on != "")
                 query += " ON " + on;
             query += whereQ;
-            return int.Parse(MySqlConnector.Connector.RunQueryCommand(query)[0]["total"]);
+            return int.Parse(SqlConnector.Connector.RunQueryCommand(query)[0]["total"]);
         }
     }
 }

@@ -183,6 +183,8 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RequestController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
+    <Compile Include="DataBase\IDBCommands.cs" />
+    <Compile Include="DataBase\Managers\DBManager.cs" />
     <Compile Include="DataBase\Managers\EmailManager.cs" />
     <Compile Include="DataBase\Managers\ExcelManager.cs" />
     <Compile Include="DataBase\Managers\FormManager.cs" />
@@ -193,6 +195,8 @@
     <Compile Include="DataBase\Managers\UserManager.cs" />
     <Compile Include="DataBase\MySqlCommands.cs" />
     <Compile Include="DataBase\MySqlConnector.cs" />
+    <Compile Include="DataBase\SqlCommands.cs" />
+    <Compile Include="DataBase\SqlConnector.cs" />
     <Compile Include="DataBase\TypeValidator.cs" />
     <Compile Include="Filters\AdminFilter.cs" />
     <Compile Include="Filters\AdminGovExpFilter.cs" />

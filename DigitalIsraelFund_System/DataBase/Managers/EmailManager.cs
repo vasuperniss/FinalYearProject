@@ -53,7 +53,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
                                 Dictionary<string, string> values = new Dictionary<string, string>();
                                 values["file_number"] = request_id;
                                 values["path"] = att.Filename;
-                                MySqlCommands.Insert("files", values);
+                                DBManager.Manager.Cmds.Insert("files", values);
                             }
                         }
                         else if ((request_id == null || request_id == "") && attachments.Count == 1
