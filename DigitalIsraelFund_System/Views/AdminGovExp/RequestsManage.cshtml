@@ -34,92 +34,7 @@
 <script src="~/Scripts/validation.js"></script>
 <script src="~/Scripts/ajaxSubmit.js"></script>
 
-<input type="hidden" id="orderBy" value="@Model.OrderBy" />
-<input type="hidden" id="isDesc" value="@Model.isDesc.ToString()" />
-<input type="hidden" id="page" value="@Model.Page" />
-<input type="hidden" id="resultsPerPage" value="@Model.ResultsPerPage" />
-
-@helper SearchAbleCol(string fieldName, string fieldTitle, bool isSearchable, bool isOrderable, Dictionary<string, string> options)
-{
-    <td style="padding:3px;font-size:small;font-weight:600;text-align:center;white-space:nowrap;">
-        @if (isSearchable)
-        {
-            <img style="width:12px;height:12px;" src="~/Content/Images/search_icon.png" />
-        }
-        @if (isOrderable)
-        {
-            <a href="#" onclick="setOrderBy('@fieldName');" style="white-space:nowrap;">@fieldTitle</a>
-            if (Model.OrderBy == fieldName)
-            {
-                if (!Model.isDesc) { <font>🠟</font> }
-                else { <font>🠝</font> }
-            }
-        }
-        else
-        {
-            <text>@fieldTitle</text>
-        }
-        @if (isSearchable)
-        {
-            if (options == null) {
-                <datalist id="listOptions_@fieldName"></datalist>
-                <div class="input-group" style="width:100%;overflow-wrap:unset;direction:ltr">
-                    <span class="input-group-addon" style="background-color:#EC7063;color:white;cursor:pointer;padding:6px;padding-left:10px;padding-right:10px;"
-                           onclick="clearSearch('@fieldName');">x</span>
-                    <input id="searchVal_@fieldName" type="search" value="@Request.Params.Get(fieldName)" list="listOptions_@fieldName" placeholder="חיפוש"
-                           class="form-control" style="height:100%;padding:6px;" oninput="updateSearchOptions('@fieldName')" onkeypress="searchAttempt(event);" />
-                </div>
-            } else
-            {
-                <div>
-                    <select id="searchVal_@fieldName" class="form-control" style="width:auto;height:100%;padding:4px;padding-left:6px;" onchange="reload();">
-                        <option value="">הכל</option>
-                        @foreach (var op in options.Keys)
-                        {
-                            var selected = options[op] == Request.Params[fieldName] ? "selected" : "";
-                            <option value="@options[op]" @selected>@op</option>
-                        }
-                    </select>
-                </div>
-            }
-        }
-    </td>
-}
-
-@helper numbersRow()
-{
-    <tr>
-        <td colspan="4" style="direction:rtl;background:linear-gradient(to left, #E3E4FA , white);">
-            &nbsp;&nbsp;
-            <font>תוצאות לעמוד : </font>&nbsp;
-            <select id="selectPP" ondurationchange="changeResultsPerPage()">
-                @for (int i = 1; i <= 5; ++i)
-                {
-                    if (i * 10 == Model.ResultsPerPage)
-                    {
-                        <option selected value="@(i * 10)">@(i * 10)</option>
-                    }
-                    else
-                    {
-                        <option value="@(i * 10)">@(i * 10)</option>
-                    }
-                }
-            </select>
-            &nbsp;&nbsp;
-            @for (int i = 1; i <= Model.NumPages; ++i)
-            {
-                if (Model.Page != i)
-                {
-                    <a href="#" style="font-size:small;" onclick="changePage(@i);">@i</a><font>&nbsp;</font>
-                }
-                else
-                {
-                    <font style="font-size:small;color:darkgrey;">@i</font><font>&nbsp;</font>
-                }
-            }
-        </td>
-    </tr>
-}
+@TableFunctions.NumbersAndOrdering(Model)
 
 <div id="cntntDiv" contenteditable="false" style="height:100%;resize:none;overflow-y:auto;min-width:inherit;min-height:200px;border-width:thin;border-style: none;font-family:sans-serif;border-color:#555555;font-size:small;font-weight:400;" dir="rtl">
     @if (type == "admin")
@@ -140,13 +55,13 @@
     <table style="padding:5px 5px;border: 1px solid #ccc;margin:auto;width:100%;">
         <tr style="background-color:#E3E4FA;">
             <td style="padding:3px;font-weight:600;text-align:center;vertical-align:bottom;"></td>
-            @SearchAbleCol("file_number", "מספר תיק", true, true, null)
-            @SearchAbleCol("comp_name", "שם  חברה או היזם", true, true, null)
-            @SearchAbleCol("status", "סטטוס התיק", true, true, null)
-            @SearchAbleCol("submiter_name", "שם  המגיש", true, true, null)
+            @TableFunctions.SearchAbleCol(Model, "file_number", "מספר תיק", true, true, null)
+            @TableFunctions.SearchAbleCol(Model, "comp_name", "שם  חברה או היזם", true, true, null)
+            @TableFunctions.SearchAbleCol(Model, "status", "סטטוס התיק", true, true, null)
+            @TableFunctions.SearchAbleCol(Model, "submiter_name", "שם  המגיש", true, true, null)
             @if (type == "admin")
             {
-                @SearchAbleCol("momhee_name", "בודק של הרשות לחדשנות", true, true, null)
+                @TableFunctions.SearchAbleCol(Model, "momhee_name", "בודק של הרשות לחדשנות", true, true, null)
             }
             @{
                 var dict = new Dictionary<string, string>();
@@ -154,10 +69,10 @@
                 dict["בתהליך"] = "temp_";
                 dict["מוגש"] = "mashov_";
             }
-            @SearchAbleCol("mashov", "משוב מומחה", true, true, dict)
-            @SearchAbleCol("fund_request", "גובה במענק המבוקש", false, false, null)
-            @SearchAbleCol("num_files", "קבצים", false, false, null)
-            @SearchAbleCol("madaan_momhee", "בודק משרדי", true, true, null)
+            @TableFunctions.SearchAbleCol(Model, "mashov", "משוב מומחה", true, true, dict)
+            @TableFunctions.SearchAbleCol(Model, "fund_request", "גובה במענק המבוקש", false, false, null)
+            @TableFunctions.SearchAbleCol(Model, "num_files", "קבצים", false, false, null)
+            @TableFunctions.SearchAbleCol(Model, "madaan_momhee", "בודק משרדי", true, true, null)
         </tr>
         @{ var count = (Model.Page - 1) * Model.ResultsPerPage + 1; }
         @foreach (Dictionary<string, string> line in Model.Table)
@@ -234,22 +149,11 @@
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["madaan_momhee"]</td>
             </tr>
         }
-        @numbersRow()
+        @TableFunctions.numbersRow(Model)
     </table>
 </div>
 
 <script>
-
-    function changeResultsPerPage() {
-        var pp = document.getElementById('selectPP').value;
-        document.getElementById('resultsPerPage').value = pp;
-        reload();
-    }
-
-    function changePage(pageNum) {
-        document.getElementById('page').value = pageNum;
-        reload();
-    }
 
     function updateSearchOptions(field) {
         var data = {
@@ -265,30 +169,6 @@
                 document.getElementById('listOptions_' + field).innerHTML = options;
             },
             function (msg) { });
-    }
-
-    function searchAttempt(event) {
-        if (event.keyCode == 13) {
-            document.getElementById('page').value = '1';
-            reload();
-        }
-    }
-
-    function clearSearch(fieldName) {
-        document.getElementById('searchVal_' + fieldName).value = '';
-        reload();
-    }
-
-    function setOrderBy(fieldName) {
-        var orderBy = document.getElementById('orderBy');
-        var order = document.getElementById('isDesc');
-        if (orderBy.value == fieldName) {
-            order.value = order.value == "True" ? "False" : "True";
-        } else {
-            order.value = "False";
-        }
-        orderBy.value = fieldName;
-        reload();
     }
 
     function reload() {

@@ -158,8 +158,11 @@
     <Content Include="App_Data\Pages\CommonQuestions.json" />
     <Content Include="App_Data\Pages\ApplyForRequest.json" />
     <Content Include="App_Data\Settings.json" />
+    <Content Include="App_Code\TableFunctions.cshtml" />
     <None Include="Properties\PublishProfiles\dif.pubxml" />
     <None Include="Properties\PublishProfiles\idf.pubxml" />
+    <None Include="Properties\PublishProfiles\isrealdigitalfundsyst - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\isrealdigitalfundsyst - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 
-
 namespace DigitalIsraelFund_System.DataBase
 {
     public class MySqlConnector
