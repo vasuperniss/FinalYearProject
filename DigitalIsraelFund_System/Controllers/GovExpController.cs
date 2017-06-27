@@ -24,7 +24,7 @@ namespace DigitalIsraelFund_System.Controllers
             // check if the momhee has this request
             UserData user = (UserData)this.Session["user"];
             if (!RequestManager.Manager.IsRequestAllowedForMomhee(user.Id, file_number))
-                Response.Redirect("AdminGovExp/RequestManage");
+                return RedirectToAction("RequestManage", "AdminGovExp");
             // add extra data of the request for the mashov page
             string where = "file_number='" + file_number + "'";
             ViewData["request"] = RequestManager.Manager.GetAllWhere(where, null, 1, 1)[0];
@@ -52,6 +52,9 @@ namespace DigitalIsraelFund_System.Controllers
             temp["misrad_name"] = user.Office;
             ViewData["temp"] = temp;
             FormComponent mashovForm = FormManager.Manager.Load(mashovFile);
+            if (isContinue != null && isContinue.ToLower() == "true")
+                // validate the filled in fields
+                ValidateAllNotEmpty(temp, mashovForm);
             return View(mashovForm.FormComponents[0]);
         }
 
@@ -61,10 +64,19 @@ namespace DigitalIsraelFund_System.Controllers
             // check if the momhee has this request
             UserData user = (UserData)this.Session["user"];
             if (!RequestManager.Manager.IsRequestAllowedForMomhee(user.Id, fTV.Values["file_number"]))
-                Response.Redirect("AdminGovExp/RequestManage");
+                return RedirectToAction("RequestsManage", "AdminGovExp");
 
             // check if submit or save
             var isSubmit = !fTV.Values.ContainsKey("isSave") || fTV.Values["isSave"] == "false" ? true : false;
+            if (isSubmit)
+            {
+                // validate field types
+                var mashovFile = Server.MapPath("~/App_Data/Forms/MashovForm_v_" + fTV.Values["file_version"] + ".xml");
+                FormComponent mashovForm = FormManager.Manager.Load(mashovFile);
+                if (!ValidateAll(fTV, mashovForm))
+                    // incorrect types, don't save mashov
+                    return RedirectToAction("RequestsManage", "AdminGovExp");
+            }
 
             // save the mashov as Json file
             string jsonPath = isSubmit ? "mashov_" : "temp_";
@@ -74,7 +86,60 @@ namespace DigitalIsraelFund_System.Controllers
             System.IO.File.WriteAllText(@dataFile, json);
             // link the mashov to the requests data base row of this request
             RequestManager.Manager.UpdateMashov(fTV.Values["file_number"], jsonPath, fTV.Values["file_version"]);
-            return RedirectToAction("../AdminGovExp/RequestsManage");
+            return RedirectToAction("RequestsManage", "AdminGovExp");
+        }
+
+        [NonAction]
+        public bool ValidateAll(FormValues values, FormComponent comp)
+        {
+            if (comp.FormComponents == null || comp.FormComponents.Count == 0)
+            {
+                if (comp.Type.ToLower() == "input")
+                {
+                    var range = comp.Properties.ContainsKey("range") ? comp.Properties["range"] : "Letters";
+                    var required = comp.Properties.ContainsKey("required") ? comp.Properties["required"] : "false";
+                    var value = values.Values[comp.Properties["id"]];
+                    if (value == "" && required == "false")
+                        // not required and empty input
+                        return true;
+                    // validate using the TypeValidator
+                    return TypeValidator.Validator.Validate(value, range);
+                }
+                return true;
+            }
+            else
+            {
+                /// check all children of the component
+                foreach (FormComponent c in comp.FormComponents)
+                {
+                    if (!ValidateAll(values, c))
+                        // found an invalid input
+                        return false;
+                }
+                return true;
+            }
+        }
+
+        [NonAction]
+        public void ValidateAllNotEmpty(Dictionary<string, string> values, FormComponent comp)
+        {
+            if (comp.FormComponents == null || comp.FormComponents.Count == 0)
+            {
+                if (comp.Type.ToLower() == "input")
+                {
+                    var range = comp.Properties.ContainsKey("range") ? comp.Properties["range"] : "Letters";
+                    var required = comp.Properties.ContainsKey("required") ? comp.Properties["required"] : "false";
+                    var value = values[comp.Properties["id"]];
+                    // validate using the TypeValidator
+                    if (value != "" && !TypeValidator.Validator.Validate(value, range))
+                        // set as incorrect
+                        comp.Properties["validationColor"] = "#ff0000";
+                }
+            }
+            else
+                /// check all children of the component
+                foreach (FormComponent c in comp.FormComponents)
+                    ValidateAllNotEmpty(values, c);
         }
 
         [HttpPost]

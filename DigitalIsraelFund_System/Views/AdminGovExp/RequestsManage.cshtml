@@ -103,7 +103,7 @@
                         }
                     </td>
                 }
-                <td style="padding:3px;border: 0px solid #888;text-align:center;">
+                <td style="padding:3px;border: 0px solid #888;text-align:center;white-space:nowrap;">
                     @if (type == "momhee")
                     {
                         if (line["mashov"].Contains("mashov_"))
@@ -124,6 +124,8 @@
                         if (line["mashov"].Contains("mashov_"))
                         {
                             @Html.ActionLink("צפה במשוב", "ViewMashov", "AdminGovExp", new { file_number = line["file_number"], form_ver = line["mashov_ver"] }, new { @class = "btn btn-primary btn-xs" })
+                            @:&nbsp;
+                            @Html.ActionLink("פתח לשינויים", "OpenForChanges", "Admin", new { file_number = line["file_number"], form_ver = line["mashov_ver"] }, new { @class = "btn btn-danger btn-xs" })
                         }
                         else if (line["mashov"].Contains("temp_"))
                         {

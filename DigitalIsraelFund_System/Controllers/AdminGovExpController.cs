@@ -98,30 +98,6 @@ namespace DigitalIsraelFund_System.Controllers
             return File(Server.MapPath("~/App_Data/RequestFiles/" + filename), System.Net.Mime.MediaTypeNames.Application.Octet, filename);
         }
 
-        //[HttpGet]
-        //public ActionResult ViewMashov(string file_number, string form_ver)
-        //{
-        //    // get the user
-        //    UserData user = (UserData)this.Session["user"];
-        //    if (user.Type.ToLower() == "momhee")
-        //        // check if the momhee has excess to this request
-        //        if (!RequestManager.Manager.IsRequestAllowedForMomhee(user.Id, file_number))
-        //            Response.Redirect("AdminGovExp/RequestManage");
-        //    // load the mashov
-        //    var dataFile = Server.MapPath("~/App_Data/Mashovs/mashov_" + file_number + ".json");
-        //    string json = System.IO.File.ReadAllText(@dataFile);
-        //    Dictionary<string, string> values = FormValues.LoadJson(json).Values;
-        //    // load the form of the mashov
-        //    var mashovFile = Server.MapPath("~/App_Data/Forms/MashovForm_v_" + form_ver + ".xml");
-        //    PostedForm pR = new PostedForm(FormManager.Manager.Load(mashovFile).FormComponents[0], values);
-        //    // load extra data of the request
-        //    string where = "file_number='" + file_number + "'";
-        //    ViewData["request"] = RequestManager.Manager.GetAllWhere(where, null, 1, 1)[0];
-        //    ViewData["names"] = RequestManager.Manager.GetAllColNames();
-
-        //    return View("../Home/PostedForm", pR);
-        //}
-
         [HttpGet]
         public ActionResult ViewMashov(string file_number, string form_ver)
         {

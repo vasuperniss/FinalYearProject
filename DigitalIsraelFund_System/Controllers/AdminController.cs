@@ -248,5 +248,21 @@ namespace DigitalIsraelFund_System.Controllers
 
             return RedirectToAction("RequestsManage", "AdminGovExp");
         }
+
+        [HttpGet]
+        public ActionResult OpenForChanges(string file_number, string form_ver)
+        {
+            // load the mashov
+            var dataFile = Server.MapPath("~/App_Data/Mashovs/mashov_" + file_number + ".json");
+            string json = System.IO.File.ReadAllText(@dataFile);
+
+            // save the mashov as Temp
+            dataFile = Server.MapPath("~/App_Data/Mashovs/temp_" + file_number + ".json");
+            System.IO.File.WriteAllText(@dataFile, json);
+            // link the mashov temp to the requests data base row of this request
+            RequestManager.Manager.UpdateMashov(file_number, "temp_" + file_number, form_ver);
+
+            return RedirectToAction("RequestsManage", "AdminGovExp");
+        }
     }
 }

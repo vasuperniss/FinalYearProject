@@ -1,6 +1,7 @@
 ﻿using DigitalIsraelFund_System.DataBase;
 using DigitalIsraelFund_System.DataBase.Managers;
 using DigitalIsraelFund_System.Models;
+using System;
 using System.Web.Mvc;
 
 namespace DigitalIsraelFund_System.Controllers
@@ -49,6 +50,14 @@ namespace DigitalIsraelFund_System.Controllers
             // clear the Session
             this.Session["user"] = null;
             return RedirectToAction("Page", "Home");
+        }
+
+        [HttpPost]
+        public JsonResult KeepMeAlive()
+        {
+            // access the Session to keep it alive
+            this.Session["Heartbeat"] = DateTime.Now;
+            return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
         }
     }
 }

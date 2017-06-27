@@ -90,45 +90,28 @@ var range = w.Properties.ContainsKey("range") ? w.Properties["range"] : "Letters
 var value = values.ContainsKey(id) ? values[id] : "";
 var readOnly = w.Properties.ContainsKey("readOnly");
 var readOnlyString = readOnly ? "readonly" : "";
+var validationColor = w.Properties.ContainsKey("validationColor") ? w.Properties["validationColor"] : "#38ACEC";
 
-if (w.Properties["type"] == "radio")
+if (w.Properties["type"] == "dropdown")
 {
-    foreach (FormComponent subW in w.FormComponents)
-    {
-        <input form="textForm" class="form-control" id="@id" name="Values[@id]" type="radio" value="@subW.Text" onchange="validate('@id',@required,'@range', false);" />
-        <label for="@subW.Text">@subW.Text</label>
-    }
-}
-else if (w.Properties["type"] == "checkbox")
-{
-    <input form="textForm" class="form-control" id="@id" name="Values[@id]" type="checkbox" onchange="validate('@id',@required,'@range', false);" />
-    <label for="@id">@w.Text</label>
-}
-else if (w.Properties["type"] == "dropdown")
-{
-    <select form="textForm" class="form-control" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;" id="@id" name="Values[@id]"
+    <select form="textForm" class="form-control" style="border-right-color: @validationColor;border-right-width: 3px;height:100%;" id="@id" name="Values[@id]"
             onchange="validate('@id',@required,'@range', false);">
         @foreach (FormComponent option in w.FormComponents)
         {
-            <option value="@option.Text">@option.Text</option>
+            var selected = value == option.Text ? "selected" : "";
+            <option value="@option.Text" @selected>@option.Text</option>
         }
     </select>
 }
 else if (w.Properties["type"] == "multiline")
 {
-    <textarea form="textForm" class="form-control" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;min-width: 100%;"
+    <textarea form="textForm" class="form-control" style="border-right-color: @validationColor;border-right-width: 3px;height:100%;min-width: 100%;"
             rows="6" id="@id" name="Values[@id]" oninput="validate('@id',@required,'@range', false);">@value</textarea>
-}
-else if (w.Properties["type"] == "file")
-{
-    var width = w.Properties.ContainsKey("width") ? w.Properties["width"] + "px" : "160px";
-    <input form="textForm" class="form-control" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;width:@width;"
-            id="@id" name="Files[@id]" type="file" value="" oninput="validate('@id',@required,'@range', false);" />
 }
 else
 {
     var width = w.Properties.ContainsKey("width") ? w.Properties["width"] + "px" : "160px";
-    <input form="textForm" class="form-control form-control-sm" style="border-right-color: #38ACEC;border-right-width: 3px;height:100%;width:@width;"
+    <input form="textForm" class="form-control form-control-sm" style="border-right-color: @validationColor;border-right-width: 3px;height:100%;width:@width;"
             id="@id" name="Values[@id]" type="@w.Properties["type"]" value="@value" oninput="validate('@id', @required, '@range', false);" @readOnlyString />
 }
 

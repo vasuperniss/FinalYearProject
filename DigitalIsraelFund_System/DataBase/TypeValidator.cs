@@ -17,7 +17,7 @@ namespace DigitalIsraelFund_System.DataBase
             this.regexes["Email"] = new Regex(@"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase);
             this.regexes["Integer"] = new Regex(@"^-*[0-9]+$");
             this.regexes["Real"] = new Regex("^([0-9]+[.][0-9])|([0-9][.][0-9]+)|([0-9]+)$");
-            this.regexes["Letters"] = new Regex("^([- .,A-Za-z0-9א-ת_\n\"]+)$");
+            this.regexes["Letters"] = new Regex("^([- .,A-Za-z0-9א-ת_\n\r\"]+)$");
             this.regexes["Date"] = new Regex(@"^([0-9]{4,4}-[0-9]{2,2}-[0-9]{2,2})$");
             this.regexes["Password"] = new Regex(@"^([- .@!#$%&*A-Za-z0-9_]+)$");
             this.regexes["Phone"] = new Regex(@"^([0-9-]*)$");

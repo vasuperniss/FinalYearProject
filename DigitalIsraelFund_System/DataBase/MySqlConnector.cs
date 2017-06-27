@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using MySql.Data.MySqlClient;
+using System.Configuration;
 
 namespace DigitalIsraelFund_System.DataBase
 {
@@ -17,12 +18,10 @@ namespace DigitalIsraelFund_System.DataBase
 
         private MySqlConnector()
         {
-            string server = "localhost";
-            string database = "IsraelDigitalDB";
-            //string uid = "Michael";
-            //string pass = "dif153246";
-            string uid = "Waternut";
-            string pass = "Madnut";
+            string server = ConfigurationManager.AppSettings["mySql_server"];
+            string database = ConfigurationManager.AppSettings["mySql_database"];
+            string uid = ConfigurationManager.AppSettings["mySql_userId"];
+            string pass = ConfigurationManager.AppSettings["mySql_password"];
             string connStr = "SERVER=" + server + ";DATABASE=" + database;
             connStr += ";UID=" + uid + ";PASSWORD=" + pass + ";";
             this.connection = new MySqlConnection(connStr);

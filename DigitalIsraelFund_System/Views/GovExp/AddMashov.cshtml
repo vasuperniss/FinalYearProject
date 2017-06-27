@@ -13,6 +13,7 @@
 }
 
 <script src="~/Scripts/validation.js"></script>
+<script src="~/Scripts/ajaxSubmit.js"></script>
 
 <div dir="rtl" style="font-family:sans-serif;">
 
@@ -154,4 +155,18 @@
         document.getElementById('isSave').value = "true";
         $('#textForm').submit();
     }
+
+    function setHeartbeat() {
+        setTimeout("heartbeat()", 300000); // every 5 min
+    }
+
+    function heartbeat() {
+        var data = {};
+        ajaxSbmt(data, '/Account/KeepMeAlive',
+            function (response) { },
+            function (msg) { });
+        setHeartbeat();
+    }
+
+    setHeartbeat();
 </script>
