@@ -1,0 +1,122 @@
+﻿@model DigitalIsraelFund_System.Models.PostedForm
+@using DigitalIsraelFund_System.Models
+@{
+    ViewBag.Title = "צפייה במשוב";
+
+    FormComponent root = Model.RequestForm;
+    List<FormComponent> pages = root.FormComponents;
+    var temp = (Dictionary<string, string>)ViewData["temp"];
+}
+
+@functions {
+    private List<string> fields = new List<string>();
+}
+
+<script src="~/Scripts/validation.js"></script>
+
+<div dir="rtl" style="font-family:sans-serif;">
+
+    <table style="padding:5px 5px;border: 1px solid #ccc;margin:auto;width:85%;">
+        <tr style="background-color:#E3E4FA;">
+            @{
+                Dictionary<string, string> line = (Dictionary<string, string>)ViewData["request"];
+                Dictionary<string, string> names = (Dictionary<string, string>)ViewData["names"];
+                foreach (string key in names.Keys)
+                {
+                    <td style="padding:3px;font-size:small;font-weight:600;text-align:center;vertical-align:bottom;">
+                        @names[key]
+                    </td>
+                }
+            }
+        </tr>
+        <tr>
+            @{
+                foreach (string key in names.Keys)
+                {
+                    <td style="padding:3px;font-weight:500;text-align:center;vertical-align:bottom;">
+                        @line[key]
+                    </td>
+                }
+            }
+        </tr>
+    </table>
+    <br />
+
+    @using (Html.BeginForm("AddMashov", "GovExp", FormMethod.Post, new { id = "textForm", enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="tab">
+            @for (int p = 0; p < pages.Count; ++p)
+            {
+                <button type="button" class="tablinks" onclick="openTab(event, 't-@p')" id='t-b-@p'>
+                    <div style="padding-top:12px;padding-bottom:2px;">@pages[p].Properties["title"]</div>
+                </button>
+            }
+            <button type="button" onclick="printingView();" id='printViewBtn' style="background-color:lightcoral;float:left;border-top-right-radius:10px;">
+                <div class="hidden-print" style="padding:8px;padding-top:12px;padding-bottom:2px;">תצוגת הדפסה</div>
+            </button>
+            <button type="button" onclick="regularView();" id='regularViewBtn' style="background-color:lightcoral;float:left;border-top-right-radius:10px;display:none;">
+                <div class="hidden-print" style="padding:8px;padding-top:12px;padding-bottom:2px;">תצוגה רגילה</div>
+            </button>
+        </div>
+        for (int p = 0; p < pages.Count; ++p)
+        {
+            FormComponent page = pages[p];
+            <div id="title-@p" class="tab" style="display:none;background-color:Highlight;border: solid 1px #555;">
+                <button type="button" class="tablinks">
+                    <div style="padding-top:12px;padding-bottom:2px;">@pages[p].Properties["title"]</div>
+                </button>
+            </div>
+            <div id="t-@p" class="tabcontent">
+                @foreach (FormComponent w in page.FormComponents)
+                {
+                    @FormFunctions.DrawComponent(w, true, fields, Model.Values);
+                }
+            </div>
+        }
+    }
+</div>
+
+<script>
+    function openTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        $('#' + tabName).fadeIn(150);
+        evt.currentTarget.className += " active";
+    }
+
+    document.getElementById("t-0").style.display = "block";
+    document.getElementById("t-b-0").className += " active";
+
+    function printingView() {
+        document.getElementById("printViewBtn").style.display = "none";
+        document.getElementById("regularViewBtn").style.display = "block";
+        @for (int p = 0; p < pages.Count; ++p)
+        {
+            @:document.getElementById("t-@p").style.display = "block";
+            @:document.getElementById("t-b-@p").style.display = "none";
+            @:document.getElementById("title-@p").style.display = "block";
+        }
+    }
+
+    function regularView() {
+        document.getElementById("printViewBtn").style.display = "block";
+        document.getElementById("regularViewBtn").style.display = "none";
+        @for (int p = 0; p < pages.Count; ++p)
+        {
+            @:document.getElementById("t-@p").style.display = "none";
+            @:document.getElementById("t-b-@p").style.display = "block";
+            @:document.getElementById("title-@p").style.display = "none";
+        }
+
+        document.getElementById("t-0").style.display = "block";
+        document.getElementById("t-b-0").className += " active";
+    }
+</script>

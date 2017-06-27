@@ -28,3 +28,57 @@ textarea {
     max-width: 100%;
     height: auto;
 }
+
+div.tab {
+    direction: rtl;
+    overflow: hidden;
+    border: 0px solid #888;
+    background-color: #E3E4FA;
+    width: 85%;
+    margin: auto;
+}
+
+    /* Style the buttons inside the tab */
+    div.tab button {
+        background-color: inherit;
+        float: right;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding-right: 8px;
+        padding-left: 8px;
+        padding-bottom: 8px;
+        transition: 0.3s;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+        /* Change background color of buttons on hover */
+        div.tab button:hover {
+            background-color: #87AFC7;
+        }
+
+        /* Create an active/current tablink class */
+        div.tab button.active {
+            background-color: #82CAFA;
+        }
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 12px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+    align-items: center;
+    width: 85%;
+    margin: auto;
+}
+
+.ta2bcontent2 {
+    padding: 12px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+    align-items: center;
+    width: 85%;
+    margin: auto;
+}

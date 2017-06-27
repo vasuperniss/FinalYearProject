@@ -159,6 +159,7 @@
     <Content Include="App_Data\Pages\ApplyForRequest.json" />
     <Content Include="App_Data\Settings.json" />
     <Content Include="App_Code\TableFunctions.cshtml" />
+    <Content Include="App_Code\FormFunctions.cshtml" />
     <None Include="Properties\PublishProfiles\dif.pubxml" />
     <None Include="Properties\PublishProfiles\idf.pubxml" />
     <None Include="Properties\PublishProfiles\isrealdigitalfundsyst - FTP.pubxml" />
@@ -226,6 +227,8 @@
     <Content Include="Views\Home\PostedForm.cshtml" />
     <Content Include="Views\Settings\Settings.cshtml" />
     <Content Include="Views\Admin\MadanMomhimManage.cshtml" />
+    <Content Include="Views\GovExp\AddMashov.cshtml" />
+    <Content Include="Views\AdminGovExp\ViewMashov.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

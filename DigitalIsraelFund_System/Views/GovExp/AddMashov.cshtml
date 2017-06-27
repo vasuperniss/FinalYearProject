@@ -1,0 +1,157 @@
+﻿@model DigitalIsraelFund_System.Models.FormComponent
+@using DigitalIsraelFund_System.Models
+@{
+    ViewBag.Title = "הגשת משוב";
+
+    FormComponent root = Model;
+    List<FormComponent> pages = root.FormComponents;
+    var temp = (Dictionary<string, string>)ViewData["temp"];
+}
+
+@functions {
+    private List<string> fields = new List<string>();
+}
+
+<script src="~/Scripts/validation.js"></script>
+
+<div dir="rtl" style="font-family:sans-serif;">
+
+    <table style="padding:5px 5px;border: 1px solid #ccc;margin:auto;width:85%;">
+        <tr style="background-color:#E3E4FA;">
+            @{
+                Dictionary<string, string> line = (Dictionary<string, string>)ViewData["request"];
+                Dictionary<string, string> names = (Dictionary<string, string>)ViewData["names"];
+                foreach (string key in names.Keys)
+                {
+                    <td style="padding:3px;font-size:small;font-weight:600;text-align:center;vertical-align:bottom;">
+                        @names[key]
+                    </td>
+                }
+            }
+        </tr>
+        <tr>
+            @{
+                foreach (string key in names.Keys)
+                {
+                    <td style="padding:3px;font-weight:500;text-align:center;vertical-align:bottom;">
+                        @line[key]
+                    </td>
+                }
+            }
+        </tr>
+    </table>
+    <br />
+
+    @using (Html.BeginForm("AddMashov", "GovExp", FormMethod.Post, new { id = "textForm", enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="tab">
+            <input form="textForm" name="Values[file_version]" type="hidden" value="@temp["file_version"]" />
+            <input form="textForm" id="isSave" name="Values[isSave]" type="hidden" value="false" />
+            @for (int p = 0; p < pages.Count; ++p)
+            {
+                <button type="button" class="tablinks" onclick="openTab(event, 't-@p')" id='t-b-@p'>
+                    <div style="padding-top:12px;padding-bottom:2px;">@pages[p].Properties["title"]</div>
+                </button>
+            }
+            <button type="button" onclick="validateAndSubmit();" id='sumbitBtn' style="background-color:lightgreen;float:left;border-top-right-radius:10px;">
+                <div style="padding:8px;padding-top:12px;padding-bottom:2px;">שלח משוב</div>
+            </button>
+            <button type="button" onclick="saveSubmit();" id='saveBtn' style="background-color:lightblue;float:left;border-top-right-radius:10px;">
+                <div style="padding:8px;padding-top:12px;padding-bottom:2px;">שמור משוב</div>
+            </button>
+        </div>
+        for (int p = 0; p < pages.Count; ++p)
+        {
+            FormComponent page = pages[p];
+            <div id="t-@p" class="tabcontent">
+                @foreach (FormComponent w in page.FormComponents)
+                {
+                    @FormFunctions.DrawComponent(w, false, fields, temp);
+                }
+            </div>
+        }
+    }
+</div>
+
+<script>
+    var repeatables = {};
+    var fieldIds = [];
+
+    @foreach (string inputId in fields)
+    {
+        var spited = inputId.Split('|');
+        @Html.Raw(System.Web.HttpUtility.HtmlDecode("\tfieldIds.push(['" + spited[0] + "'," + spited[1] + ",'" + spited[2] + "']);\n"));
+    }
+
+    function validate(inputId, isRequired, range, markParent) {
+        var inpControl = document.getElementById(inputId);
+        var val = inpControl.value;
+        if (range == "CheckBox" && isRequired && !inpControl.checked) {
+            inpControl.style.borderRightColor = '#ff0000';
+        }
+        else if (isRequired && val == "") {
+            inpControl.style.borderRightColor = '#ff0000';
+            $("#" + inputId + "-ErrMsg").fadeOut(300);
+        } else {
+            validateInput(inputId, range);
+        }
+    }
+
+    function openTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        $('#' + tabName).fadeIn(150);
+        evt.currentTarget.className += " active";
+    }
+
+    document.getElementById("t-0").style.display = "block";
+    document.getElementById("t-b-0").className += " active";
+    RunThrewAllInputs(miniCheckAll, false);
+
+    function RunThrewAllInputs(checkFnc, isSubmited) {
+        var numErrors = 0;
+        for (i = 0; i < fieldIds.length; i++) {
+            numErrors += checkFnc(fieldIds[i], isSubmited);
+        }
+        return numErrors;
+    }
+
+    function miniCheckAll(field, isSubmited) {
+        var inpControl = document.getElementById(field[0]);
+        var val = inpControl.value;
+        if (field[1] && val == "") {
+            document.getElementById(field[0]).style.borderRightColor = '#ff0000';
+        }
+        return 0;
+    }
+
+    function checkIfBlue(field, isSubmited) {
+        var inpControl = document.getElementById(field[0]);
+        var val = inpControl.value;
+        if (inpControl.style.borderRightColor == 'rgb(255, 0, 0)')
+            return 1;
+        return 0;
+    }
+
+    function validateAndSubmit() {
+        var numErrs = RunThrewAllInputs(checkIfBlue, true);
+        if (numErrs == 0) {
+            $('#textForm').submit();
+        } else {
+            alert('לא כל השדות מולאו כנדרש, יש ' + numErrs + ' שדות שלא מולאו כנדרש');
+        }
+    }
+
+    function saveSubmit() {
+        document.getElementById('isSave').value = "true";
+        $('#textForm').submit();
+    }
+</script>

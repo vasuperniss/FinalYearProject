@@ -30,30 +30,29 @@ namespace DigitalIsraelFund_System.Controllers
             ViewData["request"] = RequestManager.Manager.GetAllWhere(where, null, 1, 1)[0];
             ViewData["names"] = RequestManager.Manager.GetAllColNames();
 
-            Settings sett = Settings.GetSettings();
-            // add extra data for "pull from" fields
-            ViewData["postToController"] = "../GovExp/AddMashov";
-            ViewData["sendBtnTitle"] = "שלח משוב";
-            ViewData["fileNumberRequest"] = file_number;
-            ViewData["nameGovExp"] = user.Name;
-            ViewData["officeGovExp"] = user.Office;
-            ViewData["file_version"] = sett.MashovVersion;
-            ViewData["temp"] = new Dictionary<string, string>();
-
-            // load the mashov form
-            var mashovFile = Server.MapPath("~/App_Data/Forms/MashovForm_v_" + sett.MashovVersion + ".xml");
+            var temp = new Dictionary<string, string>();
             // check if continue
             if (isContinue != null && isContinue.ToLower() == "true")
             {
                 // load the save file
                 var dataFile = Server.MapPath("~/App_Data/Mashovs/temp_" + file_number + ".json");
                 string json = System.IO.File.ReadAllText(@dataFile);
-                ViewData["temp"] = FormValues.LoadJson(json).Values;
-                mashovFile = Server.MapPath("~/App_Data/Forms/MashovForm_v_" + form_ver + ".xml");
+                temp = FormValues.LoadJson(json).Values;
             }
+            else
+            {
+                Settings sett = Settings.GetSettings();
+                temp["file_version"] = sett.MashovVersion.ToString();
+            }
+            // load the mashov form
+            var mashovFile = Server.MapPath("~/App_Data/Forms/MashovForm_v_" + temp["file_version"] + ".xml");
+            // add extra data for "pull from" fields
+            temp["file_number"] = file_number;
+            temp["gov_exp_name"] = user.Name;
+            temp["misrad_name"] = user.Office;
+            ViewData["temp"] = temp;
             FormComponent mashovForm = FormManager.Manager.Load(mashovFile);
-
-            return View("../Home/Form", mashovForm.FormComponents[0]);
+            return View(mashovForm.FormComponents[0]);
         }
 
         [HttpPost]
