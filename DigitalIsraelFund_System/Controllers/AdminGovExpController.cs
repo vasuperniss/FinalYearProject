@@ -21,7 +21,9 @@ namespace DigitalIsraelFund_System.Controllers
                 momhee_name = Request.Params["momhee_name"],
                 madaan_momhee = Request.Params["madaan_momhee"],
                 submiter_name = Request.Params["submiter_name"],
-                mashov = Request.Params["mashov"];
+                mashov = Request.Params["mashov"],
+                madaan_mashov_date = Request.Params["madaan_mashov_date"],
+                is_accepted = Request.Params["is_accepted"];
             // get the params for page number and for ordering
             int pageNum, resultsPerPageNum;
             bool isDescBool;
@@ -42,6 +44,8 @@ namespace DigitalIsraelFund_System.Controllers
             if (madaan_momhee != null && !madaan_momhee.Contains("'")) where += " and madaan_momhee LIKE '%" + madaan_momhee + "%'";
             if (submiter_name != null && !submiter_name.Contains("'")) where += " and submiter_name LIKE '%" + submiter_name + "%'";
             if (mashov != null && !mashov.Contains("'")) where += " and mashov LIKE '%" + mashov + "%'";
+            if (madaan_mashov_date != null && !madaan_mashov_date.Contains("'")) where += " and madaan_mashov_date LIKE '%" + madaan_mashov_date + "%'";
+            if (is_accepted != null && !is_accepted.Contains("'")) where += " and is_accepted LIKE '%" + is_accepted + "%'";
 
             // load the table and number of requests
             var table = RequestManager.Manager.GetAllWhere(where, orderBy + isDescString, pageNum, resultsPerPageNum);
@@ -60,7 +64,7 @@ namespace DigitalIsraelFund_System.Controllers
                 (searchBy != "momhee_name" && searchBy != "file_number"
                  && searchBy != "comp_name" && searchBy != "status"
                  && searchBy != "madaan_momhee" && searchBy != "submiter_name"
-                 && searchBy != "mashov") || 
+                 && searchBy != "mashov" && searchBy != "madaan_mashov_date" && searchBy != "is_accepted") || 
                  (searchBy == "momhee_name" && user.Type.ToLower() != "admin"))
                 return Json(new { Success = false, ErrMsg = "השדות לא בפורמט הנכון" }, JsonRequestBehavior.AllowGet);
             if (searchBy == "momhee_name") searchBy = "CONCAT_WS(' ', fname, lname)";

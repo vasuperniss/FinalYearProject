@@ -34,7 +34,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
 
                 lastUID = ic.GetMessage(ic.GetMessageCount() - 1, true).Uid;
 
-                AE.Net.Mail.MailMessage[] mm = ic.GetMessages(lastUID, lastSeenUID, true, false, false);
+                AE.Net.Mail.MailMessage[] mm = ic.GetMessages(lastSeenUID, (int.Parse(lastUID) + 1).ToString(), true, false, false);
 
                 foreach (AE.Net.Mail.MailMessage m in mm)
                 {
@@ -85,7 +85,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
 
         private bool isSenderAllowed(string fromAddr)
         {
-            foreach (var addr in ConfigurationManager.AppSettings.GetValues("imap_allowed"))
+            foreach (var addr in ConfigurationManager.AppSettings["imap_allowed"].Split(','))
                 if (fromAddr == addr)
                     return true;
             return false;

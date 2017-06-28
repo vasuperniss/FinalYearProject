@@ -30,14 +30,12 @@
             @TableFunctions.SearchAbleCol(Model, "comp_name", "שם חברה", true, true, null)
             @TableFunctions.SearchAbleCol(Model, "status", "סטטוס", true, true, null)
             @TableFunctions.SearchAbleCol(Model, "status_date", "תאריך סטטוס", true, true, null)
-            @TableFunctions.SearchAbleCol(Model, "request_date", "תאריך בקשה", true, true, null)
             @TableFunctions.SearchAbleCol(Model, "name", "שם בודק", true, true, null)
             @TableFunctions.SearchAbleCol(Model, "head_field", "ראש תחום", true, true, null)
-            @TableFunctions.SearchAbleCol(Model, "theme", "נושא", false, false, null)
-            @TableFunctions.SearchAbleCol(Model, "tester_phone", "טלפון בודק", true, true, null)
+            @TableFunctions.SearchAbleCol(Model, "tester_phone", "טלפון בודק", false, false, null)
             @TableFunctions.SearchAbleCol(Model, "tester_email", "אימייל בודק", true, true, null)
-            @TableFunctions.SearchAbleCol(Model, "phone", "טלפון", true, true, null)
-            @TableFunctions.SearchAbleCol(Model, "cellphone", "פלפון", true, true, null)
+            @TableFunctions.SearchAbleCol(Model, "phone", "טלפון", false, false, null)
+            @TableFunctions.SearchAbleCol(Model, "cellphone", "פלפון", false, false, null)
         </tr>
         @{ var count = (Model.Page - 1) * Model.ResultsPerPage + 1; }
         @foreach (Dictionary<string, string> line in Model.Table)
@@ -51,14 +49,12 @@
                 <td style="padding:3px;border: 0px solid #888;text-align:center;"><div>@line["comp_name"]</div></td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;"><div>@line["status"]</div></td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;"><div>@line["status_date"]</div></td>
-                <td style="padding:3px;border: 0px solid #888;text-align:center;"><div>@line["request_date"]</div></td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;"><div>@line["name"]</div></td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;"><div>@line["head_field"]</div></td>
-                <td style="padding:3px;border: 0px solid #888;text-align:center;white-space:nowrap;overflow:hidden;max-width:140px;"><div title="@line["theme"]">@line["theme"]</div></td>
-                <td style="padding:3px;border: 0px solid #888;text-align:center;"><div>@line["tester_phone"]</div></td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;white-space:nowrap;"><div>@line["tester_phone"]</div></td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;"><a href="mailto:@line["tester_email"]">@line["tester_email"]</a></td>
-                <td style="padding:3px;border: 0px solid #888;text-align:center;"><div>@line["phone"]</div></td>
-                <td style="padding:3px;border: 0px solid #888;text-align:center;"><div>@line["cellphone"]</div></td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;white-space:nowrap;"><div>@line["phone"]</div></td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;white-space:nowrap;"><div>@line["cellphone"]</div></td>
             </tr>
                         }
         @TableFunctions.numbersRow(Model)
@@ -93,13 +89,9 @@
                         "&comp_name=" + document.getElementById('searchVal_comp_name').value +
                         "&status=" + document.getElementById('searchVal_status').value +
                         "&status_date=" + document.getElementById('searchVal_status_date').value +
-                        "&request_date=" + document.getElementById('searchVal_request_date').value +
                         "&name=" + document.getElementById('searchVal_name').value +
                         "&head_field=" + document.getElementById('searchVal_head_field').value +
-                        "&tester_phone=" + document.getElementById('searchVal_tester_phone').value +
-                        "&tester_email=" + document.getElementById('searchVal_tester_email').value +
-                        "&phone=" + document.getElementById('searchVal_phone').value +
-                        "&cellphone=" + document.getElementById('searchVal_cellphone').value;
+                        "&tester_email=" + document.getElementById('searchVal_tester_email').value;
     }
 
     function loadFile() {

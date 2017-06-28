@@ -1,0 +1,271 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Review>
+  <page title="כללי">
+    <table>
+      <row color="#FAD7A0">
+        <col span="4">
+          <text size="small" weight="600">נתוני החברה והתיק</text>
+        </col>
+      </row>
+      <row color="#FAD7A0">
+        <col span="4">
+          <text size="small" weight="600">נתוני החברה והתיק</text>
+        </col>
+      </row>
+      <row>
+        <col color="#FDEBD0">
+          <text>שם החברה</text>
+        </col>
+        <col>
+          <input id="company_name" type="text" required="true" range="Letters" width="250"></input>
+        </col>
+        <col color="#FDEBD0">
+          <text>מספר תיק</text>
+        </col>
+        <col>
+          <input id="file_number" type="text" required="true" range="Integer" width="100" pullFrom="fileNumberRequest" readOnly="true"></input>
+        </col>
+      </row>
+      <row>
+        <col color="#FDEBD0">
+          <text>שם היזם</text>
+        </col>
+        <col>
+          <input id="achap_name" type="text" required="true" range="Letters" width="250"></input>
+        </col>
+        <col color="#FDEBD0">
+          <text>תוצר המיזם</text>
+        </col>
+        <col>
+          <input id="arch_prod" type="dropdown" required="true">
+            <option>מוצר</option>
+            <option>שירות</option>
+            <option>תהליך</option>
+          </input>
+        </col>
+      </row>
+      <row>
+        <col color="#FDEBD0">
+          <text>נושא התוכנית</text>
+        </col>
+        <col span="3">
+          <input id="program_theme" type="multiline" range="Letters" required="true"></input>
+        </col>
+      </row>
+    </table>
+    <table>
+      <row color="#FAD7A0">
+        <col span="4">
+          <text size="small" weight="600">פרטי המשרד והמומחה</text>
+        </col>
+      </row>
+      <row>
+        <col color="#FDEBD0">
+          <text>שם המשרד</text>
+        </col>
+        <col span="3">
+          <input id="misrad_name" type="text" required="true" range="Letters" pullFrom="officeGovExp" readOnly="true"></input>
+        </col>
+      </row>
+      <row>
+        <col color="#FDEBD0">
+          <text>שם המומחה</text>
+        </col>
+        <col>
+          <input id="gov_exp_name" type="text" required="true" range="Letters" pullFrom="nameGovExp" readOnly="true"></input>
+        </col>
+        <col color="#FDEBD0">
+          <text>תאריך קבלת הבקשה</text>
+        </col>
+        <col>
+          <input id="req_rec_date" type="date" range="Date" required="true"></input>
+        </col>
+      </row>
+      <row>
+        <col color="#FDEBD0">
+          <text>תפקיד</text>
+        </col>
+        <col>
+          <input id="gov_exp_job" type="text" range="Letters" required="true"></input>
+        </col>
+        <col color="#FDEBD0">
+          <text>תאריך הגשת חוות</text>
+        </col>
+        <col>
+          <input id="req_apply_date" type="date" range="Date" required="true"></input>
+        </col>
+      </row>
+    </table>
+  </page>
+  <page title="חוות דעת המומחה">
+    <text color="green" fillOnly="false">הנחיות למומחה: </text>
+    <text color="green" fillOnly="false">1.	על חוות הדעת להתייחס באופן פרטני לישראל. במידה וידוע על המתרחש בחו"ל, ניתן להוסיף בנפרד</text>
+    <text color="green" fillOnly="false">2.	יש לסיים את הבדיקה ולהגיש את חוות הדעת בתוך 30 יום.</text>
+    <table>
+      <row color="#FAD7A0">
+        <col>
+          <text>1.1	התאמת המיזם ל"תחומים המועדפים" כפי שפורסמו ב"קול הקורא"</text>
+        </col>
+      </row>
+      <row>
+        <col>
+          <input id="long1" type="multiline" range="Letters" required="true"></input>
+        </col>
+      </row>
+    </table>
+    <table>
+      <row color="#FAD7A0">
+        <col>
+          <text>1.2	הצורך עליו בא המיזם לענות</text>
+        </col>
+      </row>
+      <row>
+        <col>
+          <input id="long2" type="multiline" range="Letters" required="true"></input>
+        </col>
+      </row>
+    </table>
+    <table>
+      <row color="#FAD7A0">
+        <col>
+          <text>1.3	האופן בו המיזם עונה לצורך</text>
+        </col>
+      </row>
+      <row>
+        <col>
+          <input id="long3" type="multiline" range="Letters" required="true"></input>
+        </col>
+      </row>
+    </table>
+    <table>
+      <row color="#FAD7A0">
+        <col>
+          <text>1.4	הערכת החדשנות במיזם בהשוואה לאלטרנטיבות הקיימות בשוק</text>
+        </col>
+      </row>
+      <row>
+        <col>
+          <input id="long4" type="multiline" range="Letters" required="true"></input>
+        </col>
+      </row>
+    </table>
+    <table>
+      <row color="#FAD7A0">
+        <col>
+          <text>1.5	ההיקפים הכמותיים הצפויים למוצר/שירות/תהליך</text>
+        </col>
+      </row>
+      <row>
+        <col>
+          <input id="long5" type="multiline" range="Letters" required="true"></input>
+        </col>
+      </row>
+    </table>
+    <table>
+      <row color="#FAD7A0">
+        <col>
+          <text>1.6	לוח הזמנים הסביר מבחינת הלקוחות לאימוץ המוצר/שירות/תהליך ובמה כרוך הדבר</text>
+        </col>
+      </row>
+      <row>
+        <col>
+          <input id="long6" type="multiline" range="Letters" required="true"></input>
+        </col>
+      </row>
+    </table>
+    <table>
+      <row color="#FAD7A0">
+        <col>
+          <text>1.7	האם נדרשים אישורי שימוש או רגולציה במוצר/שירות/תהליך</text>
+          <text color="green" weight="500">(לדוגמא: אישור FDA או מכון התקנים)</text>
+        </col>
+      </row>
+      <row>
+        <col>
+          <input id="long7" type="multiline" range="Letters" required="true"></input>
+        </col>
+      </row>
+    </table>
+    <table>
+      <row color="#FAD7A0">
+        <col>
+          <text>1.8	האם ביצעו המגישים בעבר תכנית "קדם מו"פ" בנושא המיזם, מול משרדך – מה מסקנותיך?</text>
+        </col>
+      </row>
+      <row>
+        <col>
+          <input id="long8" type="multiline" range="Letters" required="true"></input>
+        </col>
+      </row>
+    </table>
+  </page>
+  <page title="תמצית חוות הדעת וציון מסכם">
+    <text color="green" fillOnly="false">הנחיות למילוי:</text>
+    <text color="green" weight="500" fillOnly="false"> בטבלה זו על המומחה לסכם את חוות דעתו בצורה תמציתית ולקבוע את הציון המסכם:</text>
+    <text color="green" weight="500" fillOnly="false">* 	יועתק כלשונו לטופס חוות הדעת לפרק הערכת הבקשה</text>
+    <text color="green" weight="500" fillOnly="false">* 	אין לחרוג מ-5 שורות</text>
+    <text color="green" fillOnly="false">  ציון:</text>
+    <text color="green" weight="500" fillOnly="false">*   	בסקאלה של  1 עד 5</text>
+    <text color="green" weight="500" fillOnly="false">*   	1= לא ראוי, 2= מתחת לממוצע, 3= ממוצע, 4= מעל לממוצע, 5= מומלץ ביותר</text>
+    <table>
+      <row color="#FAD7A0">
+        <col>
+          <text>תמצית חוות הדעת</text>
+        </col>
+        <col color="yellow">
+          <text>ציון</text>
+        </col>
+        <col color="yellow">
+          <input id="grade" type="dropdown" range="Real" required="true">
+            <option>1.0</option>
+            <option>1.1</option>
+            <option>1.2</option>
+            <option>1.3</option>
+            <option>1.4</option>
+            <option>1.5</option>
+            <option>1.6</option>
+            <option>1.7</option>
+            <option>1.8</option>
+            <option>1.9</option>
+            <option>2.0</option>
+            <option>2.1</option>
+            <option>2.2</option>
+            <option>2.3</option>
+            <option>2.4</option>
+            <option>2.5</option>
+            <option>2.6</option>
+            <option>2.7</option>
+            <option>2.8</option>
+            <option>2.9</option>
+            <option>3.0</option>
+            <option>3.1</option>
+            <option>3.2</option>
+            <option>3.3</option>
+            <option>3.4</option>
+            <option>3.5</option>
+            <option>3.6</option>
+            <option>3.7</option>
+            <option>3.8</option>
+            <option>3.9</option>
+            <option>4.0</option>
+            <option>4.1</option>
+            <option>4.2</option>
+            <option>4.3</option>
+            <option>4.4</option>
+            <option>4.5</option>
+            <option>4.6</option>
+            <option>4.7</option>
+            <option>4.8</option>
+            <option>4.9</option>
+            <option>5.0</option>
+          </input>
+        </col>
+      </row>
+      <row>
+        <col span="3">
+          <input id="tamzit" type="multiline" required="true"></input>
+        </col>
+      </row>
+    </table>
+  </page>
+</Review>

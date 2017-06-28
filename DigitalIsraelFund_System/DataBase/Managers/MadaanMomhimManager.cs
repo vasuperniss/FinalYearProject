@@ -1,6 +1,5 @@
 ﻿using DigitalIsraelFund_System.Models;
 using System.Collections.Generic;
-using System;
 
 namespace DigitalIsraelFund_System.DataBase.Managers
 {
@@ -39,10 +38,8 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             fields.Add("comp_name");
             fields.Add("status");
             fields.Add("status_date");
-            fields.Add("request_date");
             fields.Add("name");
             fields.Add("head_field");
-            fields.Add("theme");
             fields.Add("tester_phone");
             fields.Add("tester_email");
             fields.Add("phone");

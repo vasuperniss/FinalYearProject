@@ -29,11 +29,11 @@ namespace DigitalIsraelFund_System.DataBase.Managers
                     }
                     ICollection<string> toUpdate = new List<string>(values.Keys);
                     toUpdate.Remove("file_number");
-                    values["status"] = "נקלט";
                     values["mashov"] = "אין";
                     if (values.ContainsKey("file_number"))
                     {
-                        DBManager.Manager.Cmds.InsertOrUpdate("requests", values, toUpdate);
+                        var where = "file_number='" + values["file_number"] + "'"; 
+                        DBManager.Manager.Cmds.InsertOrUpdate("requests", values, toUpdate, where);
                     }
                 }
             }
@@ -70,9 +70,15 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             fields.Add("submiter_name");
             fields.Add("CONCAT_WS(' ', fname, lname) AS momhee_name");
             fields.Add("mashov");
+            fields.Add("mashov_date");
             fields.Add("mashov_ver");
             fields.Add("fund_request");
             fields.Add("madaan_momhee");
+            fields.Add("theme");
+            fields.Add("madaan_mashov_date");
+            fields.Add("is_accepted");
+            fields.Add("given_fund");
+            fields.Add("given_percentage");
             fields.Add("(SELECT COUNT(*) FROM files WHERE requests.file_number=files.file_number) as num_files");
             string limit = ((page - 1) * resultsPerPage) + "," + resultsPerPage;
             string on = "users.id=requests.momhee_id";
@@ -84,7 +90,11 @@ namespace DigitalIsraelFund_System.DataBase.Managers
         public List<string> GetFieldWhere(string field, string where, string orderBy, int page, int resultsPerPage)
         {
             List<string> fields = new List<string>();
+            if (field.Contains("CONCAT_WS"))
+                field += " as f";
             fields.Add("DISTINCT " + field);
+            if (field.Contains("CONCAT_WS"))
+                field = "f";
             string limit = ((page - 1) * resultsPerPage) + "," + resultsPerPage;
             string on = "users.id=requests.momhee_id";
             List<Dictionary<string, string>> requestsResult = DBManager.Manager.Cmds.Select("requests LEFT JOIN users",

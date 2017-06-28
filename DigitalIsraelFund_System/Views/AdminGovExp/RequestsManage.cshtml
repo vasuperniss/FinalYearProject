@@ -72,7 +72,12 @@
             @TableFunctions.SearchAbleCol(Model, "mashov", "משוב מומחה", true, true, dict)
             @TableFunctions.SearchAbleCol(Model, "fund_request", "גובה במענק המבוקש", false, false, null)
             @TableFunctions.SearchAbleCol(Model, "num_files", "קבצים", false, false, null)
+            @TableFunctions.SearchAbleCol(Model, "theme", "נושא", false, false, null)
             @TableFunctions.SearchAbleCol(Model, "madaan_momhee", "בודק משרדי", true, true, null)
+            @TableFunctions.SearchAbleCol(Model, "madaan_mashov_date", "תאריך חוות דעת בודק משרדי", true, true, null)
+            @TableFunctions.SearchAbleCol(Model, "is_accepted", "בקשה אושרה?", true, true, null)
+            @TableFunctions.SearchAbleCol(Model, "given_fund", "גובה מענק שאושר", false, false, null)
+            @TableFunctions.SearchAbleCol(Model, "given_percentage", "אחוז מענק", false, false, null)
         </tr>
         @{ var count = (Model.Page - 1) * Model.ResultsPerPage + 1; }
         @foreach (Dictionary<string, string> line in Model.Table)
@@ -126,10 +131,13 @@
                             @Html.ActionLink("צפה במשוב", "ViewMashov", "AdminGovExp", new { file_number = line["file_number"], form_ver = line["mashov_ver"] }, new { @class = "btn btn-primary btn-xs" })
                             @:&nbsp;
                             @Html.ActionLink("פתח לשינויים", "OpenForChanges", "Admin", new { file_number = line["file_number"], form_ver = line["mashov_ver"] }, new { @class = "btn btn-danger btn-xs" })
+                            @:&nbsp;
+                            @line["mashov_date"].Split(' ')[0]
                         }
                         else if (line["mashov"].Contains("temp_"))
                         {
-                            <text>בתהליך</text>
+                            @:בתהליך
+                            @:&nbsp;@line["mashov_date"].Split(' ')[0]
                         }
                         else
                         {
@@ -148,7 +156,12 @@
                         </ul>
                     </div>
                 </td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;white-space:nowrap;overflow:hidden;max-width:140px;"><div title="@line["theme"]">@line["theme"]</div></td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["madaan_momhee"]</td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["madaan_mashov_date"]</td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["is_accepted"]</td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["given_fund"]</td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["given_percentage"]</td>
             </tr>
         }
         @TableFunctions.numbersRow(Model)
@@ -188,6 +201,8 @@
                         "&madaan_momhee=" + document.getElementById('searchVal_madaan_momhee').value +
                         "&submiter_name=" + document.getElementById('searchVal_submiter_name').value +
                         "&mashov=" + document.getElementById('searchVal_mashov').value +
+                        "&madaan_mashov_date=" + document.getElementById('searchVal_madaan_mashov_date').value +
+                        "&is_accepted=" + document.getElementById('searchVal_is_accepted').value +
                         add;
     }
 

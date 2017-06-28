@@ -34,7 +34,7 @@ namespace DigitalIsraelFund_System.DataBase
             return MySqlConnector.Connector.RunNonQueryCommand(query);
         }
 
-        public bool InsertOrUpdate(string tableName, Dictionary<string, string> values, ICollection<string> toUpdate)
+        public bool InsertOrUpdate(string tableName, Dictionary<string, string> values, ICollection<string> toUpdate, string where)
         {
             string query = "INSERT INTO " + tableName + " (";
             query += String.Join(",", values.Keys) + ")";
