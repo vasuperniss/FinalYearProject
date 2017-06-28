@@ -121,7 +121,7 @@
                         }
                         else
                         {
-                            @Html.ActionLink("צרף משוב", "AddMashov", "GovExp", new { file_number = line["file_number"], isContinue = "false" }, new { @class = "btn btn-warning btn-xs" })
+                            @Html.ActionLink("צרף משוב", "AddMashov", "GovExp", new { file_number = line["file_number"], isContinue = "false" }, new { @class = "btn btn-danger btn-xs" })
                         }
                     }
                     else if (type == "admin")
@@ -157,7 +157,16 @@
                     </div>
                 </td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;white-space:nowrap;overflow:hidden;max-width:140px;"><div title="@line["theme"]">@line["theme"]</div></td>
-                <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["madaan_momhee"]</td>
+                <td style="padding:3px;border: 0px solid #888;text-align:center;">
+                    @if (type == "momhee")
+                    {
+                        @line["madaan_momhee"]
+                    }
+                    @if (type == "admin")
+                    {
+                    @Html.ActionLink(line["madaan_momhee"], "MadanMomhimManage", "Admin", new { file_number = line["file_number"] }, null)
+                    }
+                </td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["madaan_mashov_date"]</td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["is_accepted"]</td>
                 <td style="padding:3px;border: 0px solid #888;text-align:center;">@line["given_fund"]</td>

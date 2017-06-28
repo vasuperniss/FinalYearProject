@@ -25,7 +25,7 @@ namespace DigitalIsraelFund_System.DataBase
 
         public bool Insert(string tableName, Dictionary<string, string> values)
         {
-            string query = "INSERT IGNORE INTO " + tableName + " (";
+            string query = "INSERT INTO " + tableName + " (";
             query += String.Join(",", values.Keys) + ")";
             query += " VALUES(";
             foreach (string key in values.Keys)

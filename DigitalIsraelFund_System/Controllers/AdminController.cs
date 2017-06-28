@@ -111,6 +111,11 @@ namespace DigitalIsraelFund_System.Controllers
                 || !vald.Validate(email, "Email") || !vald.Validate(office, "Integer")
                 || !vald.Validate(phone, "Phone") || !vald.Validate(cellPhone, "Phone"))
                 return Json(new { Success = false, ErrMsg = "השדות לא בפורמט הנכון" }, JsonRequestBehavior.AllowGet);
+            // check if email already in the system
+            if (UserManager.Manager.Count("email='" + email + "'") >= 1)
+                return Json(new { Success = false, ErrMsg = "הוספת מומחה נכשלה, האימייל הנל כבר נמצא במערכת" },
+                JsonRequestBehavior.AllowGet);
+
             // attempt to mail the momhee
             var success = UserManager.Manager.Add(email, password, fname, lname, "momhee", office, phone, cellPhone);
             if (success)
@@ -120,7 +125,7 @@ namespace DigitalIsraelFund_System.Controllers
                 EmailManager.Manager.SendMail(email, title, body);
             }
             // attempt to add the momhee to the data base
-            return Json(new { Success = success },
+            return Json(new { Success = success, ErrMsg = "הוספת מומחה נכשלה" },
                 JsonRequestBehavior.AllowGet);
         }
 
