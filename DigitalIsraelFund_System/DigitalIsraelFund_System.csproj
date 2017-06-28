@@ -133,12 +133,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Excels\readme.txt" />
     <Content Include="App_Data\Forms\RequestForm_v_0.xml">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App_Data\Forms\MashovForm_v_0.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="App_Data\Mashovs\readme.txt" />
+    <Content Include="App_Data\RequestFiles\readme.txt" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\bannerfund_logo.png" />
@@ -170,7 +173,9 @@
     <Content Include="Scripts\ajaxSubmit.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\validation.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\Admin\MomhimManage.cshtml" />
     <Content Include="Views\Admin\AddNewMomhee.cshtml" />
   </ItemGroup>
@@ -188,7 +193,6 @@
     <Compile Include="DataBase\Managers\EmailManager.cs" />
     <Compile Include="DataBase\Managers\ExcelManager.cs" />
     <Compile Include="DataBase\Managers\FormManager.cs" />
-    <Compile Include="DataBase\Managers\LogManager.cs" />
     <Compile Include="DataBase\Managers\MadaanMomhimManager.cs" />
     <Compile Include="DataBase\Managers\OfficeManager.cs" />
     <Compile Include="DataBase\Managers\RequestManager.cs" />
@@ -239,9 +243,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\Excels\" />
-    <Folder Include="App_Data\Mashovs\" />
-    <Folder Include="App_Data\RequestFiles\" />
     <Folder Include="Views\Account\" />
     <Folder Include="Views\Request\" />
   </ItemGroup>

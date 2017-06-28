@@ -88,8 +88,17 @@ namespace DigitalIsraelFund_System.DataBase
                 query += " WHERE " + where;
             if (orderBy != null && orderBy != "")
                 query += " ORDER BY " + orderBy;
-            //if (limit != null && limit != "")
-            //    query += " LIMIT " + limit;
+
+            if (limit != null && limit != "")
+            {
+                // convert limit to sql style
+                int ofset = int.Parse(limit.Split(',')[0]);
+                int numRows = int.Parse(limit.Split(',')[1]);
+                if (orderBy != null && orderBy != "")
+                {
+                    query += " OFFSET " + ofset + " ROWS FETCH NEXT " + numRows + " ROWS ONLY";
+                }
+            }
             return SqlConnector.Connector.RunQueryCommand(query);
         }
 

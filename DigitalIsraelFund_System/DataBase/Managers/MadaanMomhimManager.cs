@@ -44,6 +44,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             fields.Add("tester_email");
             fields.Add("phone");
             fields.Add("cellphone");
+            if (orderBy == null || orderBy == "") orderBy = "file_number";
             string limit = ((page - 1) * resultsPerPage) + "," + resultsPerPage;
             List<Dictionary<string, string>> requestsResult = DBManager.Manager.Cmds.Select("madaan_testers",
                 fields, null, where, orderBy, limit);
@@ -55,6 +56,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             List<string> fields = new List<string>();
             fields.Add("DISTINCT " + field);
             string limit = ((page - 1) * resultsPerPage) + "," + resultsPerPage;
+            if (orderBy == null || orderBy == "") orderBy = "file_number";
             List<Dictionary<string, string>> requestsResult = DBManager.Manager.Cmds.Select("madaan_testers",
                 fields, null, where, orderBy, limit);
             List<string> results = new List<string>();

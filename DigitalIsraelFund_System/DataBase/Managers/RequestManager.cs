@@ -82,6 +82,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             fields.Add("(SELECT COUNT(*) FROM files WHERE requests.file_number=files.file_number) as num_files");
             string limit = ((page - 1) * resultsPerPage) + "," + resultsPerPage;
             string on = "users.id=requests.momhee_id";
+            if (orderBy == null || orderBy == "") orderBy = "file_number";
             List<Dictionary<string, string>> requestsResult = DBManager.Manager.Cmds.Select("requests LEFT JOIN users",
                 fields, on, where, orderBy, limit);
             return requestsResult;
@@ -97,6 +98,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
                 field = "f";
             string limit = ((page - 1) * resultsPerPage) + "," + resultsPerPage;
             string on = "users.id=requests.momhee_id";
+            if (orderBy == null || orderBy == "") orderBy = "file_number";
             List<Dictionary<string, string>> requestsResult = DBManager.Manager.Cmds.Select("requests LEFT JOIN users",
                 fields, on, where, orderBy, limit);
             List<string> results = new List<string>();

@@ -102,7 +102,8 @@ namespace DigitalIsraelFund_System.DataBase.Managers
 
         public int Count(string where)
         {
-            return DBManager.Manager.Cmds.Count("users", where, null);
+            string on = "users.office=offices.id";
+            return DBManager.Manager.Cmds.Count("users LEFT JOIN offices", where, on);
         }
 
         public List<Dictionary<string, string>> GetAllWhere(string where, string orderBy, int page, int resultsPerPage)
@@ -117,6 +118,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             fields.Add("cell_phone");
             string limit = ((page - 1) * resultsPerPage) + "," + resultsPerPage;
             string on = "users.office=offices.id";
+            if (orderBy == null || orderBy == "") orderBy = "users.id";
             List<Dictionary<string, string>> requestsResult = DBManager.Manager.Cmds.Select("users LEFT JOIN offices",
                 fields, on, where, orderBy, limit);
             return requestsResult;
@@ -128,6 +130,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             fields.Add("DISTINCT " + field);
             string limit = ((page - 1) * resultsPerPage) + "," + resultsPerPage;
             string on = "users.office=offices.id";
+            if (orderBy == null || orderBy == "") orderBy = "users.id";
             List<Dictionary<string, string>> requestsResult = DBManager.Manager.Cmds.Select("users LEFT JOIN offices",
                 fields, on, where, orderBy, limit);
             List<string> results = new List<string>();
