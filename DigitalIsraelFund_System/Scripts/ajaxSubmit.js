@@ -14,7 +14,6 @@
             }
         },
         error: function () {
-            alert('בעיה בשרת');
         }
     });
 }
