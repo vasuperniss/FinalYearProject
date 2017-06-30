@@ -17,11 +17,13 @@ namespace DigitalIsraelFund_System.Models
             this.FormComponents = new List<FormComponent>();
 
             if (xmlReader.HasAttributes)
+                // read the attributes of the node into Properties
                 while (xmlReader.MoveToNextAttribute())
                     this.Properties.Add(xmlReader.Name, xmlReader.Value);
 
             while (xmlReader.Read())
             {
+                // read the value of the node, or it's children
                 if (xmlReader.NodeType == XmlNodeType.Element)
                     this.FormComponents.Add(new FormComponent(xmlReader));
                 else if (xmlReader.NodeType == XmlNodeType.Text)

@@ -14,12 +14,15 @@ namespace DigitalIsraelFund_System.DataBase.Managers
 
         private DBManager()
         {
+            // check the data base to work with
             switch (ConfigurationManager.AppSettings["db_app"].ToLower())
             {
                 case "mysql":
+                    // work with mySql data base
                     this.cmds = new MySqlCommands();
                     break;
                 case "sql":
+                    // work with Sql data base
                     this.cmds = new SqlCommands();
                     break;
             }

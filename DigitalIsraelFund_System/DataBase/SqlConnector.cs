@@ -6,18 +6,6 @@ namespace DigitalIsraelFund_System.DataBase
 {
     public class SqlConnector
     {
-        //var connectionString = "Server=tcp:israeldigitalsystemdb.database.windows.net,1433;Initial Catalog=IsraelDigital_system_DB;Persist Security Info=False;User ID=Waternut;Password=Madnut357;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-        //using (SqlConnection connection = new SqlConnection(connectionString))
-        //{
-        //    SqlCommand command = new SqlCommand("select * from users", connection);
-        //    command.Connection.Open();
-        //    var a = command.ExecuteReader();
-        //    while(a.Read())
-        //    {
-        //        Console.WriteLine(a.GetInt32(0) + " " + a.GetString(1) + " " + a.GetString(2));
-        //    }
-        //    command.Connection.Close();
-        //}
 
         private static SqlConnector instance = new SqlConnector();
 
@@ -35,6 +23,7 @@ namespace DigitalIsraelFund_System.DataBase
             string database = ConfigurationManager.AppSettings["Sql_database"];
             string uid = ConfigurationManager.AppSettings["Sql_userId"];
             string pass = ConfigurationManager.AppSettings["Sql_password"];
+            // create the connection string
             string connStr = "Server=" + server
                 + ";Initial Catalog=" + database
                 + ";Persist Security Info=False;User ID=" + uid
@@ -53,6 +42,7 @@ namespace DigitalIsraelFund_System.DataBase
             }
             catch
             {
+                // recreate the instance
                 instance = new SqlConnector();
                 return false;
             }
@@ -67,6 +57,7 @@ namespace DigitalIsraelFund_System.DataBase
             }
             catch
             {
+                // recreate the instance
                 instance = new SqlConnector();
                 return false;
             }
@@ -74,6 +65,7 @@ namespace DigitalIsraelFund_System.DataBase
 
         public List<Dictionary<string, string>> RunQueryCommand(string cmd)
         {
+            // lock the connector
             lock (syncLock)
             {
                 List<Dictionary<string, string>> results = new List<Dictionary<string, string>>();
@@ -81,9 +73,11 @@ namespace DigitalIsraelFund_System.DataBase
                 SqlCommand sqlCmd = new SqlCommand(cmd, connection);
                 try
                 {
+                    // get the result of the query
                     SqlDataReader reader = sqlCmd.ExecuteReader();
                     while (reader.Read())
                     {
+                        // read another row from the result
                         Dictionary<string, string> line = new Dictionary<string, string>();
                         for (int i = 0; i < reader.FieldCount; ++i)
                         {
@@ -105,6 +99,7 @@ namespace DigitalIsraelFund_System.DataBase
 
         public bool RunNonQueryCommand(string cmd)
         {
+            // lock the connector
             lock (syncLock)
             {
                 List<Dictionary<string, string>> results = new List<Dictionary<string, string>>();
@@ -112,6 +107,7 @@ namespace DigitalIsraelFund_System.DataBase
                 SqlCommand sqlCmd = new SqlCommand(cmd, connection);
                 try
                 {
+                    // attempt to run the command
                     sqlCmd.ExecuteNonQuery();
                     this.CloseConnection();
                     return true;

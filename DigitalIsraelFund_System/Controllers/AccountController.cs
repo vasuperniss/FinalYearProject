@@ -8,7 +8,7 @@ namespace DigitalIsraelFund_System.Controllers
 {
     public class AccountController : Controller
     {
-
+        
         [HttpPost]
         public JsonResult Login(string email, string password)
         {
@@ -27,6 +27,7 @@ namespace DigitalIsraelFund_System.Controllers
                 int badAttempts = UserManager.Manager.addIncorrectAttempt(email);
                 bool isBlocked = !UserManager.Manager.isUserAllowed(email);
                 if (!isBlocked)
+                    // user is still not blocked
                     return Json(new
                     {
                         Success = false,
@@ -34,6 +35,7 @@ namespace DigitalIsraelFund_System.Controllers
                     + (3 - badAttempts) + " מס' הזנות לא נכונות של הסיסמה עד לחסימה"
                     }, JsonRequestBehavior.AllowGet);
                 else
+                    // user got blocked
                     this.Session["user"] = null;
                 return Json(new
                 {

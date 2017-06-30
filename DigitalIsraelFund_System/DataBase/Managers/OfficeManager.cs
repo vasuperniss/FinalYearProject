@@ -8,14 +8,12 @@ namespace DigitalIsraelFund_System.DataBase.Managers
 
         public static OfficeManager Manager { get { return instance; } }
 
-        private OfficeManager()
-        {
-
-        }
+        private OfficeManager() { }
 
         public List<Dictionary<string, string>> GetAll()
         {
             List<string> fields = new List<string>();
+            // get the fields below
             fields.Add("id");
             fields.Add("office_name");
             List<Dictionary<string, string>> requestsResult = DBManager.Manager.Cmds.Select("offices", fields, null, null, null, null);
@@ -24,6 +22,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
 
         public bool Add(string office_name)
         {
+            // add new office
             var values = new Dictionary<string, string>();
             values["office_name"] = office_name;
             return DBManager.Manager.Cmds.Insert("offices", values);

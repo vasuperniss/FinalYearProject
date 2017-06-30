@@ -68,6 +68,10 @@ namespace DigitalIsraelFund_System.Controllers
                 || !vald.Validate(office, "Integer") || !vald.Validate(phone, "Phone")
                 || !vald.Validate(cellPhone, "Phone"))
                 return Json(new { Success = false, ErrMsg = "השדות לא בפורמט הנכון" }, JsonRequestBehavior.AllowGet);
+            // check if email already in the system
+            if (UserManager.Manager.Count("email='" + email + "' and id!='" + id + "'") >= 1)
+                return Json(new { Success = false, ErrMsg = "עריכת מומחה נכשלה, האימייל הנל כבר נמצא במערכת" },
+                JsonRequestBehavior.AllowGet);
             // attempt to edit the momhee
             Dictionary<string, string> newValues = new Dictionary<string, string>();
             newValues["fname"] = fname;

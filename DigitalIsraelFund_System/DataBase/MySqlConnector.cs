@@ -22,6 +22,7 @@ namespace DigitalIsraelFund_System.DataBase
             string database = ConfigurationManager.AppSettings["mySql_database"];
             string uid = ConfigurationManager.AppSettings["mySql_userId"];
             string pass = ConfigurationManager.AppSettings["mySql_password"];
+            // create the connection string
             string connStr = "SERVER=" + server + ";DATABASE=" + database;
             connStr += ";UID=" + uid + ";PASSWORD=" + pass + ";";
             this.connection = new MySqlConnection(connStr);
@@ -36,6 +37,7 @@ namespace DigitalIsraelFund_System.DataBase
             }
             catch
             {
+                // recreate the instance
                 instance = new MySqlConnector();
                 return false;
             }
@@ -50,6 +52,7 @@ namespace DigitalIsraelFund_System.DataBase
             }
             catch
             {
+                // recreate the instance
                 instance = new MySqlConnector();
                 return false;
             }
@@ -57,6 +60,7 @@ namespace DigitalIsraelFund_System.DataBase
 
         public List<Dictionary<string, string>> RunQueryCommand(string cmd)
         {
+            // lock the connector
             lock (syncLock)
             {
                 List<Dictionary<string, string>> results = new List<Dictionary<string, string>>();
@@ -64,9 +68,11 @@ namespace DigitalIsraelFund_System.DataBase
                 MySqlCommand sqlCmd = new MySqlCommand(cmd, connection);
                 try
                 {
+                    // get the result of the query
                     MySqlDataReader reader = sqlCmd.ExecuteReader();
                     while (reader.Read())
                     {
+                        // read another row from the result
                         Dictionary<string, string> line = new Dictionary<string, string>();
                         for (int i = 0; i < reader.FieldCount; ++i)
                         {
@@ -88,6 +94,7 @@ namespace DigitalIsraelFund_System.DataBase
 
         public bool RunNonQueryCommand(string cmd)
         {
+            // lock the connector
             lock (syncLock)
             {
                 List<Dictionary<string, string>> results = new List<Dictionary<string, string>>();
@@ -95,6 +102,7 @@ namespace DigitalIsraelFund_System.DataBase
                 MySqlCommand sqlCmd = new MySqlCommand(cmd, connection);
                 try
                 {
+                    // attempt to run the command
                     sqlCmd.ExecuteNonQuery();
                     this.CloseConnection();
                     return true;

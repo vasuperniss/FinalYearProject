@@ -18,9 +18,15 @@ namespace DigitalIsraelFund_System.Controllers
         [NonAction]
         private StaticPage GetPage(string filename)
         {
-            var dataFile = Server.MapPath("~/App_Data/Pages/" + filename + ".json");
-            string json = System.IO.File.ReadAllText(@dataFile);
-            return StaticPage.LoadJson(json);
+            if (filename == "About" || filename == "ApplyForRequest" || filename == "CommonQuestions"
+                || filename == "Contact" || filename == "Events" || filename == "Index")
+            {
+                var dataFile = Server.MapPath("~/App_Data/Pages/" + filename + ".json");
+                string json = System.IO.File.ReadAllText(@dataFile);
+                return StaticPage.LoadJson(json);
+            }
+            // request is for unknown page
+            return null;
         }
     }
 }

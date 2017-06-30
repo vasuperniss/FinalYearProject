@@ -170,6 +170,7 @@ namespace DigitalIsraelFund_System.Controllers
                     int badAttempts = UserManager.Manager.addIncorrectAttempt(user.Email);
                     bool isBlocked = !UserManager.Manager.isUserAllowed(user.Email);
                     if (!isBlocked)
+                        // user is still not blocked
                         return Json(new
                         {
                             Success = false,
@@ -177,6 +178,7 @@ namespace DigitalIsraelFund_System.Controllers
                         + (3 - badAttempts) + " מס' הזנות לא נכונות של הסיסמה עד לחסימה"
                         }, JsonRequestBehavior.AllowGet);
                     else
+                        // user got blocked
                         this.Session["user"] = null;
                         return Json(new
                         {
@@ -226,10 +228,12 @@ namespace DigitalIsraelFund_System.Controllers
                 }
                 else
                 {
+                    // the old password is in-correct
                     int badAttempts = UserManager.Manager.addIncorrectAttempt(user.Email);
                     bool isBlocked = !UserManager.Manager.isUserAllowed(user.Email);
                     this.Session["user"] = null;
                     if (!isBlocked)
+                        // user is still not blocked
                         return Json(new
                         {
                             Success = false,
@@ -237,6 +241,7 @@ namespace DigitalIsraelFund_System.Controllers
                         + (3 - badAttempts) + " מס' הזנות לא נכונות של הסיסמה עד לחסימה"
                         }, JsonRequestBehavior.AllowGet);
                     else
+                        // user got blocked
                         return Json(new
                         {
                             Success = false,

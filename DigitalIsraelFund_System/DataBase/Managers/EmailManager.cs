@@ -23,6 +23,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
 
             string lastUID;
             string lastSeenUID = (long.Parse(sett.LastUIDSeen) + 1).ToString();
+            // connect to the email with Imap
             using (ImapClient ic = new ImapClient(ConfigurationManager.AppSettings["imap_server"],
                             ConfigurationManager.AppSettings["imap_email_addr"],
                             ConfigurationManager.AppSettings["imap_email_pass"],
@@ -31,13 +32,14 @@ namespace DigitalIsraelFund_System.DataBase.Managers
                             true))
             {
                 ic.SelectMailbox(ConfigurationManager.AppSettings["imap_inbox"]);
-
+                // get the last uid
                 lastUID = ic.GetMessage(ic.GetMessageCount() - 1, true).Uid;
-
+                // get messages from last seen uid to new last uid
                 AE.Net.Mail.MailMessage[] mm = ic.GetMessages(lastSeenUID, (int.Parse(lastUID) + 1).ToString(), true, false, false);
-
+                // go threw all new messages
                 foreach (AE.Net.Mail.MailMessage m in mm)
                 {
+                    // check if address is allowed to send files
                     if (isSenderAllowed(m.From.Address))
                     {
                         string title = m.Subject;

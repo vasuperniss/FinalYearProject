@@ -64,10 +64,12 @@ namespace DigitalIsraelFund_System.DataBase.Managers
         public List<Dictionary<string, string>> GetAllWhere(string where, string orderBy, int page, int resultsPerPage)
         {
             List<string> fields = new List<string>();
+            // get these fields
             fields.Add("file_number");
             fields.Add("comp_name");
             fields.Add("status");
             fields.Add("submiter_name");
+            // momhee_name = fname + ' ' + lname
             fields.Add("CONCAT_WS(' ', fname, lname) AS momhee_name");
             fields.Add("mashov");
             fields.Add("mashov_date");
@@ -79,6 +81,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             fields.Add("is_accepted");
             fields.Add("given_fund");
             fields.Add("given_percentage");
+            // number of files connected to this request
             fields.Add("(SELECT COUNT(*) FROM files WHERE requests.file_number=files.file_number) as num_files");
             string limit = ((page - 1) * resultsPerPage) + "," + resultsPerPage;
             string on = "users.id=requests.momhee_id";
@@ -101,6 +104,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             if (orderBy == null || orderBy == "") orderBy = "file_number";
             List<Dictionary<string, string>> requestsResult = DBManager.Manager.Cmds.Select("requests LEFT JOIN users",
                 fields, on, where, orderBy, limit);
+            // turn the dictionary result into a list (can do cause only 1 field)
             List<string> results = new List<string>();
             if (requestsResult != null)
                 foreach (Dictionary<string, string> row in requestsResult)
@@ -121,6 +125,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
         public Dictionary<string, string> GetAllColNames()
         {
             var names = new Dictionary<string, string>();
+            // return column names for column titles
             names.Add("file_number", "מספר תיק");
             names.Add("comp_name", "שם  חברה או היזם");
             names.Add("status", "סטטוס התיק");
@@ -135,9 +140,11 @@ namespace DigitalIsraelFund_System.DataBase.Managers
         {
             List<string> fields = new List<string>();
             fields.Add("path");
+            // get all files asosiated with the request
             string where = "file_number='" + file_number + "'";
             List<Dictionary<string, string>> requestsResult = DBManager.Manager.Cmds.Select("files",
                 fields, null, where, null, null);
+            // turn the result dictionary into a list (can do cause only 1 field)
             List<string> results = new List<string>();
             if (requestsResult != null)
                 foreach (Dictionary<string, string> row in requestsResult)

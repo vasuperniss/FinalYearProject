@@ -7,6 +7,7 @@ namespace DigitalIsraelFund_System.Filters
         protected override List<string> getAllowedUsers()
         {
             List<string> allowed = new List<string>();
+            // this filter allows only users with type = momhee
             allowed.Add("momhee");
             return allowed;
         }

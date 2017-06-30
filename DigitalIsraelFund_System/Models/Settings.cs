@@ -47,6 +47,7 @@ namespace DigitalIsraelFund_System.Models
                     {
                         if (name == posibleMatch)
                         {
+                            // found another conversion
                             conv[name] = key;
                             found = true;
                             break;

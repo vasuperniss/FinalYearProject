@@ -12,6 +12,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
         public static FormManager Manager { get { return instance; } }
 
         private readonly object syncLock = new object();
+        // only MAX_SIZE forms can be loaded at the same time
         private Queue<string> formPool;
         private Dictionary<string, FormComponent> forms;
         private int MAX_SIZE = 10;
@@ -27,6 +28,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             lock (this.syncLock) {
                 if (!forms.ContainsKey(filepath))
                 {
+                    // form isn't loaded, need to load and add to the pool
                     this.forms[filepath] = LoadNotPooled(filepath);
                     this.formPool.Enqueue(filepath);
                     if (forms.Count > MAX_SIZE)
@@ -41,6 +43,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
 
         private FormComponent LoadNotPooled(string filepath)
         {
+            // open and load the file as Form Component
             string xmlNode = File.ReadAllText(filepath);
             XmlReader xmlReader = XmlReader.Create(new StringReader(xmlNode));
             FormComponent loadedForm = new FormComponent(xmlReader);

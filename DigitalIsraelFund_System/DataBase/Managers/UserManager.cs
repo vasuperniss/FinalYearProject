@@ -23,10 +23,13 @@ namespace DigitalIsraelFund_System.DataBase.Managers
         {
             if (this.blockedUsers.ContainsKey(username))
             {
+                // user was blocked
                 DateTime now = DateTime.UtcNow;
                 DateTime then = this.blockedUsers[username];
+                // check if block time is over
                 if (now.Subtract(then).Minutes > 5)
                 {
+                    // user is no longer blocked
                     this.blockedUsers.Remove(username);
                 }
             }
@@ -43,6 +46,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             currectAttempts[username] = currIncorrectAttempt;
             if (currIncorrectAttempt >= 3)
             {
+                // user got blocked
                 this.currectAttempts.Remove(username);
                 this.blockedUsers[username] = DateTime.UtcNow;
             }
@@ -51,6 +55,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
 
         public bool Add(string email, string password, string fname, string lname, string type, string office, string phone, string cellPhone)
         {
+            // attempts to add the given user to the data base
             var values = new Dictionary<string, string>();
             values["email"] = email;
             values["fname"] = fname;
@@ -76,13 +81,17 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             fields.Add("office_name");
             fields.Add("phone");
             fields.Add("cell_phone");
+            // get the user with the given email
             List<Dictionary<string, string>> userResult =
                 DBManager.Manager.Cmds.Select("users LEFT JOIN offices", fields,
                 "users.office=offices.id", "email =\'" + email + "\'", null, null);
             if (userResult == null || userResult.Count != 1)
+                // no such user found
                 return null;
             if (userResult[0]["password"] != password)
+                // passwords do not match
                 return null;
+            // email & pass are correct, return a new UserData model
             user.Id = userResult[0]["id"];
             user.Name = userResult[0]["lname"] + " " + userResult[0]["fname"];
             user.FirstName = userResult[0]["fname"];
@@ -116,6 +125,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             fields.Add("office_name");
             fields.Add("phone");
             fields.Add("cell_phone");
+            // add limit and order
             string limit = ((page - 1) * resultsPerPage) + "," + resultsPerPage;
             string on = "users.office=offices.id";
             if (orderBy == null || orderBy == "") orderBy = "users.id";
@@ -133,6 +143,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
             if (orderBy == null || orderBy == "") orderBy = "users.id";
             List<Dictionary<string, string>> requestsResult = DBManager.Manager.Cmds.Select("users LEFT JOIN offices",
                 fields, on, where, orderBy, limit);
+            // turn the dictionary result into a list (can do cause only 1 field)
             List<string> results = new List<string>();
             if (requestsResult != null)
                 foreach (Dictionary<string, string> row in requestsResult)
