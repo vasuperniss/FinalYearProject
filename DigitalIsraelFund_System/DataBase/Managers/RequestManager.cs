@@ -30,7 +30,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
                     ICollection<string> toUpdate = new List<string>(values.Keys);
                     toUpdate.Remove("file_number");
                     values["mashov"] = "אין";
-                    if (values.ContainsKey("file_number"))
+                    if (values.ContainsKey("file_number") && values["file_number"] != "" && values["file_number"] != "0")
                     {
                         var where = "file_number='" + values["file_number"] + "'"; 
                         DBManager.Manager.Cmds.InsertOrUpdate("requests", values, toUpdate, where);

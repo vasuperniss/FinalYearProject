@@ -163,6 +163,8 @@
     <Content Include="App_Data\Settings.json" />
     <Content Include="App_Code\TableFunctions.cshtml" />
     <Content Include="App_Code\FormFunctions.cshtml" />
+    <Content Include="ClassDiagram1.cd" />
+    <Content Include="ClassDiagram2.cd" />
     <None Include="Properties\PublishProfiles\dif.pubxml" />
     <None Include="Properties\PublishProfiles\idf.pubxml" />
     <None Include="Properties\PublishProfiles\isrealdigitalfundsyst - FTP.pubxml" />

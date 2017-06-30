@@ -22,7 +22,7 @@ namespace DigitalIsraelFund_System.DataBase.Managers
                     if (conv.ContainsKey(key))
                         values[conv[key]] = line[key];
                 }
-                if (values.ContainsKey("file_number"))
+                if (values.ContainsKey("file_number") && values["file_number"] != "" && values["file_number"] != "0")
                 {
                     DBManager.Manager.Cmds.Delete("madaan_testers", "file_number='" + values["file_number"] + "'");
                     DBManager.Manager.Cmds.Insert("madaan_testers", values);
